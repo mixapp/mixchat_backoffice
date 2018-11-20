@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 
 
@@ -15,78 +15,101 @@ class RegistrationForm extends React.Component {
   }
 
   render() {
+
+    this.props.form.setFieldsInitialValue(this.props.widgetSettings);
+
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
+      /*
       labelCol: {
         xs: { span: 6 },
         sm: { span: 2 },
       },
+      */
       wrapperCol: {
         xs: { span: 12 },
         sm: { span: 8 },
       },
     };
-  
+
 
     return (
       <Form onSubmit={this.handleSubmit} layout="vertical">
 
         <FormItem {...formItemLayout}>
+          {getFieldDecorator('isActive', {
+            rules: [],
+          })(<Checkbox>Widget is active?</Checkbox>)}
+        </FormItem>
+
+        <FormItem {...formItemLayout} label="">
+          {getFieldDecorator('openChat', {
+            rules: [],
+          })(<Checkbox>Chat is open by default?</Checkbox>)}
+        </FormItem>
+
+        <FormItem {...formItemLayout} label="Widget color">
+          {getFieldDecorator('color', {
+            rules: [],
+          })(<Input placeholder="Color picker soon ..." />)}
+        </FormItem>
+        
+        <FormItem {...formItemLayout} label="Telegram bot name">
           {getFieldDecorator('telegram_bot_name', {
             rules: [],
           })(<Input placeholder="Telegram bot name" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Telegram token">
           {getFieldDecorator('telegram_token', {
             rules: [],
-          })(<Input placeholder="Telegram token" />)}
+          })(<Input placeholder="Telegram bot token" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Viber bot name">
           {getFieldDecorator('viber_bot_name', {
             rules: [],
-          })(<Input placeholder="viber_bot_name" />)}
+          })(<Input placeholder="Viber bot name" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Viber bot token">
           {getFieldDecorator('viber_token', {
             rules: [],
-          })(<Input placeholder="viber_token" />)}
+          })(<Input placeholder="Viber bot token" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Sms phone">
           {getFieldDecorator('sms_phone', {
             rules: [],
-          })(<Input placeholder="sms_phone" />)}
+          })(<Input placeholder="Sms phone" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Sms api token">
           {getFieldDecorator('sms_token', {
             rules: [],
-          })(<Input placeholder="sms_token" />)}
+          })(<Input placeholder="Sms api token" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Vk group name">
           {getFieldDecorator('vk_group_name', {
             rules: [],
-          })(<Input placeholder="vk_group_name" />)}
+          })(<Input placeholder="Vk group name" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label="Vk group token">
           {getFieldDecorator('vk_token', {
             rules: [],
-          })(<Input placeholder="vk_token" />)}
+          })(<Input placeholder="Vk group token" />)}
         </FormItem>
 
-        <FormItem {...formItemLayout}>
-            {
-                getFieldDecorator('vk_confirmation_code', {rules: []})
-                (<Input placeholder="vk_confirmation_code" />)
-            }
+        <FormItem {...formItemLayout} label="Vk confirmation code">
+          {getFieldDecorator('vk_confirmation_code', {
+            rules: [],
+          })(<Input placeholder="Vk confirmation code" />)
+          }
         </FormItem>
-        
+
         <FormItem {...formItemLayout}>
           <Button type="primary" htmlType="submit">Save</Button>
         </FormItem>
