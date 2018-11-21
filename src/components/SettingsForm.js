@@ -1,7 +1,8 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-const FormItem = Form.Item;
+import { Form, Input, Button, Radio } from 'antd';
 
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
 
 class RegistrationForm extends React.Component {
 
@@ -16,7 +17,14 @@ class RegistrationForm extends React.Component {
 
   render() {
 
-    this.props.form.setFieldsInitialValue(this.props.widgetSettings);
+    if (this.props.widgetSettings) {
+      let allSettings = {
+        companyName: this.props.widgetSettings.companyName,
+        ...this.props.widgetSettings.widget,
+        ...this.props.widgetSettings.settings
+      };
+      this.props.form.setFieldsInitialValue(allSettings);
+    }
 
     const { getFieldDecorator } = this.props.form;
 
@@ -29,89 +37,103 @@ class RegistrationForm extends React.Component {
       */
       wrapperCol: {
         xs: { span: 12 },
-        sm: { span: 8 },
+        sm: { span: 14 },
       },
     };
 
 
     return (
-      <Form onSubmit={this.handleSubmit} layout="vertical">
+      <Form onSubmit={this.handleSubmit} layout='vertical'>
 
-        <FormItem {...formItemLayout}>
+        <FormItem {...formItemLayout} label='Company name'>
+          {getFieldDecorator('companyName', {
+            rules: [
+              { required: true }
+            ],
+          })(<Input placeholder='Company name' />)}
+        </FormItem>
+
+        <FormItem {...formItemLayout} label='Widget is active'>
           {getFieldDecorator('isActive', {
-            rules: [],
-          })(<Checkbox>Widget is active?</Checkbox>)}
+            rules: []
+          })(<RadioGroup>
+            <Radio value={true}>yes</Radio>
+            <Radio value={false}>no</Radio>
+          </RadioGroup>)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="">
+        <FormItem {...formItemLayout} label='Chat should be open?'>
           {getFieldDecorator('openChat', {
-            rules: [],
-          })(<Checkbox>Chat is open by default?</Checkbox>)}
+            rules: []
+          })(<RadioGroup>
+            <Radio value={true}>yes</Radio>
+            <Radio value={false}>no</Radio>
+          </RadioGroup>)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Widget color">
+        <FormItem {...formItemLayout} label='Widget color'>
           {getFieldDecorator('color', {
             rules: [],
-          })(<Input placeholder="Color picker soon ..." />)}
+          })(<Input placeholder='Color picker soon ...' />)}
         </FormItem>
-        
-        <FormItem {...formItemLayout} label="Telegram bot name">
+
+        <FormItem {...formItemLayout} label='Telegram bot name'>
           {getFieldDecorator('telegram_bot_name', {
             rules: [],
-          })(<Input placeholder="Telegram bot name" />)}
+          })(<Input placeholder='Telegram bot name' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Telegram token">
+        <FormItem {...formItemLayout} label='Telegram token'>
           {getFieldDecorator('telegram_token', {
             rules: [],
-          })(<Input placeholder="Telegram bot token" />)}
+          })(<Input placeholder='Telegram bot token' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Viber bot name">
+        <FormItem {...formItemLayout} label='Viber bot name'>
           {getFieldDecorator('viber_bot_name', {
             rules: [],
-          })(<Input placeholder="Viber bot name" />)}
+          })(<Input placeholder='Viber bot name' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Viber bot token">
+        <FormItem {...formItemLayout} label='Viber bot token'>
           {getFieldDecorator('viber_token', {
             rules: [],
-          })(<Input placeholder="Viber bot token" />)}
+          })(<Input placeholder='Viber bot token' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Sms phone">
+        <FormItem {...formItemLayout} label='Sms phone'>
           {getFieldDecorator('sms_phone', {
             rules: [],
-          })(<Input placeholder="Sms phone" />)}
+          })(<Input placeholder='Sms phone' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Sms api token">
+        <FormItem {...formItemLayout} label='Sms api token'>
           {getFieldDecorator('sms_token', {
             rules: [],
-          })(<Input placeholder="Sms api token" />)}
+          })(<Input placeholder='Sms api token' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Vk group name">
+        <FormItem {...formItemLayout} label='Vk group name'>
           {getFieldDecorator('vk_group_name', {
             rules: [],
-          })(<Input placeholder="Vk group name" />)}
+          })(<Input placeholder='Vk group name' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Vk group token">
+        <FormItem {...formItemLayout} label='Vk group token'>
           {getFieldDecorator('vk_token', {
             rules: [],
-          })(<Input placeholder="Vk group token" />)}
+          })(<Input placeholder='Vk group token' />)}
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Vk confirmation code">
+        <FormItem {...formItemLayout} label='Vk confirmation code'>
           {getFieldDecorator('vk_confirmation_code', {
             rules: [],
-          })(<Input placeholder="Vk confirmation code" />)
+          })(<Input placeholder='Vk confirmation code' />)
           }
         </FormItem>
 
         <FormItem {...formItemLayout}>
-          <Button type="primary" htmlType="submit">Save</Button>
+          <Button type='primary' htmlType='submit'>Save</Button>
         </FormItem>
       </Form>
     );

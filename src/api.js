@@ -31,7 +31,7 @@ export const fetchSettings = async () => {
         let result = await axios.get(uri, {
             headers: getHeadera()
         });
-        return result.data.settings;
+        return result.data;
     } catch (err) {
         throw err;
     }
@@ -41,13 +41,14 @@ export const fetchSettings = async () => {
 export const saveSettings = async (settings) => {
     try {
 
+        console.log(settings);
         const uri = getUrl(config.backApiProcessId, config.companyId, 'settings');
         let result = await axios.post(uri, {
-            "companyName": "MixappDev",
+            "companyName": settings.companyName,
             "widget": {
-                "isActive": true,
-                "color": "#4a90e2",
-                "openChat": false
+                "isActive": settings.isActive,
+                "color": settings.color,
+                "openChat": settings.openChat
             },
             "settings": {
                 "telegram_token": settings.telegram_token,
