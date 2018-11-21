@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, Radio } from 'antd';
+import { CirclePicker } from 'react-color';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -12,6 +13,12 @@ class RegistrationForm extends React.Component {
       if (!err) {
         this.props.onSave(values);
       }
+    });
+  }
+
+  handleChange(color, event) {
+    this.props.form.setFieldsValue({
+      color: color.hex
     });
   }
 
@@ -72,6 +79,13 @@ class RegistrationForm extends React.Component {
         </FormItem>
 
         <FormItem {...formItemLayout} label='Widget color'>
+          {getFieldDecorator('colorR', {
+            rules: [],
+          })(<CirclePicker onChangeComplete={this.handleChange.bind(this)} />)}
+        </FormItem>
+
+
+        <FormItem {...formItemLayout}>
           {getFieldDecorator('color', {
             rules: [],
           })(<Input placeholder='Color picker soon ...' />)}
