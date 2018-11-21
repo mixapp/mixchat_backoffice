@@ -41,7 +41,6 @@ export const fetchSettings = async () => {
 export const saveSettings = async (settings) => {
     try {
 
-        console.log(settings);
         const uri = getUrl(config.backApiProcessId, config.companyId, 'settings');
         let result = await axios.post(uri, {
             "companyName": settings.companyName,
@@ -70,3 +69,16 @@ export const saveSettings = async (settings) => {
         throw err;
     }
 }
+
+// Fetch managers
+export const fetchManagers = async () => {
+    try {
+        const uri = getUrl(config.backApiProcessId, config.companyId, 'listmanagers');
+        let result = await axios.get(uri, {
+            headers: getHeadera()
+        });
+        return result.data.managers;
+    } catch (err) {
+        throw err;
+    }
+};

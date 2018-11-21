@@ -3,9 +3,21 @@ import { push } from 'react-router-redux';
 import {
     SET_AUTHORIZE,
     FETCH_SETTINGS_REQUEST, FETCH_SETTINGS_SUCCESS, FETCH_SETTINGS_ERROR,
-    SAVE_SETTINGS_REQUEST, SAVE_SETTINGS_SUCCESS, SAVE_SETTINGS_ERROR
+    SAVE_SETTINGS_REQUEST, SAVE_SETTINGS_SUCCESS, SAVE_SETTINGS_ERROR,
+    FETCH_MANAGERS_REQUEST, FETCH_MANAGERS_SUCCESS, FETCH_MANAGERS_ERROR
 } from '../constants';
 import * as Api from '../api';
+
+function* fetchManagers() {
+    yield takeLatest(FETCH_MANAGERS_REQUEST, function* (action) {
+        try {
+            let managers = yield Api.fetchManagers();
+            yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
+        } catch (err) {
+            throw err;
+        }
+    })
+}
 
 function* saveSettingsSaga() {
     yield takeLatest(SAVE_SETTINGS_REQUEST, function* (action) {
@@ -46,6 +58,7 @@ export default function* ordersSaga() {
     yield [
         fork(loginSaga),
         fork(fetchSettingsSaga),
-        fork(saveSettingsSaga)
+        fork(saveSettingsSaga),
+        fork(fetchManagers)
     ];
 }
