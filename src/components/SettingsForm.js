@@ -22,8 +22,7 @@ class RegistrationForm extends React.Component {
     });
   }
 
-  render() {
-
+  componentDidMount() {
     if (this.props.widgetSettings) {
       let allSettings = {
         companyName: this.props.widgetSettings.companyName,
@@ -32,6 +31,9 @@ class RegistrationForm extends React.Component {
       };
       this.props.form.setFieldsInitialValue(allSettings);
     }
+  }
+
+  render() {
 
     const { getFieldDecorator } = this.props.form;
 

@@ -4,8 +4,7 @@ import { Table } from 'antd';
 const columns = [{
     title: '_id',
     dataIndex: '_id',
-    key: '_id   ',
-    render: _id => <a href="javascript:;">{_id}</a>,
+    key: '_id   '
 }, {
     title: 'Nickname',
     key: 'nickname',
