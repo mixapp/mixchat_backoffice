@@ -6,6 +6,6 @@ export default class ManagersListView extends React.Component {
     this.props.fetchManagers();
   }
   render() {
-    return <ManagersList managers={this.props.app.managers} />;
+    return <ManagersList addManager={this.props.addManager} managers={this.props.app.managers} />;
   }
 }

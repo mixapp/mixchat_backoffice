@@ -1,5 +1,5 @@
 import axios from 'axios';
-import querystring from 'querystring';
+//import querystring from 'querystring';
 
 const getUrl = (processId, companyId, path) => {
     return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
@@ -82,3 +82,23 @@ export const fetchManagers = async () => {
         throw err;
     }
 };
+
+/* add manager */
+export const addManager = async (data) => {
+    try {
+
+        console.log(data);
+        const uri = getUrl(config.backApiProcessId, config.companyId, 'addmanagers');
+        let result = await axios.post(uri, {
+            "email": data.email,
+            "nickname": data.nickname,
+            "password": data.password
+        }, {
+                headers: getHeadera(),
+            });
+        return result;
+
+    } catch (err) {
+        throw err;
+    }
+}
