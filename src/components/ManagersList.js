@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
-import AddManagerModal from './modals/addManagers';
+import AddManagerForm from './forms/managers/addManagerForm';
 
 const columns = [
     { title: '№', dataIndex: 'number', key: 'number' },
@@ -27,7 +27,7 @@ export default class ManagersList extends React.Component {
         return (
             <div>
                 <Table {...this.state} columns={columns} dataSource={data} />
-                <AddManagerModal addManager={this.props.addManager} />
+                <AddManagerForm addManager={this.props.addManager} />
             </div>
         );
     }

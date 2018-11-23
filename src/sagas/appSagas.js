@@ -13,7 +13,11 @@ function* addManager() {
     yield takeLatest(ADD_MANAGER_REQUEST, function* (action) {
         try {
             let result = yield Api.addManager(action.data);
-            yield put({ type: ADD_MANAGER_SUCCESS, result });
+            if (!result.data.error) {
+                yield put({ type: ADD_MANAGER_SUCCESS, result });
+                let managers = yield put({ type: FETCH_MANAGERS_REQUEST });
+                yield put({ FETCH_MANAGERS_SUCCESS, managers });
+            }
         } catch (err) {
             throw err;
         }

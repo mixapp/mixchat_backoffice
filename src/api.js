@@ -86,8 +86,6 @@ export const fetchManagers = async () => {
 /* add manager */
 export const addManager = async (data) => {
     try {
-
-        console.log(data);
         const uri = getUrl(config.backApiProcessId, config.companyId, 'addmanagers');
         let result = await axios.post(uri, {
             "email": data.email,
@@ -97,7 +95,6 @@ export const addManager = async (data) => {
                 headers: getHeadera(),
             });
         return result;
-
     } catch (err) {
         throw err;
     }
