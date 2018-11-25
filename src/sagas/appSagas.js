@@ -6,8 +6,24 @@ import {
     SAVE_SETTINGS_REQUEST, SAVE_SETTINGS_SUCCESS, //SAVE_SETTINGS_ERROR,
     FETCH_MANAGERS_REQUEST, FETCH_MANAGERS_SUCCESS, //FETCH_MANAGERS_ERROR,
     ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, //ADD_MANAGER_ERROR
+    REMOVE_MANAGER_REQUEST, REMOVE_MANAGER_SUCCESS, //REMOVE_MANAGER_ERROR
 } from '../constants';
 import * as Api from '../api';
+
+function* removeManager() {
+    yield takeLatest(REMOVE_MANAGER_REQUEST, function* (action) {
+        try {
+            let result = yield Api.removeManager(action.data);
+            if (!result.data.error) {
+                yield put({ type: REMOVE_MANAGER_SUCCESS, result });
+                let managers = yield put({ type: FETCH_MANAGERS_REQUEST });
+                yield put({ FETCH_MANAGERS_SUCCESS, managers });
+            }
+        } catch (err) {
+            throw err;
+        }
+    })
+}
 
 function* addManager() {
     yield takeLatest(ADD_MANAGER_REQUEST, function* (action) {
@@ -76,6 +92,7 @@ export default function* ordersSaga() {
         fork(fetchSettingsSaga),
         fork(saveSettingsSaga),
         fork(fetchManagers),
-        fork(addManager)
+        fork(addManager),
+        fork(removeManager)
     ];
 }

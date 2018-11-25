@@ -99,3 +99,31 @@ export const addManager = async (data) => {
         throw err;
     }
 }
+
+/* добавить manager */
+export const removeManager = async (data) => {
+    try {
+        const uri = getUrl(config.backApiProcessId, config.companyId, 'removemanagers');
+        let result = await axios.post(uri, {
+            "id": data.id
+        }, {
+                headers: getHeadera(),
+            });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+/* получение списка диалогов */
+export const fetchDialogs = async () => {
+    try {
+        const uri = getUrl(config.backApiProcessId, config.companyId, 'get-dialogs');
+        let result = await axios.post(uri, {}, {
+            headers: getHeadera(),
+        });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}

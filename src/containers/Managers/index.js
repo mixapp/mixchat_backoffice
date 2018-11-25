@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ManagersListView from '../../components/Managers';
-import { fetchManagers, addManager } from '../../actions/settings';
+import { fetchManagers, addManager, removeManager } from '../../actions/settings';
 
 const Managers = (props) => {
     return <ManagersListView {...props} />;
@@ -16,7 +16,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         fetchManagers: () => { dispatch(fetchManagers()) },
-        addManager: (data) => { dispatch(addManager(data)) }
+        addManager: (data) => { dispatch(addManager(data)) },
+        removeManager: (data) => { dispatch(removeManager(data)) }
     }
 }
 

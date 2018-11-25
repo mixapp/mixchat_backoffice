@@ -1,21 +1,22 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import AddManagerForm from './forms/managers/addManagerForm';
-
-const columns = [
-    { title: '№', dataIndex: 'number', key: 'number' },
-    { title: '_id', dataIndex: '_id', key: '_id' },
-    { title: 'Nickname', key: 'nickname', dataIndex: 'nickname' },
-    { title: 'Action', dataIndex: '', key: 'x', render: () => <div>Delete | Edit</div> }
-];
 
 export default class ManagersList extends React.Component {
 
     state = {
-        size: 'small'
+        size: 'small',
+        currentManagerId: ''
     }
 
     render() {
+        let columns = [
+            { title: '№', dataIndex: 'number', key: 'number' },
+            { title: '_id', dataIndex: '_id', key: '_id' },
+            { title: 'Nickname', key: 'nickname', dataIndex: 'nickname' },
+            { title: 'Action', dataIndex: '', key: '', render: (obj) => <Button type="primary" shape="circle" icon="delete" size='large' /> }
+        ];
+
         let data = [];
         if (this.props.managers) {
             this.props.managers.forEach((value, key) => {
@@ -26,7 +27,7 @@ export default class ManagersList extends React.Component {
         }
         return (
             <div>
-                <Table {...this.state} columns={columns} dataSource={data} />
+                <Table {...this.state} removeManager={this.props.removeManager} columns={columns} dataSource={data} />
                 <AddManagerForm addManager={this.props.addManager} />
             </div>
         );
