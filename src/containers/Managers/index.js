@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ManagersListView from '../../components/Managers';
+import { fetchManagers, addManager, removeManager } from '../../actions/settings';
 
-const Managers = () => {
-    return <div>
-        <h1>Менеджеры</h1>
-        <div>
-        Search for the keywords to learn more about each warning. To ignore, add // eslint-disable-next-line to the line before.
-        </div>
-    </div>;
+const Managers = (props) => {
+    return <ManagersListView {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -18,6 +15,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        fetchManagers: () => { dispatch(fetchManagers()) },
+        addManager: (data) => { dispatch(addManager(data)) },
+        removeManager: (data) => { dispatch(removeManager(data)) }
     }
 }
 
