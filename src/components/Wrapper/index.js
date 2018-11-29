@@ -1,12 +1,14 @@
 import React from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout, Icon, Spin } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
+
 const { Header, Sider, Content } = Layout;
 
-export default class Wrapper extends React.Component {
+class Wrapper extends React.Component {
   state = {
     collapsed: false,
+    loading: false
   };
 
   toggle = () => {
@@ -19,10 +21,10 @@ export default class Wrapper extends React.Component {
     return (
       <Layout className="main_layout">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-            <div className="logo_container">
-                <div className="logo">LOGO</div>
-            </div>
-            <MenuPanel />
+          <div className="logo_container">
+            <div className="logo">LOGO</div>
+          </div>
+          <MenuPanel />
         </Sider>
 
         <Layout>
@@ -33,9 +35,13 @@ export default class Wrapper extends React.Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content className="content">{this.props.children}</Content>
+          <Spin spinning={this.state.loading} delay={500}>
+            <Content className="content">{this.props.children}</Content>
+          </Spin>
         </Layout>
       </Layout>
     );
   }
 }
+
+export default Wrapper;

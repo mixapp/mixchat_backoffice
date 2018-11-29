@@ -1,4 +1,4 @@
-import { SET_AUTHORIZE, FETCH_SETTINGS_SUCCESS, FETCH_MANAGERS_SUCCESS, ADD_MANAGER_SUCCESS, REMOVE_MANAGER_SUCCESS, FETCH_DIALOGS_SUCCESS } from '../constants';
+import { SET_AUTHORIZE, FETCH_SETTINGS_SUCCESS, FETCH_MANAGERS_SUCCESS, ADD_MANAGER_SUCCESS, REMOVE_MANAGER_SUCCESS, FETCH_DIALOGS_SUCCESS, LOADER_ON, LOADER_OFF } from '../constants';
 const initialState = {
     user: null
 };
@@ -17,6 +17,12 @@ export default function reducer(state = initialState, action = {}) {
             return { ...state, result: action };
         case FETCH_DIALOGS_SUCCESS:
             return { ...state, dialogs: action.dialogs };
+        case LOADER_ON:
+            console.log('LOADER_ON');
+            return { ...state, loader: true };
+        case LOADER_OFF:
+            console.log('LOADER_OFF');
+            return { ...state, loader: false };
         default:
             return state;
     }

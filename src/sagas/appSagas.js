@@ -8,6 +8,7 @@ import {
     ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, //ADD_MANAGER_ERROR,
     REMOVE_MANAGER_REQUEST, REMOVE_MANAGER_SUCCESS,  //REMOVE_MANAGER_ERROR,
     FETCH_DIALOGS_REQUEST, FETCH_DIALOGS_SUCCESS, //FETCH_DIALOGS_ERROR
+    LOADER_ON, LOADER_OFF
 } from '../constants';
 import * as Api from '../api';
 
@@ -81,8 +82,10 @@ function* saveSettingsSaga() {
 function* fetchSettingsSaga() {
     yield takeLatest(FETCH_SETTINGS_REQUEST, function* (action) {
         try {
+            yield put({ type: LOADER_ON });
             let widgetSettings = yield Api.fetchSettings();
             yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings });
+            yield put({ type: LOADER_OFF });
         } catch (err) {
             throw err;
         }
