@@ -31,7 +31,11 @@ export const fetchSettings = async () => {
         let result = await axios.get(uri, {
             headers: getHeadera()
         });
-        return result.data;
+        return {
+            companyName: result.data.companyName,
+            ...result.data.widget,
+            ...result.data.settings
+        }
     } catch (err) {
         throw err;
     }
@@ -105,7 +109,8 @@ export const removeManager = async (data) => {
     try {
         const uri = getUrl(config.backApiProcessId, config.companyId, 'removemanagers');
         let result = await axios.post(uri, {
-            "id": data.id
+            id: data._id,
+            username: data.nickname
         }, {
                 headers: getHeadera(),
             });
@@ -119,10 +124,10 @@ export const removeManager = async (data) => {
 export const fetchDialogs = async () => {
     try {
         const uri = getUrl(config.backApiProcessId, config.companyId, 'get-dialogs');
-        let result = await axios.post(uri, {}, {
+        let result = await axios.get(uri, {
             headers: getHeadera(),
         });
-        return result;
+        return result.data.groups;
     } catch (err) {
         throw err;
     }

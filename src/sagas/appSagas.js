@@ -5,10 +5,22 @@ import {
     FETCH_SETTINGS_REQUEST, FETCH_SETTINGS_SUCCESS, //FETCH_SETTINGS_ERROR,
     SAVE_SETTINGS_REQUEST, SAVE_SETTINGS_SUCCESS, //SAVE_SETTINGS_ERROR,
     FETCH_MANAGERS_REQUEST, FETCH_MANAGERS_SUCCESS, //FETCH_MANAGERS_ERROR,
-    ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, //ADD_MANAGER_ERROR
-    REMOVE_MANAGER_REQUEST, REMOVE_MANAGER_SUCCESS, //REMOVE_MANAGER_ERROR
+    ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, //ADD_MANAGER_ERROR,
+    REMOVE_MANAGER_REQUEST, REMOVE_MANAGER_SUCCESS,  //REMOVE_MANAGER_ERROR,
+    FETCH_DIALOGS_REQUEST, FETCH_DIALOGS_SUCCESS, //FETCH_DIALOGS_ERROR
 } from '../constants';
 import * as Api from '../api';
+
+function* fetchDialogs() {
+    yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
+        try {
+            let dialogs = yield Api.fetchDialogs();
+            yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
+        } catch (err) {
+            throw (err);
+        }
+    })
+}
 
 function* removeManager() {
     yield takeLatest(REMOVE_MANAGER_REQUEST, function* (action) {
@@ -17,7 +29,7 @@ function* removeManager() {
             if (!result.data.error) {
                 yield put({ type: REMOVE_MANAGER_SUCCESS, result });
                 let managers = yield put({ type: FETCH_MANAGERS_REQUEST });
-                yield put({ FETCH_MANAGERS_SUCCESS, managers });
+                yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
             }
         } catch (err) {
             throw err;
@@ -32,7 +44,7 @@ function* addManager() {
             if (!result.data.error) {
                 yield put({ type: ADD_MANAGER_SUCCESS, result });
                 let managers = yield put({ type: FETCH_MANAGERS_REQUEST });
-                yield put({ FETCH_MANAGERS_SUCCESS, managers });
+                yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
             }
         } catch (err) {
             throw err;
@@ -44,6 +56,10 @@ function* fetchManagers() {
     yield takeLatest(FETCH_MANAGERS_REQUEST, function* (action) {
         try {
             let managers = yield Api.fetchManagers();
+            managers.forEach((value, key) => {
+                value.key = String(key + 1);
+                value.number = key + 1;
+            });
             yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
         } catch (err) {
             throw err;
@@ -93,6 +109,7 @@ export default function* ordersSaga() {
         fork(saveSettingsSaga),
         fork(fetchManagers),
         fork(addManager),
-        fork(removeManager)
+        fork(removeManager),
+        fork(fetchDialogs)
     ];
 }

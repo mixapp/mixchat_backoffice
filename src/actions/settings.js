@@ -38,3 +38,9 @@ export const removeManager = (data) => {
         data
     }
 }
+
+export const fetchDialogs = () => {
+    return {
+        type: FETCH_DIALOGS_REQUEST
+    }
+}

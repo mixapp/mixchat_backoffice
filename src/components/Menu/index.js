@@ -7,21 +7,21 @@ export default class MenuPanel extends React.Component {
         return <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
                 <Link to='/settings'>
-                    <Icon type="user" />
+                    <Icon type="setting" />
                     <span>Настройки</span>
                 </Link>
             </Menu.Item>
-            
+
             <Menu.Item key="2">
                 <Link to='/dialogs'>
-                    <Icon type="video-camera" />
+                    <Icon type="message" />
                     <span>Диалоги</span>
                 </Link>
             </Menu.Item>
 
             <Menu.Item key="3">
                 <Link to='/managers'>
-                    <Icon type="video-camera" />
+                    <Icon type="team" />
                     <span>Менеджеры</span>
                 </Link>
             </Menu.Item>
