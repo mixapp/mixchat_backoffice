@@ -127,7 +127,20 @@ export const fetchDialogs = async () => {
         let result = await axios.get(uri, {
             headers: getHeadera(),
         });
-        return result.data.groups;
+        let data = [];
+        result.data.groups.forEach((value, key) => {
+            let name = value.name.split('_');
+            name = value.name.replace(name[name.length - 1], '');
+            data.push({
+                _id: value._id,
+                name: name,
+                msgs: value.msgs,
+                _updatedAt: value._updatedAt,
+                u: value.u,
+                usersCount: value.usersCount
+            })
+        });
+        return data;
     } catch (err) {
         throw err;
     }

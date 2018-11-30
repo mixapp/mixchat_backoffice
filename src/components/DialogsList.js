@@ -1,30 +1,34 @@
 import React from 'react';
-import { List } from 'antd';
+import { Row, Col, List } from 'antd';
 
 export default class DialogsList extends React.Component {
 
-    state = {
-        size: 'small'
-    }
+  state = {
+    size: 'small'
+  }
 
-    render() {
-        let data = [];
+  render() {
+    return (
+      <Row>
+        <Col span={14}>
+        </Col>
+        <Col span={10} style={{ overflow: 'hidden' }}>
+          <List
+            size="small"
+            header={<div>List of groups</div>}
+            footer={<div>Footer</div>}
+            bordered
+            dataSource={this.props.dialogs}
+            renderItem={item => (
+              <List.Item style={{ cursor: 'pointer' }}>
+                {item.name}
+                <b>({item.usersCount})</b>
+              </ List.Item>
+            )}
+          />
+        </Col>
+      </Row>
 
-        /* TEMP */
-        if (this.props.dialogs) {
-            this.props.dialogs.groups.forEach((value, key) => {
-                data.push(value.name + '(' + value.usersCount + ')');
-            });
-        }
-        return (
-            <List
-                size="small"
-                header={<div>List of groups</div>}
-                footer={<div>Footer</div>}
-                bordered
-                dataSource={data}
-                renderItem={item => (<List.Item>{item}</List.Item>)}
-            />
-        );
-    }
+    );
+  }
 }
