@@ -8,9 +8,21 @@ import {
     ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, //ADD_MANAGER_ERROR,
     REMOVE_MANAGER_REQUEST, REMOVE_MANAGER_SUCCESS,  //REMOVE_MANAGER_ERROR,
     FETCH_DIALOGS_REQUEST, FETCH_DIALOGS_SUCCESS, //FETCH_DIALOGS_ERROR
-    LOADER_ON, LOADER_OFF
+    LOADER_ON, LOADER_OFF,
+    FETCH_DIALOG_REQUEST, FETCH_DIALOG_SUCCESS, //FETCH_DIALOG_ERROR
 } from '../constants';
 import * as Api from '../api';
+
+function* fetchDialogSaga() {
+    yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
+        try {
+            let messages = yield Api.fetchDialog(action.data);
+            yield put({ type: FETCH_DIALOG_SUCCESS, messages });
+        } catch (err) {
+            throw err;
+        }
+    })
+}
 
 function* fetchDialogs() {
     yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
@@ -113,6 +125,7 @@ export default function* ordersSaga() {
         fork(fetchManagers),
         fork(addManager),
         fork(removeManager),
-        fork(fetchDialogs)
+        fork(fetchDialogs),
+        fork(fetchDialogSaga)
     ];
 }

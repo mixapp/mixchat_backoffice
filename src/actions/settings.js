@@ -4,7 +4,8 @@ import {
     FETCH_MANAGERS_REQUEST,
     ADD_MANAGER_REQUEST,
     REMOVE_MANAGER_REQUEST,
-    FETCH_DIALOGS_REQUEST
+    FETCH_DIALOGS_REQUEST,
+    FETCH_DIALOG_REQUEST
 } from '../constants'
 export const fetchSettings = () => {
     return {
@@ -42,5 +43,12 @@ export const removeManager = (data) => {
 export const fetchDialogs = () => {
     return {
         type: FETCH_DIALOGS_REQUEST
+    }
+}
+
+export const fetchDialog = (data) => {
+    return {
+        type: FETCH_DIALOG_REQUEST,
+        data
     }
 }
