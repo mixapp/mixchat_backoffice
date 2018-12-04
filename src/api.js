@@ -1,4 +1,5 @@
 import axios from 'axios';
+import DDP from 'ddp.js';
 //import querystring from 'querystring';
 
 const getUrl = (processId, companyId, path) => {
@@ -150,12 +151,12 @@ export const fetchDialogs = async () => {
   }
 }
 
-/* получение диалога */
-export const fetchDialog = async (data) => {
+/* Получение диалога */
+export const fetchDialog = async (id) => {
   try {
     let result = await axios.get('https://chat.mixapp.io/api/v1/groups.history', {
       params: {
-        roomId: data._id
+        roomId: id
       },
       headers: {
         'X-Auth-Token': config.rocketChat.XauthToken,
@@ -163,6 +164,76 @@ export const fetchDialog = async (data) => {
       }
     });
     return result.data.messages;
+  } catch (err) {
+    throw err;
+  }
+}
+
+/* Отправка сообщения */
+export const sendMessageSaga = async (data) => {
+  try {
+    console.log(data);
+    let result = await axios({
+      method: 'POST',
+      url: 'https://chat.mixapp.io/api/v1/chat.postMessage',
+      data: {
+        roomId: data.roomId,
+        text: data.text
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': config.rocketChat.XauthToken,
+        'X-User-Id': config.rocketChat.XuserId
+      }
+    });
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
+const isManager = async (nickname) => {
+  try {
+
+    return nickname.indexOf('client') === -1;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+
+/* Открываем веб сокет и подписываемся на событие */
+export const webSocket = async (data, cb) => {
+  try {
+
+    // Stream API
+    let { roomId } = data;
+    // socket connection
+    const options = {
+      endpoint: 'wss://chat.mixapp.io/websocket',
+      SocketConstructor: WebSocket
+    };
+    const ddp = new DDP(options);
+
+    ddp.on('connected', () => {
+      ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
+      ddp.sub('stream-room-messages', [roomId, false]);
+    });
+
+    ddp.on('changed', async (msg) => {
+      try {
+        let args = msg.fields.args[0];
+        let username = args.u.username;
+        let is_Manager = await isManager(username);
+
+        cb(username, args, is_Manager);
+
+      } catch (err) {
+        throw err;
+      }
+    })
+
   } catch (err) {
     throw err;
   }
