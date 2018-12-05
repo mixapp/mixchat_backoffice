@@ -33,6 +33,13 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
       let messages = yield Api.fetchDialog(action.data);
+      let socket = localStorage.getItem('sub[' + action.data + ']');
+      if (!socket) {
+        yield Api.webSocket(action.data, async () => {
+          let msgs = await Api.fetchDialog(action.data);
+          console.log(msgs);
+        });
+      }
       yield put({ type: FETCH_DIALOG_SUCCESS, messages });
     } catch (err) {
       throw err;

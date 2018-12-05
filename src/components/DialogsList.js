@@ -28,7 +28,6 @@ class DialogsList extends React.Component {
           roomId: this.state.currentRoom,
           text: values.userComment
         });
-        console.log('Received values of form: ', values);
       }
     });
   }

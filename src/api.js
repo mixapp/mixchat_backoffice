@@ -172,7 +172,6 @@ export const fetchDialog = async (id) => {
 /* Отправка сообщения */
 export const sendMessageSaga = async (data) => {
   try {
-    console.log(data);
     let result = await axios({
       method: 'POST',
       url: 'https://chat.mixapp.io/api/v1/chat.postMessage',
@@ -204,21 +203,20 @@ const isManager = async (nickname) => {
 
 
 /* Открываем веб сокет и подписываемся на событие */
-export const webSocket = async (data, cb) => {
+export const webSocket = async (roomId, cb) => {
   try {
 
-    // Stream API
-    let { roomId } = data;
     // socket connection
     const options = {
       endpoint: 'wss://chat.mixapp.io/websocket',
       SocketConstructor: WebSocket
     };
-    const ddp = new DDP(options);
+    var ddp = new DDP(options);
 
     ddp.on('connected', () => {
       ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
-      ddp.sub('stream-room-messages', [roomId, false]);
+      var subId = ddp.sub('stream-room-messages', [roomId, false]);
+      localStorage.setItem('sub[' + roomId + ']', subId);
     });
 
     ddp.on('changed', async (msg) => {
@@ -232,7 +230,7 @@ export const webSocket = async (data, cb) => {
       } catch (err) {
         throw err;
       }
-    })
+    });
 
   } catch (err) {
     throw err;
