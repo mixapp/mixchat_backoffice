@@ -1,5 +1,7 @@
 import axios from 'axios';
 import DDP from 'ddp.js';
+import { eventChannel } from 'redux-saga'
+import { FECTH_NEW_MESSAGE_SUCCESS } from './constants';
 //import querystring from 'querystring';
 
 const getUrl = (processId, companyId, path) => {
@@ -36,6 +38,7 @@ export const fetchSettings = async () => {
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
+    await setTimeout(() => { }, 2000);
     return {
       companyName: result.data.companyName,
       ...result.data.widget,
@@ -215,18 +218,12 @@ export const webSocket = async (roomId, cb) => {
 
     ddp.on('connected', () => {
       ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
-      var subId = ddp.sub('stream-room-messages', [roomId, false]);
-      localStorage.setItem('sub[' + roomId + ']', subId);
+      ddp.sub('stream-room-messages', [roomId, false]);
     });
 
     ddp.on('changed', async (msg) => {
       try {
-        let args = msg.fields.args[0];
-        let username = args.u.username;
-        let is_Manager = await isManager(username);
-
-        cb(username, args, is_Manager);
-
+        cb(msg);
       } catch (err) {
         throw err;
       }
@@ -235,4 +232,30 @@ export const webSocket = async (roomId, cb) => {
   } catch (err) {
     throw err;
   }
+}
+
+export const websocketInitChannel = (roomId) => {
+  return eventChannel(emitter => {
+    // init the connection here
+    const options = {
+      endpoint: 'wss://chat.mixapp.io/websocket',
+      SocketConstructor: WebSocket
+    };
+    var ddp = new DDP(options);
+
+    ddp.on('connected', () => {
+      ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
+      ddp.sub('stream-room-messages', [roomId, false]);
+    });
+
+    ddp.on('changed', (msg) => {
+      console.log(msg);
+      return emitter({ type: 'FECTH_NEW_MESSAGE_SUCCESS', msg });
+    });
+
+    // unsubscribe function
+    return () => {
+      // do whatever to interrupt the socket communication here
+    }
+  })
 }

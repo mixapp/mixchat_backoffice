@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Icon, Spin } from 'antd';
+import { Layout, Icon } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
 
@@ -7,8 +7,7 @@ const { Header, Sider, Content } = Layout;
 
 class Wrapper extends React.Component {
   state = {
-    collapsed: false,
-    loading: false
+    collapsed: false
   };
 
   toggle = () => {
@@ -35,9 +34,7 @@ class Wrapper extends React.Component {
               onClick={this.toggle}
             />
           </Header>
-          <Spin spinning={this.state.loading} delay={500}>
-            <Content className="content">{this.props.children}</Content>
-          </Spin>
+          <Content className="content">{this.props.children}</Content>
         </Layout>
       </Layout>
     );

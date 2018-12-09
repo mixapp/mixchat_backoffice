@@ -12,12 +12,12 @@ class DialogsList extends React.Component {
 
   state = {
     size: 'small',
-    currentRoom: ''
+    currentRoom: '',
+    messages: ''
   }
 
   componentDidMount() {
     // To disabled submit button at the beginning.
-    this.props.form.validateFields();
   }
 
   handleSubmit = (e) => {
@@ -29,6 +29,7 @@ class DialogsList extends React.Component {
           text: values.userComment
         });
       }
+      this.props.form.resetFields('userComment');
     });
   }
 
@@ -38,7 +39,6 @@ class DialogsList extends React.Component {
     } = this.props.form;
 
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
-
     return [
       <Row key='1'>
         <Col span={14} style={{ height: '600px', overflow: 'auto' }}>
@@ -93,7 +93,7 @@ class DialogsList extends React.Component {
               {getFieldDecorator('userComment', {
                 rules: [{ required: true, message: 'Please input your message!' }],
               })(
-                <TextArea placeholder="Username" />
+                <TextArea placeholder="You commnet ..." />
               )}
             </FormItem>
             <FormItem>

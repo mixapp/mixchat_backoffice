@@ -1,4 +1,4 @@
-import { put, fork, takeLatest } from 'redux-saga/effects';
+import { put, fork, takeLatest, call, take } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import {
   SET_AUTHORIZE,
@@ -29,18 +29,23 @@ function* sendMessageSaga() {
   })
 }
 
+var sockets = [];
+
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
-      let messages = yield Api.fetchDialog(action.data);
-      let socket = localStorage.getItem('sub[' + action.data + ']');
-      if (!socket) {
-        yield Api.webSocket(action.data, async () => {
-          let msgs = await Api.fetchDialog(action.data);
-          console.log(msgs);
-        });
-      }
+      yield put({ type: LOADER_ON });
+      let roomId = action.data;
+      let messages = yield Api.fetchDialog(roomId);
       yield put({ type: FETCH_DIALOG_SUCCESS, messages });
+      if (!sockets[roomId]) {
+        sockets[roomId] = yield call(Api.websocketInitChannel, roomId);
+      }
+      yield put({ type: LOADER_OFF });
+      while (true) {
+        const action = yield take(sockets[roomId]);
+        yield put(action);
+      }
     } catch (err) {
       throw err;
     }
@@ -50,8 +55,10 @@ function* fetchDialogSaga() {
 function* fetchDialogs() {
   yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
     try {
+      yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
+      yield put({ type: LOADER_OFF });
     } catch (err) {
       throw (err);
     }
@@ -91,12 +98,14 @@ function* addManager() {
 function* fetchManagers() {
   yield takeLatest(FETCH_MANAGERS_REQUEST, function* (action) {
     try {
+      yield put({ type: LOADER_ON });
       let managers = yield Api.fetchManagers();
       managers.forEach((value, key) => {
         value.key = String(key + 1);
         value.number = key + 1;
       });
       yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
+      yield put({ type: LOADER_OFF });
     } catch (err) {
       throw err;
     }
@@ -106,8 +115,10 @@ function* fetchManagers() {
 function* saveSettingsSaga() {
   yield takeLatest(SAVE_SETTINGS_REQUEST, function* (action) {
     try {
+      yield put({ type: LOADER_ON });
       yield Api.saveSettings(action.data);
       yield put({ type: SAVE_SETTINGS_SUCCESS });
+      yield put({ type: LOADER_OFF });
     } catch (err) {
       throw err;
     }

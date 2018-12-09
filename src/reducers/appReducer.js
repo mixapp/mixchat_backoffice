@@ -6,10 +6,14 @@ import {
   REMOVE_MANAGER_SUCCESS,
   FETCH_DIALOGS_SUCCESS,
   LOADER_ON, LOADER_OFF,
-  FETCH_DIALOG_SUCCESS
+  FETCH_DIALOG_SUCCESS,
+  FECTH_NEW_MESSAGE_SUCCESS
 } from '../constants';
 const initialState = {
-  user: null
+  user: null,
+  messages: [],
+  dialogs: [],
+  loader: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -27,13 +31,13 @@ export default function reducer(state = initialState, action = {}) {
     case FETCH_DIALOGS_SUCCESS:
       return { ...state, dialogs: action.dialogs };
     case LOADER_ON:
-      console.log('LOADER_ON');
       return { ...state, loader: true };
     case LOADER_OFF:
-      console.log('LOADER_OFF');
       return { ...state, loader: false };
     case FETCH_DIALOG_SUCCESS:
-      return { ...state, messages: action.messages };
+      return { ...state, messages: action.messages.reverse() };
+    case FECTH_NEW_MESSAGE_SUCCESS:
+      return { ...state, messages: [...state.messages, action.msg.fields.args[0]] };
     default:
       return state;
   }
