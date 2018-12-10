@@ -67,7 +67,7 @@ class DialogsList extends React.Component {
                   this.setState({
                     currentRoom: item._id
                   });
-                  await this.props.fetchDialog(item._id);
+                  await this.props.fetchDialog({ roomId: item._id, count: 1000 });
                 } catch (err) {
                   throw err;
                 }

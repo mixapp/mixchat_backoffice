@@ -155,18 +155,18 @@ export const fetchDialogs = async () => {
 }
 
 /* Получение диалога */
-export const fetchDialog = async (id) => {
+export const fetchDialog = async (data) => {
   try {
+
     let result = await axios.get('https://chat.mixapp.io/api/v1/groups.history', {
-      params: {
-        roomId: id
-      },
+      params: data,
       headers: {
         'X-Auth-Token': config.rocketChat.XauthToken,
         'X-User-Id': config.rocketChat.XuserId
       }
     });
     return result.data.messages;
+
   } catch (err) {
     throw err;
   }
