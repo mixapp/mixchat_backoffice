@@ -172,6 +172,23 @@ export const fetchDialog = async (data) => {
   }
 }
 
+export const fetchDialogInfo = async (data) => {
+  try {
+
+    let result = await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
+      params: data,
+      headers: {
+        'X-Auth-Token': config.rocketChat.XauthToken,
+        'X-User-Id': config.rocketChat.XuserId
+      }
+    });
+    return result;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
 /* Отправка сообщения */
 export const sendMessageSaga = async (data) => {
   try {

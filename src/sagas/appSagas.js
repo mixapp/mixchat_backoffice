@@ -161,6 +161,6 @@ export default function* ordersSaga() {
     fork(removeManager),
     fork(fetchDialogs),
     fork(fetchDialogSaga),
-    fork(sendMessageSaga)
+    fork(sendMessageSaga),
   ];
 }

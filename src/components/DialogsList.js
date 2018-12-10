@@ -1,5 +1,7 @@
 import React from 'react';
-import { Row, Col, List, Input, Form, Button } from 'antd';
+import { Row, Col, List, Input, Form, Button, Avatar, Spin, message } from 'antd';
+import InfiniteScroll from 'react-infinite-scroller';
+import * as Api from '../api';
 const { TextArea } = Input
 const FormItem = Form.Item;
 
@@ -13,11 +15,29 @@ class DialogsList extends React.Component {
   state = {
     size: 'small',
     currentRoom: '',
-    messages: ''
+    messages: '',
+    data: [],
+    loading: false,
+    hasMore: true,
+    latest: ''
   }
 
-  componentDidMount() {
-    // To disabled submit button at the beginning.
+  test = async () => {
+    let messagesCount = await Api.fetchDialogInfo({ roomId: this.state.currentRoom });
+    this.setState({
+      messagesCount: messagesCount.data.group.msgs,
+      hasMore: true,
+      messages: [],
+      data: [],
+      loading: false,
+      latest: ''
+    });
+    await this.fetchData((res) => {
+      this.setState({
+        data: res.results,
+      });
+    });
+    document.getElementById('test123').scrollTop = 99999;
   }
 
   handleSubmit = (e) => {
@@ -33,6 +53,37 @@ class DialogsList extends React.Component {
     });
   }
 
+  fetchData = async (callback) => {
+    let messages = await Api.fetchDialog({ roomId: this.state.currentRoom, count: 20, latest: this.state.latest });
+    if (messages[messages.length - 1])
+      await this.setState({
+        latest: messages[messages.length - 1].ts
+      });
+    callback({ results: messages.reverse() });
+  }
+
+  handleInfiniteOnLoad = () => {
+    let data = this.state.data;
+    this.setState({
+      loading: true,
+    });
+    if (data.length > this.state.messagesCount) {
+      message.warning('Infinite List loaded all');
+      this.setState({
+        hasMore: false,
+        loading: false,
+      });
+      return;
+    }
+    this.fetchData((res) => {
+      data = res.results.concat(data);
+      this.setState({
+        data,
+        loading: false
+      });
+    });
+  }
+
   render() {
     const {
       getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
@@ -41,18 +92,35 @@ class DialogsList extends React.Component {
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
-        <Col span={14} style={{ height: '600px', overflow: 'auto' }}>
-          <List
-            size="small"
-            header={<b>Comments</b>}
-            bordered
-            dataSource={this.props.messages}
-            renderItem={item => {
-              return <div>
-                <b>{item.u.username}</b>: {item.msg}
-              </div>
-            }}
-          />
+        <Col span={14} style={{ height: '600px', overflow: 'auto', padding: '20px' }} id='test123'>
+          <InfiniteScroll
+            initialLoad={false}
+            pageStart={0}
+            isReverse={true}
+            loadMore={this.handleInfiniteOnLoad}
+            hasMore={!this.state.loading && this.state.hasMore}
+            useWindow={false}
+          >
+            <List
+              dataSource={this.state.data}
+              renderItem={item => {
+                return <List.Item key={item._id}>
+                  <List.Item.Meta
+                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                    title={<a href="https://ant.design">{item.u.name}</a>}
+                  />
+                  <div>{item.msg}</div>
+                </List.Item>
+              }
+              }
+            >
+              {this.state.loading && this.state.hasMore && (
+                <div className="demo-loading-container">
+                  <Spin />
+                </div>
+              )}
+            </List>
+          </InfiniteScroll>
         </Col>
         <Col span={1}></Col>
         <Col span={9} style={{ overflow: 'hidden' }}>
@@ -64,10 +132,10 @@ class DialogsList extends React.Component {
             renderItem={item => {
               async function fetchDialog() {
                 try {
-                  this.setState({
+                  await this.setState({
                     currentRoom: item._id
                   });
-                  await this.props.fetchDialog({ roomId: item._id, count: 1000 });
+                  await this.test({ roomId: item._id, count: 1000 });
                 } catch (err) {
                   throw err;
                 }

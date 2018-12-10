@@ -7,13 +7,13 @@ import {
   FETCH_DIALOGS_SUCCESS,
   LOADER_ON, LOADER_OFF,
   FETCH_DIALOG_SUCCESS,
-  FECTH_NEW_MESSAGE_SUCCESS
+  FECTH_NEW_MESSAGE_SUCCESS,
 } from '../constants';
 const initialState = {
   user: null,
   messages: [],
   dialogs: [],
-  loader: false
+  loader: false,
 };
 
 export default function reducer(state = initialState, action = {}) {

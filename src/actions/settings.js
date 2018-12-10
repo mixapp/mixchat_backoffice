@@ -6,7 +6,7 @@ import {
   REMOVE_MANAGER_REQUEST,
   FETCH_DIALOGS_REQUEST,
   FETCH_DIALOG_REQUEST,
-  SEND_MESSAGE_REQUEST
+  SEND_MESSAGE_REQUEST,
 } from '../constants'
 
 export const sendMessage = (data) => {
