@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, List, Input, Form, Button, Avatar, Spin, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as Api from '../api';
+import Comment from '../components/items/Comment'
 const { TextArea } = Input
 const FormItem = Form.Item;
 
@@ -14,15 +15,22 @@ class DialogsList extends React.Component {
 
   state = {
     size: 'small',
-    currentRoom: '',
-    messages: '',
+    currentRoom: null,
+    messages: null,
     data: [],
     loading: false,
     hasMore: true,
-    latest: ''
+    latest: null,
+    chatContainer: null
   }
 
-  test = async () => {
+  componentDidMount() {
+    this.setState({
+      chatContainer: document.getElementById('chat-conteiner')
+    });
+  }
+
+  fetchDialog = async () => {
     let messagesCount = await Api.fetchDialogInfo({ roomId: this.state.currentRoom });
     this.setState({
       messagesCount: messagesCount.data.group.msgs,
@@ -37,7 +45,7 @@ class DialogsList extends React.Component {
         data: res.results,
       });
     });
-    document.getElementById('test123').scrollTop = 99999;
+    this.state.chatContainer.scrollTop = 99999;
   }
 
   handleSubmit = (e) => {
@@ -46,7 +54,8 @@ class DialogsList extends React.Component {
       if (!err && this.state.currentRoom) {
         this.props.sendMessage({
           roomId: this.state.currentRoom,
-          text: values.userComment
+          text: values.userComment,
+          messageCount: this.state.data.length
         });
       }
       this.props.form.resetFields('userComment');
@@ -54,7 +63,7 @@ class DialogsList extends React.Component {
   }
 
   fetchData = async (callback) => {
-    let messages = await Api.fetchDialog({ roomId: this.state.currentRoom, count: 20, latest: this.state.latest });
+    let messages = await Api.fetchDialog({ roomId: this.state.currentRoom, count: 15, latest: this.state.latest });
     if (messages[messages.length - 1])
       await this.setState({
         latest: messages[messages.length - 1].ts
@@ -67,7 +76,7 @@ class DialogsList extends React.Component {
     this.setState({
       loading: true,
     });
-    if (data.length > this.state.messagesCount) {
+    if (data.length >= this.state.messagesCount) {
       message.warning('Infinite List loaded all');
       this.setState({
         hasMore: false,
@@ -75,12 +84,13 @@ class DialogsList extends React.Component {
       });
       return;
     }
-    this.fetchData((res) => {
+    this.fetchData(async (res) => {
       data = res.results.concat(data);
       this.setState({
         data,
         loading: false
       });
+      this.state.chatContainer.scrollTop = 300;
     });
   }
 
@@ -92,7 +102,7 @@ class DialogsList extends React.Component {
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
-        <Col span={14} style={{ height: '600px', overflow: 'auto', padding: '20px' }} id='test123'>
+        <Col span={14} style={{ height: '600px', overflow: 'auto', padding: '20px' }} id='chat-conteiner'>
           <InfiniteScroll
             initialLoad={false}
             pageStart={0}
@@ -100,26 +110,11 @@ class DialogsList extends React.Component {
             loadMore={this.handleInfiniteOnLoad}
             hasMore={!this.state.loading && this.state.hasMore}
             useWindow={false}
+            threshold={100}
           >
-            <List
-              dataSource={this.state.data}
-              renderItem={item => {
-                return <List.Item key={item._id}>
-                  <List.Item.Meta
-                    avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                    title={<a href="https://ant.design">{item.u.name}</a>}
-                  />
-                  <div>{item.msg}</div>
-                </List.Item>
-              }
-              }
-            >
-              {this.state.loading && this.state.hasMore && (
-                <div className="demo-loading-container">
-                  <Spin />
-                </div>
-              )}
-            </List>
+            <Comment
+              state={this.state}
+            />
           </InfiniteScroll>
         </Col>
         <Col span={1}></Col>
@@ -135,7 +130,7 @@ class DialogsList extends React.Component {
                   await this.setState({
                     currentRoom: item._id
                   });
-                  await this.test({ roomId: item._id, count: 1000 });
+                  await this.fetchDialog({ roomId: item._id, count: 1000 });
                 } catch (err) {
                   throw err;
                 }

@@ -20,7 +20,7 @@ function* sendMessageSaga() {
       let result = yield Api.sendMessageSaga(action.data);
       if (result.status === 200) {
         yield put({ type: SEND_MESSAGE_SUCCESS });
-        let messages = yield Api.fetchDialog(action.data.roomId);
+        let messages = yield Api.fetchDialog({ roomId: action.data.roomId, count: action.data.messageCount });
         yield put({ type: FETCH_DIALOG_SUCCESS, messages });
       }
     } catch (err) {
