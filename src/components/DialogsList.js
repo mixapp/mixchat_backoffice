@@ -1,10 +1,14 @@
 import React from 'react';
-import { Row, Col, List, Input, Form, Button, Avatar, Spin, message } from 'antd';
+import * as Scroll from 'react-scroll';
+import { Row, Col, List, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as Api from '../api';
 import Comment from '../components/items/Comment'
 const { TextArea } = Input
 const FormItem = Form.Item;
+
+/* Scroll */
+const scroll = Scroll.animateScroll;
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -12,21 +16,25 @@ function hasErrors(fieldsError) {
 
 
 class DialogsList extends React.Component {
+  constructor() {
+    super();
+    this.lm = null;
+  }
 
   state = {
     size: 'small',
     currentRoom: null,
-    messages: null,
-    data: [],
     loading: false,
     hasMore: true,
-    latest: null,
-    chatContainer: null
+    pageItemsCount: 15,
+    currentPage: 0,
+    lm: null //last message
   }
 
-  componentDidMount() {
-    this.setState({
-      chatContainer: document.getElementById('chat-conteiner')
+  scrollToBottom(options) {
+    scroll.scrollToBottom({
+      containerId: 'chat-conteiner',
+      ...options
     });
   }
 
@@ -35,17 +43,9 @@ class DialogsList extends React.Component {
     this.setState({
       messagesCount: messagesCount.data.group.msgs,
       hasMore: true,
-      messages: [],
-      data: [],
-      loading: false,
-      latest: ''
+      lm: null
     });
-    await this.fetchData((res) => {
-      this.setState({
-        data: res.results,
-      });
-    });
-    this.state.chatContainer.scrollTop = 99999;
+    await this.fetchData();
   }
 
   handleSubmit = (e) => {
@@ -55,28 +55,47 @@ class DialogsList extends React.Component {
         this.props.sendMessage({
           roomId: this.state.currentRoom,
           text: values.userComment,
-          messageCount: this.state.data.length
+          messageCount: this.props.messages.length
         });
       }
       this.props.form.resetFields('userComment');
     });
   }
 
-  fetchData = async (callback) => {
-    let messages = await Api.fetchDialog({ roomId: this.state.currentRoom, count: 15, latest: this.state.latest });
-    if (messages[messages.length - 1])
-      await this.setState({
-        latest: messages[messages.length - 1].ts
+  async componentDidUpdate() {
+    let { messages, message } = this.props;
+    if (messages) {
+      let lm = messages[messages.length - 1];
+      if (this.lm) {
+        if (message && this.lm._id !== message._id) {
+          this.lm = lm;
+          this.scrollToBottom({ duration: 0 });
+        }
+      } else {
+        this.lm = lm;
+        this.scrollToBottom({ duration: 0 });
+      }
+    }
+  }
+
+  async componentWillReceiveProps() {
+    let { messages } = this.props;
+    if (messages) {
+      this.setState({
+        loading: false
       });
-    callback({ results: messages.reverse() });
+    }
+  }
+
+  fetchData = async () => {
+    this.props.fetchDialog({ roomId: this.state.currentRoom, count: this.state.currentPage * this.state.pageItemsCount });
   }
 
   handleInfiniteOnLoad = () => {
-    let data = this.state.data;
     this.setState({
       loading: true,
     });
-    if (data.length >= this.state.messagesCount) {
+    if (this.state.currentPage * this.state.pageItemsCount >= this.state.messagesCount) {
       message.warning('Infinite List loaded all');
       this.setState({
         hasMore: false,
@@ -84,14 +103,10 @@ class DialogsList extends React.Component {
       });
       return;
     }
-    this.fetchData(async (res) => {
-      data = res.results.concat(data);
-      this.setState({
-        data,
-        loading: false
-      });
-      this.state.chatContainer.scrollTop = 300;
-    });
+    this.setState({
+      currentPage: ++this.state.currentPage
+    })
+    this.fetchData();
   }
 
   render() {
@@ -102,18 +117,18 @@ class DialogsList extends React.Component {
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
-        <Col span={14} style={{ height: '600px', overflow: 'auto', padding: '20px' }} id='chat-conteiner'>
+        <Col span={14} style={{ height: '600px', overflow: 'auto', padding: '10px' }} id='chat-conteiner'>
           <InfiniteScroll
             initialLoad={false}
-            pageStart={0}
             isReverse={true}
             loadMore={this.handleInfiniteOnLoad}
             hasMore={!this.state.loading && this.state.hasMore}
             useWindow={false}
-            threshold={100}
+            threshold={20}
           >
             <Comment
               state={this.state}
+              messages={this.props.messages}
             />
           </InfiniteScroll>
         </Col>
@@ -128,9 +143,10 @@ class DialogsList extends React.Component {
               async function fetchDialog() {
                 try {
                   await this.setState({
-                    currentRoom: item._id
+                    currentRoom: item._id,
+                    currentPage: 1
                   });
-                  await this.fetchDialog({ roomId: item._id, count: 1000 });
+                  await this.fetchDialog();
                 } catch (err) {
                   throw err;
                 }

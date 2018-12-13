@@ -1,8 +1,6 @@
 import axios from 'axios';
 import DDP from 'ddp.js';
 import { eventChannel } from 'redux-saga'
-import { FECTH_NEW_MESSAGE_SUCCESS } from './constants';
-//import querystring from 'querystring';
 
 const getUrl = (processId, companyId, path) => {
   return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
@@ -211,17 +209,6 @@ export const sendMessageSaga = async (data) => {
   }
 }
 
-const isManager = async (nickname) => {
-  try {
-
-    return nickname.indexOf('client') === -1;
-
-  } catch (err) {
-    throw err;
-  }
-}
-
-
 /* Открываем веб сокет и подписываемся на событие */
 export const webSocket = async (roomId, cb) => {
   try {
@@ -266,7 +253,6 @@ export const websocketInitChannel = (roomId) => {
     });
 
     ddp.on('changed', (msg) => {
-      console.log(msg);
       return emitter({ type: 'FECTH_NEW_MESSAGE_SUCCESS', msg });
     });
 

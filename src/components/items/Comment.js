@@ -4,12 +4,13 @@ import { List, Avatar, Spin } from 'antd';
 export default class Comment extends React.Component {
   render() {
     return <List
-      dataSource={this.props.state.data}
+      size="small"
+      dataSource={this.props.messages}
       renderItem={item => {
         if (item.file) {
           switch (item.file.type) {
             case 'image/png':
-              item.fileLink = <img height='200px' src={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name} />;
+              item.fileLink = <img height='150px' src={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name} />;
               break;
             case 'text/plain':
               item.fileLink = <a href={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name}>{item.file.name}</a>;

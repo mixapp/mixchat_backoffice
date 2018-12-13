@@ -12,6 +12,7 @@ import {
 const initialState = {
   user: null,
   messages: [],
+  message: null,
   dialogs: [],
   loader: false
 };
@@ -37,7 +38,7 @@ export default function reducer(state = initialState, action = {}) {
     case FETCH_DIALOG_SUCCESS:
       return { ...state, messages: action.messages.reverse() };
     case FECTH_NEW_MESSAGE_SUCCESS:
-      return { ...state, messages: [...state.messages, action.msg.fields.args[0]] };
+      return { ...state, message: action.msg.fields.args[0], messages: [...state.messages, action.msg.fields.args[0]] };
     default:
       return state;
   }

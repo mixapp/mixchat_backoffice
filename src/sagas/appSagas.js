@@ -20,8 +20,6 @@ function* sendMessageSaga() {
       let result = yield Api.sendMessageSaga(action.data);
       if (result.status === 200) {
         yield put({ type: SEND_MESSAGE_SUCCESS });
-        let messages = yield Api.fetchDialog({ roomId: action.data.roomId, count: action.data.messageCount });
-        yield put({ type: FETCH_DIALOG_SUCCESS, messages });
       }
     } catch (err) {
       throw err;
@@ -35,8 +33,8 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
       yield put({ type: LOADER_ON });
-      let roomId = action.data;
-      let messages = yield Api.fetchDialog(roomId);
+      let { roomId, count } = action.data;
+      let messages = yield Api.fetchDialog({ roomId, count });
       yield put({ type: FETCH_DIALOG_SUCCESS, messages });
       if (!sockets[roomId]) {
         sockets[roomId] = yield call(Api.websocketInitChannel, roomId);
