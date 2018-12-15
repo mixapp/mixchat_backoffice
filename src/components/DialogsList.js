@@ -6,6 +6,7 @@ import * as Api from '../api';
 import Comment from '../components/items/Comment'
 const { TextArea } = Input
 const FormItem = Form.Item;
+const Search = Input.Search;
 
 /* Scroll */
 const scroll = Scroll.animateScroll;
@@ -28,11 +29,19 @@ class DialogsList extends React.Component {
     hasMore: true,
     pageItemsCount: 15,
     currentPage: 0,
-    lm: null //last message
+    lm: null, //last message,
+    searchDialogText: ''
   }
 
   scrollToBottom(options) {
     scroll.scrollToBottom({
+      containerId: 'chat-conteiner',
+      ...options
+    });
+  }
+
+  scrollToTop(options) {
+    scroll.scrollToTop({
       containerId: 'chat-conteiner',
       ...options
     });
@@ -62,6 +71,12 @@ class DialogsList extends React.Component {
     });
   }
 
+  searchDialog(value) {
+    this.setState({
+      searchDialogText: value
+    })
+  }
+
   async componentDidUpdate() {
     let { messages, message } = this.props;
     if (messages) {
@@ -87,11 +102,18 @@ class DialogsList extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState({
+      currentRoom: null,
+      lm: null //last message
+    });
+  }
+
   fetchData = async () => {
     this.props.fetchDialog({ roomId: this.state.currentRoom, count: this.state.currentPage * this.state.pageItemsCount });
   }
 
-  handleInfiniteOnLoad = () => {
+  handleInfiniteOnLoad = async () => {
     this.setState({
       loading: true,
     });
@@ -136,10 +158,19 @@ class DialogsList extends React.Component {
         <Col span={9} style={{ overflow: 'hidden' }}>
           <List
             size="small"
-            header={<b>List of groups</b>}
+            header={<Search
+              placeholder="Dialog name"
+              onSearch={value => this.searchDialog(value)}
+            />}
             bordered
             dataSource={this.props.dialogs}
             renderItem={item => {
+              /* crop roomName if need it */
+              let roomName = item.name.length > 15 ? item.name.substring(0, 12) + '...' : item.name;
+
+              /* room is selected */
+              let selected = item._id === this.state.currentRoom;
+
               async function fetchDialog() {
                 try {
                   await this.setState({
@@ -155,7 +186,7 @@ class DialogsList extends React.Component {
                 style={{ cursor: 'pointer' }}
                 onClick={fetchDialog.bind(this)}
               >
-                {item.name.length > 15 ? item.name.substring(0, 12) + '...' : item.name}
+                {selected ? <b>{roomName}</b> : roomName}
                 <b>({item.msgs})</b>
               </ List.Item>
             }}
