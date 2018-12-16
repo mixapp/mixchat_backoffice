@@ -7,14 +7,15 @@ import {
   FETCH_DIALOGS_SUCCESS,
   LOADER_ON, LOADER_OFF,
   FETCH_DIALOG_SUCCESS,
-  FECTH_NEW_MESSAGE_SUCCESS
+  SOCKET_ROOMS_CHANGED_EVENT
 } from '../constants';
 const initialState = {
   user: null,
   messages: [],
   message: null,
   dialogs: [],
-  loader: false
+  loader: false,
+  currentRoomId: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -36,9 +37,11 @@ export default function reducer(state = initialState, action = {}) {
     case LOADER_OFF:
       return { ...state, loader: false };
     case FETCH_DIALOG_SUCCESS:
-      return { ...state, messages: action.messages.reverse() };
-    case FECTH_NEW_MESSAGE_SUCCESS:
-      return { ...state, message: action.msg.fields.args[0], messages: [...state.messages, action.msg.fields.args[0]] };
+      state.currentRoomId = action.data.roomId;
+      return { ...state, messages: action.data.messages.reverse() };
+    case SOCKET_ROOMS_CHANGED_EVENT:
+      let lastMsg = action.data.fields.args[1].lastMessage;
+      return { ...state, message: lastMsg, messages: state.currentRoomId === lastMsg.rid ? [...state.messages, lastMsg] : state.messages };
     default:
       return state;
   }

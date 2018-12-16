@@ -238,7 +238,7 @@ export const webSocket = async (roomId, cb) => {
   }
 }
 
-export const websocketInitChannel = (roomId) => {
+export const websocketInitRoomsChanged = () => {
   return eventChannel(emitter => {
     // init the connection here
     const options = {
@@ -249,11 +249,11 @@ export const websocketInitChannel = (roomId) => {
 
     ddp.on('connected', () => {
       ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
-      ddp.sub('stream-room-messages', [roomId, false]);
+      ddp.sub('stream-notify-user', [config.rocketChat.XuserId + '/rooms-changed', false]);
     });
 
-    ddp.on('changed', (msg) => {
-      return emitter({ type: 'FECTH_NEW_MESSAGE_SUCCESS', msg });
+    ddp.on('changed', (data) => {
+      return emitter({ type: 'SOCKET_ROOMS_CHANGED_EVENT', data });
     });
 
     // unsubscribe function

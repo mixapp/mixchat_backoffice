@@ -3,7 +3,7 @@ import * as Scroll from 'react-scroll';
 import { Row, Col, List, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as Api from '../api';
-import Comment from '../components/items/Comment'
+import Comment from '../components/items/Comment';
 const { TextArea } = Input
 const FormItem = Form.Item;
 const Search = Input.Search;
@@ -17,8 +17,8 @@ function hasErrors(fieldsError) {
 
 
 class DialogsList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.lm = null;
   }
 
@@ -45,6 +45,12 @@ class DialogsList extends React.Component {
       containerId: 'chat-conteiner',
       ...options
     });
+  }
+
+  sendMessage(event) {
+    if (event.key === 'Enter') {
+      //this.handleSubmit().bind(this);
+    }
   }
 
   fetchDialog = async () => {
@@ -165,6 +171,9 @@ class DialogsList extends React.Component {
             bordered
             dataSource={this.props.dialogs}
             renderItem={item => {
+
+              if (item.name.search(this.state.searchDialogText) === -1) return <div></div>;
+
               /* crop roomName if need it */
               let roomName = item.name.length > 15 ? item.name.substring(0, 12) + '...' : item.name;
 
@@ -195,7 +204,7 @@ class DialogsList extends React.Component {
       </Row>,
       <Row key='2'>
         <Col span={14} style={{ height: '600px', overflow: 'auto' }}>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit.bind}>
             <FormItem
               validateStatus={userCommentError ? 'error' : ''}
               help={userCommentError || ''}
@@ -203,7 +212,7 @@ class DialogsList extends React.Component {
               {getFieldDecorator('userComment', {
                 rules: [{ required: true, message: 'Please input your message!' }],
               })(
-                <TextArea placeholder="You commnet ..." />
+                <TextArea placeholder="You commnet ..." onKeyDown={this.sendMessage.bind(this)} />
               )}
             </FormItem>
             <FormItem>

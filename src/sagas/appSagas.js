@@ -27,23 +27,14 @@ function* sendMessageSaga() {
   })
 }
 
-var sockets = [];
-
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
       yield put({ type: LOADER_ON });
       let { roomId, count } = action.data;
       let messages = yield Api.fetchDialog({ roomId, count });
-      yield put({ type: FETCH_DIALOG_SUCCESS, messages });
-      if (!sockets[roomId]) {
-        sockets[roomId] = yield call(Api.websocketInitChannel, roomId);
-      }
+      yield put({ type: FETCH_DIALOG_SUCCESS, data: { messages: messages, roomId } });
       yield put({ type: LOADER_OFF });
-      while (true) {
-        const action = yield take(sockets[roomId]);
-        yield put(action);
-      }
     } catch (err) {
       throw err;
     }
@@ -57,6 +48,15 @@ function* fetchDialogs() {
       let dialogs = yield Api.fetchDialogs();
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       yield put({ type: LOADER_OFF });
+      /* NEW */
+      let socket = yield call(Api.websocketInitRoomsChanged);
+      while (true) {
+        const action = yield take(socket);
+        yield put(action);
+        //TODO
+        let dialogs = yield Api.fetchDialogs();
+        yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
+      }
     } catch (err) {
       throw (err);
     }
