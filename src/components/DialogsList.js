@@ -1,8 +1,9 @@
 import React from 'react';
 import * as Scroll from 'react-scroll';
-import { Row, Col, List, Input, Form, Button, message } from 'antd';
+import { Badge, Row, Col, List, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as Api from '../api';
+import * as lsApi from '../lsApi';
 import Comment from '../components/items/Comment';
 const { TextArea } = Input
 const FormItem = Form.Item;
@@ -48,8 +49,8 @@ class DialogsList extends React.Component {
   }
 
   sendMessage(event) {
-    if (event.key === 'Enter') {
-      //this.handleSubmit().bind(this);
+    if (event.key === 'Enter' && event.shiftKey) {
+      this.handleSubmit();
     }
   }
 
@@ -64,7 +65,8 @@ class DialogsList extends React.Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
+    if (e)
+      e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err && this.state.currentRoom) {
         this.props.sendMessage({
@@ -145,20 +147,22 @@ class DialogsList extends React.Component {
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
-        <Col span={14} style={{ height: '600px', overflow: 'auto', padding: '10px' }} id='chat-conteiner'>
-          <InfiniteScroll
-            initialLoad={false}
-            isReverse={true}
-            loadMore={this.handleInfiniteOnLoad}
-            hasMore={!this.state.loading && this.state.hasMore}
-            useWindow={false}
-            threshold={20}
-          >
-            <Comment
-              state={this.state}
-              messages={this.props.messages}
-            />
-          </InfiniteScroll>
+        <Col span={14} style={{ overflow: 'hidden' }}> {/* TODO */}
+          <div style={{ height: '600px', width: '104%', overflow: 'auto', padding: '10px' }} id='chat-conteiner'>
+            <InfiniteScroll
+              initialLoad={false}
+              isReverse={true}
+              loadMore={this.handleInfiniteOnLoad}
+              hasMore={!this.state.loading && this.state.hasMore}
+              useWindow={false}
+              threshold={20}
+            >
+              <Comment
+                state={this.state}
+                messages={this.props.messages}
+              />
+            </InfiniteScroll>
+          </div>
         </Col>
         <Col span={1}></Col>
         <Col span={9} style={{ overflow: 'hidden' }}>
@@ -196,7 +200,8 @@ class DialogsList extends React.Component {
                 onClick={fetchDialog.bind(this)}
               >
                 {selected ? <b>{roomName}</b> : roomName}
-                <b>({item.msgs})</b>
+                <Badge count={item.msgs} overflowCount={99999} style={{ backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset' }} />
+                <Badge count={0} />
               </ List.Item>
             }}
           />
@@ -204,7 +209,7 @@ class DialogsList extends React.Component {
       </Row>,
       <Row key='2'>
         <Col span={14} style={{ height: '600px', overflow: 'auto' }}>
-          <Form onSubmit={this.handleSubmit.bind}>
+          <Form onSubmit={this.handleSubmit}>
             <FormItem
               validateStatus={userCommentError ? 'error' : ''}
               help={userCommentError || ''}
@@ -212,7 +217,7 @@ class DialogsList extends React.Component {
               {getFieldDecorator('userComment', {
                 rules: [{ required: true, message: 'Please input your message!' }],
               })(
-                <TextArea placeholder="You commnet ..." onKeyDown={this.sendMessage.bind(this)} />
+                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
               )}
             </FormItem>
             <FormItem>

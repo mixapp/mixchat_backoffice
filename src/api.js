@@ -1,6 +1,7 @@
 import axios from 'axios';
 import DDP from 'ddp.js';
-import { eventChannel } from 'redux-saga'
+import * as lsApi from '../src/lsApi';
+import { eventChannel } from 'redux-saga';
 
 const getUrl = (processId, companyId, path) => {
   return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
@@ -129,24 +130,15 @@ export const removeManager = async (data) => {
 /* получение списка диалогов */
 export const fetchDialogs = async () => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'get-dialogs');
-    let result = await axios.get(uri, {
-      headers: getHeadera(),
+
+    let result = await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
+      headers: {
+        'X-Auth-Token': config.rocketChat.XauthToken,
+        'X-User-Id': config.rocketChat.XuserId
+      }
     });
-    let data = [];
-    result.data.groups.forEach((value, key) => {
-      let name = value.name.split('_');
-      name = value.name.replace(name[name.length - 1], '');
-      data.push({
-        _id: value._id,
-        name: name,
-        msgs: value.msgs,
-        _updatedAt: value._updatedAt,
-        u: value.u,
-        usersCount: value.usersCount
-      })
-    });
-    return data;
+    return result.data.groups;
+
   } catch (err) {
     throw err;
   }

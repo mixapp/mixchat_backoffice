@@ -69,8 +69,7 @@ function* removeManager() {
       let result = yield Api.removeManager(action.data);
       if (!result.data.error) {
         yield put({ type: REMOVE_MANAGER_SUCCESS, result });
-        let managers = yield put({ type: FETCH_MANAGERS_REQUEST });
-        yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
+        yield put({ type: FETCH_MANAGERS_REQUEST });
       }
     } catch (err) {
       throw err;
@@ -84,8 +83,7 @@ function* addManager() {
       let result = yield Api.addManager(action.data);
       if (!result.data.error) {
         yield put({ type: ADD_MANAGER_SUCCESS, result });
-        let managers = yield put({ type: FETCH_MANAGERS_REQUEST });
-        yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
+        yield put({ type: FETCH_MANAGERS_REQUEST });
       }
     } catch (err) {
       throw err;

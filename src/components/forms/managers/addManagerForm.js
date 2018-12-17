@@ -49,7 +49,7 @@ class AddManagerForm extends React.Component {
             rules: [
               { required: true }
             ],
-          })(<Input placeholder='*********' />)}
+          })(<Input placeholder='*********'  type='password' />)}
         </FormItem>
 
         <FormItem {...formItemLayout}>
