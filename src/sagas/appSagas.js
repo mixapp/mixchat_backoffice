@@ -13,11 +13,18 @@ import {
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
 } from '../constants';
 import * as Api from '../api';
+import { readDialog, updateDialogs, getDialogs } from '../lsApi';
+import * as _ from 'underscore';
 
 function* sendMessageSaga() {
   yield takeLatest(SEND_MESSAGE_REQUEST, function* (action) {
     try {
       let result = yield Api.sendMessageSaga(action.data);
+      let lsDialogs = getDialogs();
+      let lsDialog = _.findIndex(lsDialogs, { _id: action.data.roomId });
+      lsDialogs[lsDialog].nmsgs = 0;
+      lsDialogs[lsDialog].msgs = lsDialogs[lsDialog].msgs + 1;
+      updateDialogs(lsDialogs);
       if (result.status === 200) {
         yield put({ type: SEND_MESSAGE_SUCCESS });
       }
@@ -31,9 +38,12 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
       yield put({ type: LOADER_ON });
-      let { roomId, count } = action.data;
-      let messages = yield Api.fetchDialog({ roomId, count });
-      yield put({ type: FETCH_DIALOG_SUCCESS, data: { messages: messages, roomId } });
+      let { count, room } = action.data;
+      updateDialogs(readDialog(room));
+      let dialogs = yield Api.fetchDialogs();
+      yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
+      let messages = yield Api.fetchDialog({ roomId: room._id, count });
+      yield put({ type: FETCH_DIALOG_SUCCESS, data: { messages: messages, roomId: room._id } });
       yield put({ type: LOADER_OFF });
     } catch (err) {
       throw err;

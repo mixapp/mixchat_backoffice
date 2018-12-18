@@ -1,6 +1,6 @@
 import axios from 'axios';
 import DDP from 'ddp.js';
-import * as lsApi from '../src/lsApi';
+import { getDialogsNmsgs } from '../src/lsApi';
 import { eventChannel } from 'redux-saga';
 
 const getUrl = (processId, companyId, path) => {
@@ -137,7 +137,7 @@ export const fetchDialogs = async () => {
         'X-User-Id': config.rocketChat.XuserId
       }
     });
-    return result.data.groups;
+    return getDialogsNmsgs(result.data.groups);
 
   } catch (err) {
     throw err;

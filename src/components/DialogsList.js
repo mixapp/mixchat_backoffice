@@ -3,7 +3,7 @@ import * as Scroll from 'react-scroll';
 import { Badge, Row, Col, List, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as Api from '../api';
-import * as lsApi from '../lsApi';
+import * as _ from 'underscore';
 import Comment from '../components/items/Comment';
 const { TextArea } = Input
 const FormItem = Form.Item;
@@ -55,7 +55,7 @@ class DialogsList extends React.Component {
   }
 
   fetchDialog = async () => {
-    let messagesCount = await Api.fetchDialogInfo({ roomId: this.state.currentRoom });
+    let messagesCount = await Api.fetchDialogInfo({ roomId: this.state.currentRoom._id });
     this.setState({
       messagesCount: messagesCount.data.group.msgs,
       hasMore: true,
@@ -70,7 +70,7 @@ class DialogsList extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err && this.state.currentRoom) {
         this.props.sendMessage({
-          roomId: this.state.currentRoom,
+          roomId: this.state.currentRoom._id,
           text: values.userComment,
           messageCount: this.props.messages.length
         });
@@ -118,7 +118,10 @@ class DialogsList extends React.Component {
   }
 
   fetchData = async () => {
-    this.props.fetchDialog({ roomId: this.state.currentRoom, count: this.state.currentPage * this.state.pageItemsCount });
+    this.props.fetchDialog({
+      count: this.state.currentPage * this.state.pageItemsCount,
+      room: this.state.currentRoom
+    });
   }
 
   handleInfiniteOnLoad = async () => {
@@ -173,21 +176,24 @@ class DialogsList extends React.Component {
               onSearch={value => this.searchDialog(value)}
             />}
             bordered
-            dataSource={this.props.dialogs}
+            dataSource={_.sortBy(this.props.dialogs, 'nmsgs').reverse()}
             renderItem={item => {
+
+              let result = item.name.split('_');
+              let companyid = result[result.length - 1];
+              item.name = item.name.replace(companyid, '');
 
               if (item.name.search(this.state.searchDialogText) === -1) return <div></div>;
 
-              /* crop roomName if need it */
-              let roomName = item.name.length > 15 ? item.name.substring(0, 12) + '...' : item.name;
-
               /* room is selected */
-              let selected = item._id === this.state.currentRoom;
+              let selected;
+              if (this.state.currentRoom)
+                selected = item._id === this.state.currentRoom._id;
 
               async function fetchDialog() {
                 try {
                   await this.setState({
-                    currentRoom: item._id,
+                    currentRoom: item,
                     currentPage: 1
                   });
                   await this.fetchDialog();
@@ -199,9 +205,12 @@ class DialogsList extends React.Component {
                 style={{ cursor: 'pointer' }}
                 onClick={fetchDialog.bind(this)}
               >
-                {selected ? <b>{roomName}</b> : roomName}
-                <Badge count={item.msgs} overflowCount={99999} style={{ backgroundColor: '#fff', color: '#999', boxShadow: '0 0 0 1px #d9d9d9 inset' }} />
-                <Badge count={0} />
+                {selected ? <b>{item.name}</b> : item.name}
+                <Badge count={item.nmsgs} overflowCount={99999} className="messages-count-badge" style={{
+                  //backgroundColor: '#fff',
+                  //color: '#999',
+                  //boxShadow: '0 0 0 1px #d9d9d9 inset',
+                }} />
               </ List.Item>
             }}
           />

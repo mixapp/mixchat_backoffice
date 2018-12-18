@@ -13,3 +13,13 @@
     width: 100%;
     text-align: center;
 }
+
+.messages-count-badge {
+    background-color: #fff;
+    color: #999;
+    box-shadow: 0 0 0 1px #d9d9d9 inset;
+    box-shadow: #FFFFFF 0px 0px 1px 5px;
+    position: absolute;
+    right: 5px;
+    border-radius: 100%;
+}
