@@ -153,7 +153,7 @@ class DialogsList extends React.Component {
     return [
       <Row key='1'>
         <Col span={14} style={{ overflow: 'hidden', border: '1px solid #e8e8e8', borderRadius: '5px 5px 0 0' }}> {/* TODO */}
-          <div style={{ height: '600px', width: '104%', overflow: 'auto', padding: '15px' }} id='chat-conteiner'>
+          <div style={{ height: '600px', width: '100%', overflow: 'auto', padding: '15px' }} id='chat-conteiner'> {/* TODO width: 104% */}
             <InfiniteScroll
               initialLoad={false}
               isReverse={true}
@@ -170,7 +170,7 @@ class DialogsList extends React.Component {
           </div>
         </Col>
         <Col span={1}></Col>
-        <Col span={9} style={{ overflow: 'hidden' }}>
+        <Col span={9} style={{ overflow: 'hidden', overflowY: 'auto', maxHeight: '600px' }}>
           <List
             size="small"
             header={<Search
@@ -208,11 +208,7 @@ class DialogsList extends React.Component {
                 onClick={fetchDialog.bind(this)}
               >
                 {selected ? <b>{item.name}</b> : item.name}
-                <Badge count={item.nmsgs} overflowCount={99999} className="messages-count-badge" style={{
-                  //backgroundColor: '#fff',
-                  //color: '#999',
-                  //boxShadow: '0 0 0 1px #d9d9d9 inset',
-                }} />
+                <Badge count={item.nmsgs} overflowCount={99999} className='messages-count-badge' />
               </ List.Item>
             }}
           />

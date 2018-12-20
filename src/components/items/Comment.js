@@ -8,6 +8,8 @@ export default class Comment extends React.Component {
       size="small"
       dataSource={this.props.state.currentRoom ? this.props.messages : []}
       renderItem={item => {
+        if (item.u.name)
+          item.u.name.length > 15 ? item.u.shortName = item.u.name.substring(0, 15) + '...' : item.u.shortName = item.u.name;
         if (item.file) {
           switch (item.file.type) {
             case 'image/png':
@@ -24,7 +26,7 @@ export default class Comment extends React.Component {
         return <List.Item key={item._id}>
           <List.Item.Meta
             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-            title={<a href="https://ant.design">{item.u.name}</a>}
+            title={<a href="https://ant.design">{item.u.shortName}</a>}
           />
           <div>{Parser(item.msg.replace(/\n/g, '<br/>'))}</div>
           {item.fileLink ? item.fileLink : ''}
