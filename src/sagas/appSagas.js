@@ -13,7 +13,7 @@ import {
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
 } from '../constants';
 import * as Api from '../api';
-import { readDialog, updateDialogs, getDialogs } from '../lsApi';
+import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
 import * as _ from 'underscore';
 
 function* sendMessageSaga() {
@@ -41,6 +41,7 @@ function* fetchDialogSaga() {
       let { count, room } = action.data;
       updateDialogs(readDialog(room));
       let dialogs = yield Api.fetchDialogs();
+      setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       let messages = yield Api.fetchDialog({ roomId: room._id, count });
       yield put({ type: FETCH_DIALOG_SUCCESS, data: { messages: messages, roomId: room._id } });
@@ -56,6 +57,7 @@ function* fetchDialogs() {
     try {
       yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
+      setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       yield put({ type: LOADER_OFF });
       /* NEW */

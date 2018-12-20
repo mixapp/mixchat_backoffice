@@ -20,15 +20,66 @@ function getDialogs() {
 
 function setDialogs(dialogs) {
     let lsDialogs = getDialogs();
-    if (dialogs && !lsDialogs) {
-        localStorage.setItem('dialogs', JSON.stringify(dialogs));
-        return true;
+    if (dialogs) {
+        if (!lsDialogs) {
+            localStorage.setItem('dialogs', JSON.stringify(dialogs));
+            return true;
+        } else {
+            if (lsDialogs.length > dialogs.length) {
+                lsDialogs.forEach(dialog => {
+                    let _dialog = _.findIndex(dialogs, { _id: dialog._id });
+                    if (_dialog === -1) {
+                        removeDialog(dialog);
+                    }
+                })
+            }
+            if (lsDialogs.length < dialogs.length) {
+                dialogs.forEach(dialog => {
+                    let _dialog = _.findIndex(lsDialogs, { _id: dialog._id });
+                    if (_dialog === -1) {
+                        addDialog(dialog);
+                    }
+                })
+            }
+        }
     }
     return false;
 }
 
+function addDialog(dialog) {
+    let lsDialogs = getDialogs();
+    if (lsDialogs && dialog) {
+        lsDialogs.push(dialog);
+        updateDialogs(lsDialogs);
+    }
+}
+
+function removeDialog(dialog) {
+    let lsDialogs = getDialogs();
+    if (lsDialogs && dialog) {
+        updateDialogs(_.filter(lsDialogs, (_dialog) => {
+            return _dialog._id !== dialog._id;
+        }));
+    }
+}
+
 function updateDialogs(dialogs) {
-    localStorage.setItem('dialogs', JSON.stringify(dialogs));
+    let lsDialogs = getDialogs();
+    if (dialogs && lsDialogs) {
+        console.log('updateDialogs');
+        localStorage.setItem('dialogs', JSON.stringify(dialogs));
+    }
+}
+
+function updateDialog(dialog) {
+    let lsDialogs = getDialogs();
+    if (dialog && lsDialogs) {
+        let _dialog = _.findIndex(lsDialogs, { _id: dialog._id });
+        if (_dialog !== -1) {
+            lsDialogs[_dialog] = dialog;
+            localStorage.setItem('dialogs', JSON.stringify(lsDialogs));
+        }
+    }
 }
 
 function getDialogsNmsgs(dialogs) {
@@ -37,10 +88,12 @@ function getDialogsNmsgs(dialogs) {
     if (lsDialogs) {
         lsDialogs.forEach((lsDialog) => {
             let dialog = _.findIndex(dialogs, { _id: lsDialog._id });
-            if (dialogs[dialog].msgs > lsDialog.msgs) {
-                dialogs[dialog].nmsgs = dialogs[dialog].msgs - lsDialog.msgs;
-            } else {
-                dialogs[dialog].nmsgs = 0;
+            if (dialogs[dialog]) {
+                if (dialogs[dialog].msgs > lsDialog.msgs) {
+                    dialogs[dialog].nmsgs = dialogs[dialog].msgs - lsDialog.msgs;
+                } else {
+                    dialogs[dialog].nmsgs = 0;
+                }
             }
         })
     }
@@ -63,5 +116,8 @@ export {
     setDialogs,
     getDialogsNmsgs,
     readDialog,
-    updateDialogs
+    updateDialogs,
+    removeDialog,
+    addDialog,
+    updateDialog
 }

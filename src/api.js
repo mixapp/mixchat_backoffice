@@ -2,6 +2,7 @@ import axios from 'axios';
 import DDP from 'ddp.js';
 import { getDialogsNmsgs } from '../src/lsApi';
 import { eventChannel } from 'redux-saga';
+import _ from 'underscore';
 
 const getUrl = (processId, companyId, path) => {
   return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
@@ -30,7 +31,6 @@ export const config = {
   }
 };
 
-// Fetch widget settings
 export const fetchSettings = async () => {
   try {
     const uri = getUrl(config.backApiProcessId, config.companyId, 'full-widget-settings');
@@ -48,7 +48,6 @@ export const fetchSettings = async () => {
   }
 };
 
-/* save widget settings */
 export const saveSettings = async (settings) => {
   try {
 
@@ -81,7 +80,6 @@ export const saveSettings = async (settings) => {
   }
 }
 
-// Fetch managers
 export const fetchManagers = async () => {
   try {
     const uri = getUrl(config.backApiProcessId, config.companyId, 'listmanagers');
@@ -94,7 +92,6 @@ export const fetchManagers = async () => {
   }
 };
 
-/* add manager */
 export const addManager = async (data) => {
   try {
     const uri = getUrl(config.backApiProcessId, config.companyId, 'addmanagers');
@@ -111,7 +108,6 @@ export const addManager = async (data) => {
   }
 }
 
-/* добавить manager */
 export const removeManager = async (data) => {
   try {
     const uri = getUrl(config.backApiProcessId, config.companyId, 'removemanagers');
@@ -127,7 +123,6 @@ export const removeManager = async (data) => {
   }
 }
 
-/* получение списка диалогов */
 export const fetchDialogs = async () => {
   try {
 
@@ -165,21 +160,28 @@ export const fetchDialog = async (data) => {
 export const fetchDialogInfo = async (data) => {
   try {
 
-    let result = await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
-      params: data,
+    let groupList = await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
       headers: {
         'X-Auth-Token': config.rocketChat.XauthToken,
         'X-User-Id': config.rocketChat.XuserId
       }
     });
-    return result;
+    if (_.findIndex(groupList.data.groups, { _id: data.roomId }) > -1) {
+      let result = await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
+        params: data,
+        headers: {
+          'X-Auth-Token': config.rocketChat.XauthToken,
+          'X-User-Id': config.rocketChat.XuserId
+        }
+      });
+      return result;
+    }
 
   } catch (err) {
-    throw err;
+    return err;
   }
 }
 
-/* Отправка сообщения */
 export const sendMessageSaga = async (data) => {
   try {
     let result = await axios({
@@ -201,7 +203,6 @@ export const sendMessageSaga = async (data) => {
   }
 }
 
-/* Открываем веб сокет и подписываемся на событие */
 export const webSocket = async (roomId, cb) => {
   try {
 

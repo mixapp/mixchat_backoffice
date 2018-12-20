@@ -49,26 +49,28 @@ class DialogsList extends React.Component {
   }
 
   sendMessage(event) {
-    if (event.key === 'Enter' && event.shiftKey) {
+    if (event.key === 'Enter' && !event.shiftKey) {
       this.handleSubmit();
     }
   }
 
   fetchDialog = async () => {
-    let messagesCount = await Api.fetchDialogInfo({ roomId: this.state.currentRoom._id });
-    this.setState({
-      messagesCount: messagesCount.data.group.msgs,
-      hasMore: true,
-      lm: null
-    });
-    await this.fetchData();
+    let groupInfo = await Api.fetchDialogInfo({ roomId: this.state.currentRoom._id });
+    if (groupInfo && groupInfo.data) {
+      this.setState({
+        messagesCount: groupInfo.data.group.msgs,
+        hasMore: true,
+        lm: null
+      });
+      await this.fetchData();
+    }
   }
 
   handleSubmit = (e) => {
     if (e)
       e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err && this.state.currentRoom) {
+      if (!err && this.state.currentRoom && values.userComment.replace(/\s/g, '').length) {
         this.props.sendMessage({
           roomId: this.state.currentRoom._id,
           text: values.userComment,
@@ -150,8 +152,8 @@ class DialogsList extends React.Component {
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
-        <Col span={14} style={{ overflow: 'hidden' }}> {/* TODO */}
-          <div style={{ height: '600px', width: '104%', overflow: 'auto', padding: '10px' }} id='chat-conteiner'>
+        <Col span={14} style={{ overflow: 'hidden', border: '1px solid #e8e8e8', borderRadius: '5px 5px 0 0' }}> {/* TODO */}
+          <div style={{ height: '600px', width: '104%', overflow: 'auto', padding: '15px' }} id='chat-conteiner'>
             <InfiniteScroll
               initialLoad={false}
               isReverse={true}
@@ -215,7 +217,7 @@ class DialogsList extends React.Component {
             }}
           />
         </Col>
-      </Row>,
+      </Row >,
       <Row key='2'>
         <Col span={14} style={{ height: '600px', overflow: 'auto' }}>
           <Form onSubmit={this.handleSubmit}>
@@ -226,7 +228,7 @@ class DialogsList extends React.Component {
               {getFieldDecorator('userComment', {
                 rules: [{ required: true, message: 'Please input your message!' }],
               })(
-                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
+                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} style={{ borderRadius: '0 0 5px 5px' }} />
               )}
             </FormItem>
             <FormItem>

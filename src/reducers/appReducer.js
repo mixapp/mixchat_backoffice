@@ -41,7 +41,10 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, messages: action.data.messages.reverse() };
     case SOCKET_ROOMS_CHANGED_EVENT:
       let lastMsg = action.data.fields.args[1].lastMessage;
-      return { ...state, message: lastMsg, messages: state.currentRoomId === lastMsg.rid ? [...state.messages, lastMsg] : state.messages };
+      if (lastMsg)
+        return { ...state, message: lastMsg, messages: state.currentRoomId === lastMsg.rid ? [...state.messages, lastMsg] : state.messages };
+      else
+        return { ...state, message: null, messages: state.messages }
     default:
       return state;
   }
