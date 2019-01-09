@@ -66,7 +66,6 @@ function removeDialog(dialog) {
 function updateDialogs(dialogs) {
     let lsDialogs = getDialogs();
     if (dialogs && lsDialogs) {
-        console.log('updateDialogs');
         localStorage.setItem('dialogs', JSON.stringify(dialogs));
     }
 }

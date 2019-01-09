@@ -48,6 +48,13 @@ class DialogsList extends React.Component {
     });
   }
 
+  scrollTo(to, options) {
+    scroll.scrollTo(to, {
+      containerId: 'chat-conteiner',
+      ...options
+    });
+  }
+
   sendMessage(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
       this.handleSubmit();
@@ -142,6 +149,7 @@ class DialogsList extends React.Component {
       currentPage: ++this.state.currentPage
     })
     this.fetchData();
+    this.scrollTo(150, { duration: 0 });
   }
 
   render() {
@@ -160,7 +168,7 @@ class DialogsList extends React.Component {
               loadMore={this.handleInfiniteOnLoad}
               hasMore={!this.state.loading && this.state.hasMore}
               useWindow={false}
-              threshold={20}
+              threshold={5}
             >
               <Comment
                 state={this.state}
