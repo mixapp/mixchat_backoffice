@@ -4,7 +4,7 @@ import { Badge, Row, Col, List, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import * as Api from '../api';
 import * as _ from 'underscore';
-import Comment from '../components/items/Comment';
+import CommentClass from '../components/items/Comment';
 const { TextArea } = Input
 const FormItem = Form.Item;
 const Search = Input.Search;
@@ -170,7 +170,7 @@ class DialogsList extends React.Component {
               useWindow={false}
               threshold={5}
             >
-              <Comment
+              <CommentClass
                 state={this.state}
                 messages={this.props.messages}
               />

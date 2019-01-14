@@ -1,13 +1,15 @@
 import React from 'react';
 import Parser from 'html-react-parser';
-import { List, Avatar, Spin } from 'antd';
+import { List, Avatar, Spin, Comment, Tooltip } from 'antd';
+import * as Api from '../../api';
 
-export default class Comment extends React.Component {
+export default class CommentClass extends React.Component {
   render() {
     return <List
       size="small"
       dataSource={this.props.state.currentRoom ? this.props.messages : []}
       renderItem={item => {
+        let time = typeof item.ts === 'string' ? new Date(item.ts) : new Date(item.ts.$date);
         if (item.u.name)
           item.u.name.length > 15 ? item.u.shortName = item.u.name.substring(0, 15) + '...' : item.u.shortName = item.u.name;
         if (item.file) {
@@ -23,14 +25,29 @@ export default class Comment extends React.Component {
               break;
           }
         }
-        return <List.Item key={item._id}>
-          <List.Item.Meta
-            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-            title={<a href="https://ant.design">{item.u.shortName}</a>}
+        return (
+          <Comment
+            key={item._id}
+            author={item.u.shortName}
+            avatar={(
+              <Avatar
+                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                alt={item.u.shortName}
+              />
+            )}
+            content={(
+              <div>
+                {Parser(item.msg.replace(/\n/g, '<br/>'))}
+                <div>{item.fileLink ? item.fileLink : ''}</div>
+              </div>
+            )}
+            datetime={(
+              <Tooltip title="">
+                <span>{Api.formatDate(time)}</span>
+              </Tooltip>
+            )}
           />
-          <div>{Parser(item.msg.replace(/\n/g, '<br/>'))}</div>
-          {item.fileLink ? item.fileLink : ''}
-        </List.Item>
+        );
       }
       }
     >

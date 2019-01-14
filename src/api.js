@@ -231,6 +231,31 @@ export const webSocket = async (roomId, cb) => {
   }
 }
 
+export const formatDate = (date) => {
+  const monthNamesEn = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+
+  const monthNamesRu = [
+    "Январь", "Февраль", "Март",
+    "Апрель", "Май", "Июнь", "Июль",
+    "Август", "Сентябрь", "Октябрь",
+    "Ноябрь", "Декабрь"
+  ];
+
+  let day = date.getDate();
+  let monthIndex = date.getMonth();
+  let year = date.getFullYear();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+
+  //return date.toDateString();
+  return day + ' ' + monthNamesRu[monthIndex] + ' ' + year + ', ' + hours + ':' + minutes;
+}
+
 export const websocketInitRoomsChanged = () => {
   return eventChannel(emitter => {
     // init the connection here
