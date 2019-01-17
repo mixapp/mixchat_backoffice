@@ -43,7 +43,7 @@ export default class CommentClass extends React.Component {
             )}
             datetime={(
               <Tooltip title="">
-                <span>{Api.formatDate(time)}</span>
+                <span>{Api.formatDate(time, 'ru')}</span>
               </Tooltip>
             )}
           />

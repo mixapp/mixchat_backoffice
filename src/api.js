@@ -37,7 +37,6 @@ export const fetchSettings = async () => {
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
-    await setTimeout(() => { }, 2000);
     return {
       companyName: result.data.companyName,
       ...result.data.widget,
@@ -68,10 +67,13 @@ export const saveSettings = async (settings) => {
         "sms_phone": settings.sms_phone,
         "vk_token": settings.vk_token,
         "vk_group_name": settings.vk_group_name,
-        "vk_confirmation_code": settings.vk_confirmation_code
+        "vk_confirmation_code": settings.vk_confirmation_code,
+        "fbm_api_key": settings.fbm_api_key,
+        "fbm_secret": settings.fbm_secret,
+        "fbm_page": settings.fbm_page
       }
     }, {
-        headers: getHeadera(),
+        headers: getHeadera()
       });
     return result;
 
@@ -231,20 +233,21 @@ export const webSocket = async (roomId, cb) => {
   }
 }
 
-export const formatDate = (date) => {
-  const monthNamesEn = [
-    "January", "February", "March",
-    "April", "May", "June", "July",
-    "August", "September", "October",
-    "November", "December"
-  ];
-
-  const monthNamesRu = [
-    "Январь", "Февраль", "Март",
-    "Апрель", "Май", "Июнь", "Июль",
-    "Август", "Сентябрь", "Октябрь",
-    "Ноябрь", "Декабрь"
-  ];
+export const formatDate = (date, lang) => {
+  const monthNames = {
+    en: [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ],
+    ru: [
+      "Январь", "Февраль", "Март",
+      "Апрель", "Май", "Июнь", "Июль",
+      "Август", "Сентябрь", "Октябрь",
+      "Ноябрь", "Декабрь"
+    ]
+  }
 
   let day = date.getDate();
   let monthIndex = date.getMonth();
@@ -252,8 +255,7 @@ export const formatDate = (date) => {
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
-  //return date.toDateString();
-  return day + ' ' + monthNamesRu[monthIndex] + ' ' + year + ', ' + hours + ':' + minutes;
+  return day + ' ' + monthNames[lang][monthIndex] + ' ' + year + ', ' + hours + ':' + minutes;
 }
 
 export const websocketInitRoomsChanged = () => {
