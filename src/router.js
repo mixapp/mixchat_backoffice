@@ -12,13 +12,13 @@ import Settings from './containers/Settings';
 import Dialogs from './containers/Dialogs';
 import Managers from './containers/Managers';
 import { connect } from 'react-redux';
-import { fetchSettings, saveSettings, fetchRole } from './actions/settings';
+import { fetchSettings, saveSettings, fetchRole, loaderOff } from './actions/settings';
 import { Spin } from 'antd';
 
 class Router extends React.Component {
   componentDidMount() {
     this.props.fetchRole();
-
+    this.props.loaderOff();
   }
   render() {
     return <ConnectedRouter history={history}>
@@ -27,9 +27,9 @@ class Router extends React.Component {
         <Wrapper role={this.props.app.role}>
           <Spin spinning={this.props.app.loader} delay={0}>
             <PrivateRoute path='/' exact component={MainPage} />
-            <PrivateRoute path='/settings' exact component={Settings} />
+            {this.props.app.role === 'admin' ? <PrivateRoute path='/settings' exact component={Settings} /> : null}
             <PrivateRoute path='/dialogs' exact component={Dialogs} />
-            <PrivateRoute path='/managers' exact component={Managers} />
+            {this.props.app.role === 'admin' ? <PrivateRoute path='/managers' exact component={Managers} /> : null}
           </Spin>
         </Wrapper>
       </div>
@@ -47,7 +47,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchSettings: () => { dispatch(fetchSettings()) },
     saveSettings: (data) => { dispatch(saveSettings(data)) },
-    fetchRole: () => { dispatch(fetchRole()) }
+    fetchRole: () => { dispatch(fetchRole()) },
+    loaderOff: () => { dispatch(loaderOff()) }
   }
 }
 

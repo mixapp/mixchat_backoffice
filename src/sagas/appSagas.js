@@ -180,7 +180,9 @@ function* fetchRole() {
   yield takeLatest(FETCH_ROLE_REQUEST, function* (action) {
     try {
       let role = yield Api.fetchRole();
-      yield put({ type: FETCH_ROLE_SUCCESS, role });
+      if (!role.error) {
+        yield put({ type: FETCH_ROLE_SUCCESS, role: role.role });
+      }
     } catch (err) {
       throw err;
     }

@@ -1,10 +1,6 @@
 import React from 'react';
 
 export default class MainPageView extends React.Component {
-  componentDidMount() {
-    this.props.loaderOff();
-  }
-
   render() {
     return (
       <div>

@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 
 class MenuPanel extends React.Component {
   state = {
-    role: 'manager',
     currentMenuKey: 2
   }
   componentWillMount() {
@@ -25,17 +24,9 @@ class MenuPanel extends React.Component {
     });
   }
 
-  componentWillReceiveProps() {
-    if (this.props.role && this.props.role.role === 'admin') {
-      this.setState({
-        role: 'admin'
-      });
-    }
-  }
-
   render() {
     return <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentMenuKey.toString()]}>
-      {this.state.role === 'admin' ?
+      {this.props.role === 'admin' ?
         <Menu.Item key="1">
           <Link to='/settings'>
             <Icon type="setting" />
@@ -50,7 +41,7 @@ class MenuPanel extends React.Component {
         </Link>
       </Menu.Item>
 
-      {this.state.role === 'admin' ?
+      {this.props.role === 'admin' ?
         <Menu.Item key="3">
           <Link to='/managers'>
             <Icon type="team" />

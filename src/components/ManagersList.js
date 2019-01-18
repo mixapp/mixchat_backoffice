@@ -26,15 +26,11 @@ export default class ManagersList extends React.Component {
         }
       }
     ];
-    if (this.props.managers && !this.props.managers.error) {
-      return (
-        <div>
-          <Table {...this.state} columns={columns} dataSource={this.props.managers} />
-          <AddManagerForm addManager={this.props.addManager} />
-        </div>
-      );
-    } else {
-      return <div></div>
-    }
+    return (
+      <div>
+        <Table {...this.state} columns={columns} dataSource={this.props.managers} />
+        <AddManagerForm addManager={this.props.addManager} />
+      </div>
+    );
   }
 }
