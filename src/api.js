@@ -105,7 +105,8 @@ export const fetchManagers = async () => {
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
-    return result.data.managers;
+
+    return result.data;
   } catch (err) {
     throw err;
   }
@@ -197,7 +198,7 @@ export const fetchRole = async () => {
       headers: getHeadera()
     });
 
-    console.log(result);
+    return result.data;
 
   } catch (err) {
     throw err;

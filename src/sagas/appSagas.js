@@ -12,7 +12,7 @@ import {
   FETCH_DIALOG_REQUEST, FETCH_DIALOG_SUCCESS, //FETCH_DIALOG_ERROR
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
   LOADER_TURN_OFF,
-  FETCH_ROLE
+  FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
 } from '../constants';
 import * as Api from '../api';
 import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
@@ -110,12 +110,15 @@ function* addManager() {
 function* fetchManagers() {
   yield takeLatest(FETCH_MANAGERS_REQUEST, function* (action) {
     try {
+
       yield put({ type: LOADER_ON });
       let managers = yield Api.fetchManagers();
-      managers.forEach((value, key) => {
-        value.key = String(key + 1);
-        value.number = key + 1;
-      });
+      if (!managers.error) {
+        managers.managers.forEach((value, key) => {
+          value.key = String(key + 1);
+          value.number = key + 1;
+        });
+      }
       yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
       yield put({ type: LOADER_OFF });
     } catch (err) {
@@ -174,9 +177,10 @@ function* loaderOff() {
 }
 
 function* fetchRole() {
-  yield takeLatest(FETCH_ROLE, function* (action) {
+  yield takeLatest(FETCH_ROLE_REQUEST, function* (action) {
     try {
-      return yield Api.fetchRole();
+      let role = yield Api.fetchRole();
+      yield put({ type: FETCH_ROLE_SUCCESS, role });
     } catch (err) {
       throw err;
     }

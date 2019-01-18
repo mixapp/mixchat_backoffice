@@ -1,16 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Menu, Icon } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
-import { fetchRole } from '../../actions/settings';
-import MenuItem from '../items/menu';
 
 class MenuPanel extends React.Component {
   state = {
-    currentMenuKey: 1,
-    role: 'user'
+    role: 'manager',
+    currentMenuKey: 2
   }
-
   componentWillMount() {
     let key;
     let path = this.props.location.pathname;
@@ -29,10 +25,23 @@ class MenuPanel extends React.Component {
     });
   }
 
+  componentWillReceiveProps() {
+    if (this.props.role && this.props.role.role === 'admin') {
+      this.setState({
+        role: 'admin'
+      });
+    }
+  }
+
   render() {
     return <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentMenuKey.toString()]}>
-
-      <MenuItem />
+      {this.state.role === 'admin' ?
+        <Menu.Item key="1">
+          <Link to='/settings'>
+            <Icon type="setting" />
+            <span>Настройки</span>
+          </Link>
+        </Menu.Item> : null}
 
       <Menu.Item key="2">
         <Link to='/dialogs'>
@@ -41,12 +50,13 @@ class MenuPanel extends React.Component {
         </Link>
       </Menu.Item>
 
-      <Menu.Item key="3">
-        <Link to='/managers'>
-          <Icon type="team" />
-          <span>Менеджеры</span>
-        </Link>
-      </Menu.Item>
+      {this.state.role === 'admin' ?
+        <Menu.Item key="3">
+          <Link to='/managers'>
+            <Icon type="team" />
+            <span>Менеджеры</span>
+          </Link>
+        </Menu.Item> : null}
 
       <Menu.Item key="4">
         <Link to='/logout'>
@@ -58,16 +68,4 @@ class MenuPanel extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    app: state.app
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    fetchRole: () => { dispatch(fetchRole()) }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(props => <MenuPanel {...props} />));
+export default withRouter(props => <MenuPanel {...props} />);

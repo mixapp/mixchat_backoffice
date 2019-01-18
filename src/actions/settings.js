@@ -8,7 +8,7 @@ import {
   FETCH_DIALOG_REQUEST,
   SEND_MESSAGE_REQUEST,
   LOADER_OFF,
-  FETCH_ROLE
+  FETCH_ROLE_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -72,6 +72,6 @@ export const loaderOff = () => {
 
 export const fetchRole = () => {
   return {
-    type: FETCH_ROLE
+    type: FETCH_ROLE_REQUEST
   }
 }

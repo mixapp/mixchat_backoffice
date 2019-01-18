@@ -23,7 +23,7 @@ class Wrapper extends React.Component {
           <div className="logo_container">
             <div className="logo">LOGO</div>
           </div>
-          <MenuPanel />
+          <MenuPanel role={this.props.role} />
         </Sider>
 
         <Layout>

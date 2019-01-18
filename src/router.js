@@ -16,24 +16,20 @@ import { fetchSettings, saveSettings, fetchRole } from './actions/settings';
 import { Spin } from 'antd';
 
 class Router extends React.Component {
-  state = {
-    role: 'user'
-  }
-
-  componentWillMount() {
+  componentDidMount() {
+    this.props.fetchRole();
 
   }
-
   render() {
     return <ConnectedRouter history={history}>
       <div>
         <Route path="/authorize" exact component={Authorize} />
-        <Wrapper>
+        <Wrapper role={this.props.app.role}>
           <Spin spinning={this.props.app.loader} delay={0}>
             <PrivateRoute path='/' exact component={MainPage} />
-            {this.state.role === 'admin' ? <PrivateRoute path='/settings' exact component={Settings} /> : null}
+            <PrivateRoute path='/settings' exact component={Settings} />
             <PrivateRoute path='/dialogs' exact component={Dialogs} />
-            {this.state.role === 'admin' ? <PrivateRoute path='/managers' exact component={Managers} /> : null}
+            <PrivateRoute path='/managers' exact component={Managers} />
           </Spin>
         </Wrapper>
       </div>
