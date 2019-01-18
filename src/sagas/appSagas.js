@@ -11,6 +11,8 @@ import {
   LOADER_ON, LOADER_OFF,
   FETCH_DIALOG_REQUEST, FETCH_DIALOG_SUCCESS, //FETCH_DIALOG_ERROR
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
+  LOADER_TURN_OFF,
+  FETCH_ROLE
 } from '../constants';
 import * as Api from '../api';
 import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
@@ -55,6 +57,8 @@ function* fetchDialogSaga() {
 function* fetchDialogs() {
   yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
     try {
+      let result = yield Api.getXauthToken();
+      localStorage.setItem('XUSER', JSON.stringify(result));
       yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
       setDialogs(dialogs);
@@ -159,6 +163,26 @@ function* loginSaga() {
   });
 }
 
+function* loaderOff() {
+  yield takeLatest(LOADER_TURN_OFF, function* (action) {
+    try {
+      yield put({ type: LOADER_OFF });
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
+function* fetchRole() {
+  yield takeLatest(FETCH_ROLE, function* (action) {
+    try {
+      return yield Api.fetchRole();
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -170,5 +194,7 @@ export default function* ordersSaga() {
     fork(fetchDialogs),
     fork(fetchDialogSaga),
     fork(sendMessageSaga),
+    fork(loaderOff),
+    fork(fetchRole)
   ];
 }

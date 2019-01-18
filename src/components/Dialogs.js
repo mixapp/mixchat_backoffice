@@ -2,6 +2,9 @@ import React from 'react';
 import DialogsList from './DialogsList';
 
 export default class DialogsListView extends React.Component {
+  componentWillMount(){
+    
+  }
   componentDidMount() {
     this.props.fetchDialogs();
   }

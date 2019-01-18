@@ -7,6 +7,8 @@ import {
   FETCH_DIALOGS_REQUEST,
   FETCH_DIALOG_REQUEST,
   SEND_MESSAGE_REQUEST,
+  LOADER_OFF,
+  FETCH_ROLE
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -59,5 +61,17 @@ export const fetchDialog = (data) => {
   return {
     type: FETCH_DIALOG_REQUEST,
     data
+  }
+}
+
+export const loaderOff = () => {
+  return {
+    type: LOADER_OFF
+  }
+}
+
+export const fetchRole = () => {
+  return {
+    type: FETCH_ROLE
   }
 }

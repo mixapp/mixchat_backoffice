@@ -13,6 +13,15 @@ const getToken = () => {
   return token;
 }
 
+const getRocketChatHeaders = (json) => {
+  let Xuser = JSON.parse(localStorage.getItem('XUSER'));
+  return {
+    'Content-Type': json ? 'application/json' : '',
+    'X-Auth-Token': Xuser.data.authToken,
+    'X-User-Id': Xuser.data.userId
+  }
+}
+
 const getHeadera = () => {
   return {
     'Authorization': 'Bearer ' + getToken(),
@@ -24,16 +33,24 @@ const getHeadera = () => {
 export const config = {
   companyId: '5bed9d260dec1f9f4f358399',
   backApiProcessId: '5bc49dd0574e7403e22ec1a0',
-  frontApiProcessId: '5bc49dd735b38203254872a5',
-  rocketChat: {
-    XuserId: 'Yi8mxJGcXZHx2Dn5P',//'knpMD3iwLvxM5j8MT',
-    XauthToken: 'W7u0ntx3ZrGQClllUsw5TCN_eVDLgpeTsrWlzGpD_Ep',//'Ot_wqhtJjy-iDAl3itZB80Ju2k3H9DTrmfDzf6AgHLp'
+  frontApiProcessId: '5bc49dd735b38203254872a5'
+};
+
+export const getXauthToken = async () => {
+  try {
+    const uri = getUrl(config.backApiProcessId, config.companyId, 'get-token');
+    let result = await axios.get(uri, {
+      headers: getHeadera()
+    });
+    return result.data;
+  } catch (err) {
+    throw err;
   }
 };
 
 export const fetchSettings = async () => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'full-widget-settings');
+    const uri = getUrl(config.backApiProcessId, config.companyId, 'widget-oidc');
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
@@ -129,10 +146,7 @@ export const fetchDialogs = async () => {
   try {
 
     let result = await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
-      headers: {
-        'X-Auth-Token': config.rocketChat.XauthToken,
-        'X-User-Id': config.rocketChat.XuserId
-      }
+      headers: getRocketChatHeaders()
     });
     return getDialogsNmsgs(result.data.groups);
 
@@ -147,10 +161,7 @@ export const fetchDialog = async (data) => {
 
     let result = await axios.get('https://chat.mixapp.io/api/v1/groups.history', {
       params: data,
-      headers: {
-        'X-Auth-Token': config.rocketChat.XauthToken,
-        'X-User-Id': config.rocketChat.XuserId
-      }
+      headers: getRocketChatHeaders()
     });
     return result.data.messages;
 
@@ -163,24 +174,33 @@ export const fetchDialogInfo = async (data) => {
   try {
 
     let groupList = await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
-      headers: {
-        'X-Auth-Token': config.rocketChat.XauthToken,
-        'X-User-Id': config.rocketChat.XuserId
-      }
+      headers: getRocketChatHeaders()
     });
     if (_.findIndex(groupList.data.groups, { _id: data.roomId }) > -1) {
       let result = await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
         params: data,
-        headers: {
-          'X-Auth-Token': config.rocketChat.XauthToken,
-          'X-User-Id': config.rocketChat.XuserId
-        }
+        headers: getRocketChatHeaders()
       });
       return result;
     }
 
   } catch (err) {
     return err;
+  }
+}
+
+export const fetchRole = async () => {
+  try {
+
+    const uri = getUrl(config.backApiProcessId, config.companyId, 'fetch-role');
+    let result = await axios.get(uri, {
+      headers: getHeadera()
+    });
+
+    console.log(result);
+
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -193,41 +213,9 @@ export const sendMessageSaga = async (data) => {
         roomId: data.roomId,
         text: data.text
       },
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': config.rocketChat.XauthToken,
-        'X-User-Id': config.rocketChat.XuserId
-      }
+      headers: getRocketChatHeaders(true)
     });
     return result;
-  } catch (err) {
-    throw err;
-  }
-}
-
-export const webSocket = async (roomId, cb) => {
-  try {
-
-    // socket connection
-    const options = {
-      endpoint: 'wss://chat.mixapp.io/websocket',
-      SocketConstructor: WebSocket
-    };
-    var ddp = new DDP(options);
-
-    ddp.on('connected', () => {
-      ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
-      ddp.sub('stream-room-messages', [roomId, false]);
-    });
-
-    ddp.on('changed', async (msg) => {
-      try {
-        cb(msg);
-      } catch (err) {
-        throw err;
-      }
-    });
-
   } catch (err) {
     throw err;
   }
@@ -259,6 +247,7 @@ export const formatDate = (date, lang) => {
 }
 
 export const websocketInitRoomsChanged = () => {
+  var Xuser = getRocketChatHeaders();
   return eventChannel(emitter => {
     // init the connection here
     const options = {
@@ -266,10 +255,9 @@ export const websocketInitRoomsChanged = () => {
       SocketConstructor: WebSocket
     };
     var ddp = new DDP(options);
-
     ddp.on('connected', () => {
-      ddp.method('login', [{ resume: config.rocketChat.XauthToken }]);
-      ddp.sub('stream-notify-user', [config.rocketChat.XuserId + '/rooms-changed', false]);
+      ddp.method('login', [{ resume: Xuser['X-Auth-Token'] }]);
+      ddp.sub('stream-notify-user', [Xuser['X-User-Id'] + '/rooms-changed', false]);
     });
 
     ddp.on('changed', (data) => {

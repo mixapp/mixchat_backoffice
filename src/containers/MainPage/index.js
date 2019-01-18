@@ -1,12 +1,22 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import MainPageView from '../../components/MainPage'
+import { loaderOff } from '../../actions/settings';
 
-const MainPage = () => {
-    return (
-      <div>
-        <h2>Home</h2>
-        <div>Login</div>
-      </div>
-    );
+const MainPage = (props) => {
+  return <MainPageView {...props} />;
+};
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    app: state.app
   }
+}
 
-export default MainPage;
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    loaderOff: (data) => { dispatch(loaderOff()) }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
