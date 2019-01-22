@@ -53,7 +53,7 @@ class AddManagerForm extends React.Component {
         </FormItem>
 
         <FormItem {...formItemLayout}>
-          <Button type='primary' htmlType='submit'>Submit</Button>
+          <Button type='primary' htmlType='submit'>Add</Button>
         </FormItem>
 
       </Form>
