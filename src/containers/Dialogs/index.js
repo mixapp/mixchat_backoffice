@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import DialogsListView from '../../components/Dialogs';
+import DialogsView from '../../components/DialogsView';
 import { fetchDialogs, fetchDialog, sendMessage } from '../../actions/settings';
 
 const Dialogs = (props) => {
-    return <DialogsListView {...props} />;
+    return <DialogsView {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
