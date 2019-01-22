@@ -6,7 +6,7 @@ import {
 export default class RequestsListView extends React.Component {
 
   state = {
-    loading: true
+    loading: false
   }
 
   deleteRequest = async (item) => {
