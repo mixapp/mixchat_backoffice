@@ -107,6 +107,9 @@ class DialogsList extends React.Component {
           this.lm = lm;
           this.scrollToBottom({ duration: 0 });
         }
+        if (this.state.currentPage === 1) {
+          this.scrollToBottom({ duration: 0 });
+        }
       } else {
         this.lm = lm;
         this.scrollToBottom({ duration: 0 });
