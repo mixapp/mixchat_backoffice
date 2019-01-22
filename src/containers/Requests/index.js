@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import RequestsListView from '../../components/Requests';
+import RequestsView from '../../components/RequestsView';
 import { fetchRequests, deleteRequest } from '../../actions/settings';
 
 const Settings = (props) => {
-    return <RequestsListView {...props} />;
+    return <RequestsView {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {

@@ -10,7 +10,7 @@ import {
   LOADER_OFF,
   FETCH_ROLE_REQUEST,
   FETCH_REQUESTS_REQUEST,
-  DELETE_REQUEST_REQUEST,
+  DELETE_REQUESTS_REQUEST,
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -87,7 +87,7 @@ export const fetchRequests = (data) => {
 
 export const deleteRequest = (data) => {
   return {
-    type: DELETE_REQUEST_REQUEST,
+    type: DELETE_REQUESTS_REQUEST,
     data
   }
 }

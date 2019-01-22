@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ManagersListView from '../../components/Managers';
+import ManagersView from '../../components/ManagersView';
 import { fetchManagers, addManager, removeManager } from '../../actions/settings';
 
 const Managers = (props) => {
-    return <ManagersListView {...props} />;
+    return <ManagersView {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {

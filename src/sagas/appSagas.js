@@ -14,7 +14,7 @@ import {
   LOADER_TURN_OFF,
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
   FETCH_REQUESTS_REQUEST, FETCH_REQUESTS_SUCCESS, //FETCH_REQUESTS_ERROR
-  DELETE_REQUEST_REQUEST, DELETE_REQUEST_SUCCESS, //DELETE_REQUEST_ERROR
+  DELETE_REQUESTS_REQUEST, DELETE_REQUESTS_SUCCESS, //DELETE_REQUESTS_ERROR
 } from '../constants';
 import * as Api from '../api';
 import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
@@ -157,7 +157,7 @@ function* loginSaga() {
   yield takeLatest(SET_AUTHORIZE, function* (action) {
     try {
       localStorage.setItem('user', JSON.stringify(action.data))
-      
+
       //Get RocketChat Token
       let result = yield Api.getXauthToken();
       localStorage.setItem('XUSER', JSON.stringify(result));
@@ -195,13 +195,17 @@ function* fetchRole() {
 }
 
 function* fetchRequests() {
-  yield takeLatest(FETCH_REQUESTS_REQUEST, function* (data) {
+  yield takeLatest(FETCH_REQUESTS_REQUEST, function* () {
     try {
       let config = Api.fetchConfig();
       let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
-      let messages = yield Api.fetchDialog({ roomId: groupInfo.data.group._id, count: data.data.count || 20 });
-      //messages = _.filter(messages, function (item) { return item.bot === null; });
-      yield put({ type: FETCH_REQUESTS_SUCCESS, messages });
+      let messages = yield Api.fetchDialog({ roomId: groupInfo.data.group._id, count: 9999 });
+      _.each(messages, (value, key) => {
+        let time = typeof value.ts === 'string' ? new Date(value.ts) : new Date(value.ts.$date);
+        value.key = value._id;
+        value.ts = Api.formatDate(time)
+      });
+      yield put({ type: FETCH_REQUESTS_SUCCESS, messages: messages.reverse() });
     } catch (err) {
       throw err;
     }
@@ -209,12 +213,12 @@ function* fetchRequests() {
 }
 
 function* deleteRequest() {
-  yield takeLatest(DELETE_REQUEST_REQUEST, function* (data) {
+  yield takeLatest(DELETE_REQUESTS_REQUEST, function* (data) {
     try {
       let config = Api.fetchConfig();
       let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
-      let result = yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data.msgId });
-      yield put({ type: DELETE_REQUEST_SUCCESS, result });
+      yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data.msgId });
+      yield put({ type: FETCH_REQUESTS_REQUEST });
     } catch (err) {
       throw err;
     }

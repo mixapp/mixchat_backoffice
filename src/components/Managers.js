@@ -1,14 +1,36 @@
 import React from 'react';
-import ManagersList from './ManagersList';
+import { Table, Button } from 'antd';
+import AddManagerForm from './forms/managers/addManagerForm';
 
-export default class ManagersListView extends React.Component {
-  componentDidMount() {
-    this.props.fetchManagers();
+export default class ManagersList extends React.Component {
+  state = {
+    size: 'small',
+    managers: []
   }
+
   render() {
-    return <ManagersList
-      addManager={this.props.addManager}
-      removeManager={this.props.removeManager}
-      managers={this.props.app.managers} />;
+    let columns = [
+      { title: '№', dataIndex: 'number', key: 'number' },
+      { title: '_id', dataIndex: '_id', key: '_id' },
+      { title: 'Nickname', key: 'nickname', dataIndex: 'nickname' },
+      {
+        title: 'Action', dataIndex: '', key: '', render: (obj) => {
+          async function removeManager() {
+            try {
+              await this.props.removeManager(obj);
+            } catch (err) {
+              throw err;
+            }
+          }
+          return <Button onClick={removeManager.bind(this)} type="primary" shape="circle" icon="delete" size='large' />
+        }
+      }
+    ];
+    return (
+      <div>
+        <Table {...this.state} columns={columns} dataSource={this.props.managers} />
+        <AddManagerForm addManager={this.props.addManager} />
+      </div>
+    );
   }
 }

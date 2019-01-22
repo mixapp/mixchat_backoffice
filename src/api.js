@@ -257,12 +257,12 @@ export const formatDate = (date, lang) => {
   }
 
   let day = date.getDate();
-  let monthIndex = date.getMonth();
+  let month = lang ? monthNames[lang][date.getMonth()] : date.getMonth();
   let year = date.getFullYear();
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
-  return day + ' ' + monthNames[lang][monthIndex] + ' ' + year + ', ' + hours + ':' + minutes;
+  return day + ' ' + ('0' + (month + 1)).slice(-2) + ' ' + year + ', ' + hours + ':' + minutes;
 }
 
 export const websocketInitRoomsChanged = () => {

@@ -9,7 +9,8 @@ import {
   FETCH_DIALOG_SUCCESS,
   SOCKET_ROOMS_CHANGED_EVENT,
   FETCH_ROLE_SUCCESS,
-  FETCH_REQUESTS_SUCCESS
+  FETCH_REQUESTS_SUCCESS,
+  DELETE_REQUESTS_SUCCESS
 } from '../constants';
 const initialState = {
   user: null,
@@ -17,7 +18,8 @@ const initialState = {
   message: null,
   dialogs: [],
   loader: false,
-  currentRoomId: null
+  currentRoomId: null,
+  requests: []
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -51,6 +53,8 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, role: action.role };
     case FETCH_REQUESTS_SUCCESS:
       return { ...state, requests: action.messages };
+    case DELETE_REQUESTS_SUCCESS:
+      return { ...state, result: action };
     default:
       return state;
   }
