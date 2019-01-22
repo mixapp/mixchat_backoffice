@@ -8,7 +8,8 @@ import {
   LOADER_ON, LOADER_OFF,
   FETCH_DIALOG_SUCCESS,
   SOCKET_ROOMS_CHANGED_EVENT,
-  FETCH_ROLE_SUCCESS
+  FETCH_ROLE_SUCCESS,
+  FETCH_REQUESTS_SUCCESS
 } from '../constants';
 const initialState = {
   user: null,
@@ -48,6 +49,8 @@ export default function reducer(state = initialState, action = {}) {
         return { ...state, message: null, messages: state.messages }
     case FETCH_ROLE_SUCCESS:
       return { ...state, role: action.role };
+    case FETCH_REQUESTS_SUCCESS:
+      return { ...state, requests: action.messages };
     default:
       return state;
   }

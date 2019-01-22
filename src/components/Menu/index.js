@@ -49,6 +49,13 @@ class MenuPanel extends React.Component {
           </Link>
         </Menu.Item> : null}
 
+      <Menu.Item key="5">
+        <Link to='/requests'>
+          <Icon type="inbox" />
+          <span>Заявки</span>
+        </Link>
+      </Menu.Item>
+
       <Menu.Item key="4">
         <Link to='/logout'>
           <Icon type="upload" />

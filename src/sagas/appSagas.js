@@ -13,6 +13,8 @@ import {
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
   LOADER_TURN_OFF,
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
+  FETCH_REQUESTS_REQUEST, FETCH_REQUESTS_SUCCESS, //FETCH_REQUESTS_ERROR
+  DELETE_REQUEST_REQUEST, DELETE_REQUEST_SUCCESS, //DELETE_REQUEST_ERROR
 } from '../constants';
 import * as Api from '../api';
 import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
@@ -57,8 +59,6 @@ function* fetchDialogSaga() {
 function* fetchDialogs() {
   yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
     try {
-      let result = yield Api.getXauthToken();
-      localStorage.setItem('XUSER', JSON.stringify(result));
       yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
       setDialogs(dialogs);
@@ -157,6 +157,11 @@ function* loginSaga() {
   yield takeLatest(SET_AUTHORIZE, function* (action) {
     try {
       localStorage.setItem('user', JSON.stringify(action.data))
+      
+      //Get RocketChat Token
+      let result = yield Api.getXauthToken();
+      localStorage.setItem('XUSER', JSON.stringify(result));
+
       const uri = localStorage.getItem('redirect');
       localStorage.removeItem('redirect');
       yield put(push(uri || '/'));
@@ -189,6 +194,33 @@ function* fetchRole() {
   });
 }
 
+function* fetchRequests() {
+  yield takeLatest(FETCH_REQUESTS_REQUEST, function* (data) {
+    try {
+      let config = Api.fetchConfig();
+      let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
+      let messages = yield Api.fetchDialog({ roomId: groupInfo.data.group._id, count: data.data.count || 20 });
+      //messages = _.filter(messages, function (item) { return item.bot === null; });
+      yield put({ type: FETCH_REQUESTS_SUCCESS, messages });
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
+function* deleteRequest() {
+  yield takeLatest(DELETE_REQUEST_REQUEST, function* (data) {
+    try {
+      let config = Api.fetchConfig();
+      let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
+      let result = yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data.msgId });
+      yield put({ type: DELETE_REQUEST_SUCCESS, result });
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -201,6 +233,8 @@ export default function* ordersSaga() {
     fork(fetchDialogSaga),
     fork(sendMessageSaga),
     fork(loaderOff),
-    fork(fetchRole)
+    fork(fetchRole),
+    fork(fetchRequests),
+    fork(deleteRequest)
   ];
 }

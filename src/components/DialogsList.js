@@ -62,7 +62,11 @@ class DialogsList extends React.Component {
   }
 
   fetchDialog = async () => {
-    let groupInfo = await Api.fetchDialogInfo({ roomId: this.state.currentRoom._id });
+    let groupInfo = null;
+    let groupList = await Api.fetchGroupList({ roomId: this.state.currentRoom._id });
+    if (_.findIndex(groupList.data.groups, { _id: this.state.currentRoom._id }) > -1) {
+      groupInfo = await Api.fetchGroupInfo({ roomId: this.state.currentRoom._id });
+    }
     if (groupInfo && groupInfo.data) {
       this.setState({
         messagesCount: groupInfo.data.group.msgs,

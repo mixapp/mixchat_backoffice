@@ -2,7 +2,6 @@ import axios from 'axios';
 import DDP from 'ddp.js';
 import { getDialogsNmsgs } from '../src/lsApi';
 import { eventChannel } from 'redux-saga';
-import _ from 'underscore';
 
 const getUrl = (processId, companyId, path) => {
   return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
@@ -35,6 +34,10 @@ export const config = {
   backApiProcessId: '5bc49dd0574e7403e22ec1a0',
   frontApiProcessId: '5bc49dd735b38203254872a5'
 };
+
+export const fetchConfig = () => {
+  return config;
+}
 
 export const getXauthToken = async () => {
   try {
@@ -171,22 +174,38 @@ export const fetchDialog = async (data) => {
   }
 }
 
-export const fetchDialogInfo = async (data) => {
+export const fetchGroupList = async (data) => {
   try {
-
-    let groupList = await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
+    return await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
       headers: getRocketChatHeaders()
     });
-    if (_.findIndex(groupList.data.groups, { _id: data.roomId }) > -1) {
-      let result = await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
-        params: data,
-        headers: getRocketChatHeaders()
-      });
-      return result;
-    }
-
   } catch (err) {
-    return err;
+    throw err;
+  }
+}
+
+export const fetchGroupInfo = async (data) => {
+  try {
+    return await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
+      params: data,
+      headers: getRocketChatHeaders()
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const deleteRequest = async (data) => {
+  try {
+    let result = await axios({
+      method: 'POST',
+      url: 'https://chat.mixapp.io/api/v1/chat.delete',
+      data: data,
+      headers: getRocketChatHeaders(true)
+    });
+    return result;
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -197,7 +216,6 @@ export const fetchRole = async () => {
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
-
     return result.data;
 
   } catch (err) {

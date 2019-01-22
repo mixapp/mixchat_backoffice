@@ -11,6 +11,7 @@ import Authorize from './containers/Authorize';
 import Settings from './containers/Settings';
 import Dialogs from './containers/Dialogs';
 import Managers from './containers/Managers';
+import Requests from './containers/Requests';
 import { connect } from 'react-redux';
 import { fetchSettings, saveSettings, fetchRole, loaderOff } from './actions/settings';
 import { Spin } from 'antd';
@@ -27,9 +28,10 @@ class Router extends React.Component {
         <Wrapper role={this.props.app.role}>
           <Spin spinning={this.props.app.loader} delay={0}>
             <PrivateRoute path='/' exact component={MainPage} />
-            {this.props.app.role === 'admin' ? <PrivateRoute path='/settings' exact component={Settings} /> : null}
+            <PrivateRoute path='/settings' exact component={Settings} />
             <PrivateRoute path='/dialogs' exact component={Dialogs} />
-            {this.props.app.role === 'admin' ? <PrivateRoute path='/managers' exact component={Managers} /> : null}
+            <PrivateRoute path='/managers' exact component={Managers} />
+            <PrivateRoute path='/requests' exact component={Requests} />
           </Spin>
         </Wrapper>
       </div>
