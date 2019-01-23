@@ -48,8 +48,19 @@ export default class RequestsListView extends React.Component {
       }
       return (<Button onClick={del.bind(this)} type="danger">Delete</Button>)
     },
-    fixed: 'right'
+    fixed: 'right',
+    width: 100
   }];
+
+  rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    getCheckboxProps: record => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
 
   componentWillReceiveProps() {
     if (this.props.requests) {
@@ -60,6 +71,6 @@ export default class RequestsListView extends React.Component {
   }
 
   render() {
-    return <Table scroll={{ x: 1500 }} loading={this.state.loading} columns={this.columns} dataSource={this.props.requests} />;
+    return <Table rowSelection={this.rowSelection} scroll={{ x: 1800 }} pagination={{ hideOnSinglePage: true }} loading={this.state.loading} columns={this.columns} dataSource={this.props.requests} />;
   }
 }
