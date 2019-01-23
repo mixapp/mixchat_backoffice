@@ -8,6 +8,7 @@ import {
   FETCH_DIALOG_REQUEST,
   SEND_MESSAGE_REQUEST,
   LOADER_OFF,
+  LOADER_ON,
   FETCH_ROLE_REQUEST,
   FETCH_REQUESTS_REQUEST,
   DELETE_REQUESTS_REQUEST,
@@ -69,6 +70,12 @@ export const fetchDialog = (data) => {
 export const loaderOff = () => {
   return {
     type: LOADER_OFF
+  }
+}
+
+export const loaderOn = () => {
+  return {
+    type: LOADER_ON
   }
 }
 

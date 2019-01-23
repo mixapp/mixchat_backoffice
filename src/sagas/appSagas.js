@@ -5,7 +5,7 @@ import {
   FETCH_SETTINGS_REQUEST, FETCH_SETTINGS_SUCCESS, //FETCH_SETTINGS_ERROR,
   SAVE_SETTINGS_REQUEST, SAVE_SETTINGS_SUCCESS, //SAVE_SETTINGS_ERROR,
   FETCH_MANAGERS_REQUEST, FETCH_MANAGERS_SUCCESS, //FETCH_MANAGERS_ERROR,
-  ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, //ADD_MANAGER_ERROR,
+  ADD_MANAGER_REQUEST, ADD_MANAGER_SUCCESS, ADD_MANAGER_ERROR,
   REMOVE_MANAGER_REQUEST, REMOVE_MANAGER_SUCCESS,  //REMOVE_MANAGER_ERROR,
   FETCH_DIALOGS_REQUEST, FETCH_DIALOGS_SUCCESS, //FETCH_DIALOGS_ERROR
   LOADER_ON, LOADER_OFF,
@@ -14,7 +14,7 @@ import {
   LOADER_TURN_OFF,
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
   FETCH_REQUESTS_REQUEST, FETCH_REQUESTS_SUCCESS, //FETCH_REQUESTS_ERROR
-  DELETE_REQUESTS_REQUEST, DELETE_REQUESTS_SUCCESS, //DELETE_REQUESTS_ERROR
+  DELETE_REQUESTS_REQUEST, //DELETE_REQUESTS_SUCCESS, //DELETE_REQUESTS_ERROR
 } from '../constants';
 import * as Api from '../api';
 import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
@@ -82,11 +82,15 @@ function* fetchDialogs() {
 function* removeManager() {
   yield takeLatest(REMOVE_MANAGER_REQUEST, function* (action) {
     try {
+
+      yield put({ type: LOADER_ON });
       let result = yield Api.removeManager(action.data);
       if (!result.data.error) {
         yield put({ type: REMOVE_MANAGER_SUCCESS, result });
         yield put({ type: FETCH_MANAGERS_REQUEST });
       }
+      yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -96,11 +100,17 @@ function* removeManager() {
 function* addManager() {
   yield takeLatest(ADD_MANAGER_REQUEST, function* (action) {
     try {
+
+      yield put({ type: LOADER_ON });
       let result = yield Api.addManager(action.data);
       if (!result.data.error) {
         yield put({ type: ADD_MANAGER_SUCCESS, result });
         yield put({ type: FETCH_MANAGERS_REQUEST });
+      } else {
+        yield put({ type: ADD_MANAGER_ERROR, result });
       }
+      yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }

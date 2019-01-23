@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -14,7 +14,22 @@ class AddManagerForm extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.props.form.setFieldsValue({
+      email: 'm2dev@mixapp.io',
+      nickname: 'manager2dev',
+      password: 'qwerty123456'
+    })
+  }
+
+  componentDidUpdate() {
+    if (this.props.error_message && this.props.error_message.error) {
+      message.error(this.props.error_message.error_message);
+    }
+  }
+
   render() {
+
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
@@ -49,7 +64,7 @@ class AddManagerForm extends React.Component {
             rules: [
               { required: true }
             ],
-          })(<Input placeholder='*********'  type='password' />)}
+          })(<Input placeholder='*********' type='password' />)}
         </FormItem>
 
         <FormItem {...formItemLayout}>

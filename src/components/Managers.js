@@ -29,7 +29,10 @@ export default class ManagersList extends React.Component {
     return (
       <div>
         <Table {...this.state} columns={columns} dataSource={this.props.managers} />
-        <AddManagerForm addManager={this.props.addManager} />
+        <AddManagerForm
+          addManager={this.props.addManager}
+          error_message={this.props.error_message}
+        />
       </div>
     );
   }

@@ -1,8 +1,9 @@
+import * as _ from 'underscore';
 import {
   SET_AUTHORIZE,
   FETCH_SETTINGS_SUCCESS,
   FETCH_MANAGERS_SUCCESS,
-  ADD_MANAGER_SUCCESS,
+  ADD_MANAGER_SUCCESS, ADD_MANAGER_ERROR,
   REMOVE_MANAGER_SUCCESS,
   FETCH_DIALOGS_SUCCESS,
   LOADER_ON, LOADER_OFF,
@@ -32,14 +33,16 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, managers: action.managers.managers };
     case ADD_MANAGER_SUCCESS:
       return { ...state, result: action };
+    case ADD_MANAGER_ERROR:
+      return { ...state, error_message: action.result.data };
     case REMOVE_MANAGER_SUCCESS:
-      return { ...state, result: action };
+      return { ...state, result: action.result };
     case FETCH_DIALOGS_SUCCESS:
       return { ...state, dialogs: action.dialogs };
     case LOADER_ON:
       return { ...state, loader: true };
     case LOADER_OFF:
-      return { ...state, loader: false };
+      return { ..._.omit(state, 'error_message'), loader: false };
     case FETCH_DIALOG_SUCCESS:
       state.currentRoomId = action.data.roomId;
       return { ...state, messages: action.data.messages.reverse() };
