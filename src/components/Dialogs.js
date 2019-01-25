@@ -1,13 +1,10 @@
 import React from 'react';
 import * as Scroll from 'react-scroll';
-import { Badge, Row, Col, List, Input, Form, Button, message } from 'antd';
+import { Row, Col, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
-import * as Api from '../api';
-import * as _ from 'underscore';
 import CommentClass from './items/Comment';
 const { TextArea } = Input
 const FormItem = Form.Item;
-const Search = Input.Search;
 
 /* Scroll */
 const scroll = Scroll.animateScroll;
@@ -31,7 +28,7 @@ class DialogsList extends React.Component {
     pageItemsCount: 15,
     currentPage: 0,
     lm: null, //last message,
-    searchDialogText: ''
+    messagesCount: 0
   }
 
   scrollToBottom(options) {
@@ -61,22 +58,6 @@ class DialogsList extends React.Component {
     }
   }
 
-  fetchDialog = async () => {
-    let groupInfo = null;
-    let groupList = await Api.fetchGroupList({ roomId: this.state.currentRoom._id });
-    if (_.findIndex(groupList.data.groups, { _id: this.state.currentRoom._id }) > -1) {
-      groupInfo = await Api.fetchGroupInfo({ roomId: this.state.currentRoom._id });
-    }
-    if (groupInfo && groupInfo.data) {
-      this.setState({
-        messagesCount: groupInfo.data.group.msgs,
-        hasMore: true,
-        lm: null
-      });
-      await this.fetchData();
-    }
-  }
-
   handleSubmit = (e) => {
     if (e)
       e.preventDefault();
@@ -85,17 +66,11 @@ class DialogsList extends React.Component {
         this.props.sendMessage({
           roomId: this.state.currentRoom._id,
           text: values.userComment,
-          messageCount: this.props.messages.length
+          messagesCount: this.props.messages.length
         });
       }
       this.props.form.resetFields('userComment');
     });
-  }
-
-  searchDialog(value) {
-    this.setState({
-      searchDialogText: value
-    })
   }
 
   async componentDidUpdate() {
@@ -118,10 +93,28 @@ class DialogsList extends React.Component {
   }
 
   async componentWillReceiveProps() {
-    let { messages } = this.props;
+    let { messages, currentRoomId, messagesCount } = this.props;
     if (messages) {
-      this.setState({
+      await this.setState({
         loading: false
+      });
+    }
+    if (currentRoomId) {
+      if (this.state.currentRoom && currentRoomId !== this.state.currentRoom._id) {
+        await this.setState({
+          hasMore: true,
+          currentPage: 0
+        });
+      }
+      await this.setState({
+        currentRoom: {
+          _id: currentRoomId
+        }
+      });
+    }
+    if (messagesCount) {
+      await this.setState({
+        messagesCount: messagesCount
       });
     }
   }
@@ -147,8 +140,7 @@ class DialogsList extends React.Component {
     if (this.state.currentPage * this.state.pageItemsCount >= this.state.messagesCount) {
       message.warning('Infinite List loaded all');
       this.setState({
-        hasMore: false,
-        loading: false,
+        hasMore: false
       });
       return;
     }
@@ -163,11 +155,10 @@ class DialogsList extends React.Component {
     const {
       getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
     } = this.props.form;
-
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
-        <Col span={14} style={{ overflow: 'hidden', border: '1px solid #e8e8e8', borderRadius: '5px 5px 0 0' }}> {/* TODO */}
+        <Col span={24} style={{ overflow: 'hidden', border: 'none' }}>
           <div style={{ height: '600px', width: '100%', overflow: 'auto', padding: '15px' }} id='chat-conteiner'> {/* TODO width: 104% */}
             <InfiniteScroll
               initialLoad={false}
@@ -178,68 +169,26 @@ class DialogsList extends React.Component {
               threshold={5}
             >
               <CommentClass
-                state={this.state}
+                state={this.state} /* TODO */
                 messages={this.props.messages}
               />
             </InfiniteScroll>
           </div>
         </Col>
-        <Col span={1}></Col>
-        <Col span={9} style={{ overflow: 'hidden', overflowY: 'auto', maxHeight: '600px' }}>
-          <List
-            size="small"
-            header={<Search
-              placeholder="Dialog name"
-              onSearch={value => this.searchDialog(value)}
-            />}
-            bordered
-            dataSource={_.sortBy(this.props.dialogs, 'nmsgs').reverse()}
-            renderItem={item => {
-
-              let result = item.name.split('_');
-              let companyid = result[result.length - 1];
-              item.name = item.name.replace(companyid, '');
-
-              if (item.name.search(this.state.searchDialogText) === -1) return <div></div>;
-
-              /* room is selected */
-              let selected;
-              if (this.state.currentRoom)
-                selected = item._id === this.state.currentRoom._id;
-
-              async function fetchDialog() {
-                try {
-                  await this.setState({
-                    currentRoom: item,
-                    currentPage: 1
-                  });
-                  await this.fetchDialog();
-                } catch (err) {
-                  throw err;
-                }
-              }
-              return <List.Item
-                style={{ cursor: 'pointer' }}
-                onClick={fetchDialog.bind(this)}
-              >
-                {selected ? <b>{item.name}</b> : item.name}
-                <Badge count={item.nmsgs} overflowCount={99999} className='messages-count-badge' />
-              </ List.Item>
-            }}
-          />
-        </Col>
+        <Col span={0}></Col>
       </Row >,
       <Row key='2'>
-        <Col span={14} style={{ height: '600px', overflow: 'auto' }}>
+        <Col span={24}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem
               validateStatus={userCommentError ? 'error' : ''}
               help={userCommentError || ''}
+              style={{ marginBottom: '0' }}
             >
               {getFieldDecorator('userComment', {
                 rules: [{ required: true, message: 'Please input your message!' }],
               })(
-                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} style={{ borderRadius: '0 0 5px 5px' }} />
+                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} style={{ borderRadius: '5px', backgroundColor: '#f6f6f6' }} />
               )}
             </FormItem>
             <FormItem>

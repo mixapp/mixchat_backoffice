@@ -39,7 +39,7 @@ class MenuPanel extends React.Component {
 
       <Menu.Item key="2">
         <Link to='/dialogs'>
-          <Icon type="message" />
+          <Icon type="database" />
           <span>Диалоги</span>
         </Link>
       </Menu.Item>

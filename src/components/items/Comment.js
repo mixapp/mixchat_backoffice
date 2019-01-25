@@ -7,7 +7,7 @@ export default class CommentClass extends React.Component {
   render() {
     return <List
       size="small"
-      dataSource={this.props.state.currentRoom ? this.props.messages : []}
+      dataSource={this.props.messages}
       renderItem={item => {
         let time = typeof item.ts === 'string' ? new Date(item.ts) : new Date(item.ts.$date);
         if (item.u.name)

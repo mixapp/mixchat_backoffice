@@ -9,6 +9,8 @@ export default class DialogsListView extends React.Component {
 
   render() {
     return <Dialogs
+      messagesCount={this.props.app.messagesCount}
+      currentRoomId={this.props.app.currentRoomId}
       fetchDialog={this.props.fetchDialog}
       messages={this.props.app.messages}
       message={this.props.app.message}

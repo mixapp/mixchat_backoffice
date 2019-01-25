@@ -23,3 +23,33 @@
     right: 5px;
     border-radius: 100%;
 }
+
+.dialogs-item-sider {
+    background-color: #262e47;
+    overflow: auto;
+    min-width: 300px !important;
+}
+
+.dialogs-item-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dialogs-item-container>span {
+    display: inline-block;
+}
+
+.dialogs-item-container>span:nth-child(2) {
+    display: inline-block;
+    width: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 10px;
+}
+
+.dialogs-item-container>div {
+    display: inline-block;
+    margin-left: auto;
+}
