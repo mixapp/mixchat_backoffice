@@ -1,6 +1,6 @@
 import React from 'react';
 import Parser from 'html-react-parser';
-import { List, Avatar, Spin, Comment, Tooltip } from 'antd';
+import { List, Avatar, Comment, Tooltip } from 'antd';
 import * as Api from '../../api';
 
 export default class CommentClass extends React.Component {
@@ -51,11 +51,6 @@ export default class CommentClass extends React.Component {
       }
       }
     >
-      {this.props.state.loading && this.props.state.hasMore && (
-        <div className="demo-loading-container">
-          <Spin />
-        </div>
-      )}
     </List>;
   }
 }

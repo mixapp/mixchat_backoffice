@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Input, Tag, Avatar } from 'antd';
 import * as _ from 'underscore';
-import * as Api from '../api';
 
 const { Sider } = Layout;
 const Search = Input.Search;
@@ -19,18 +18,9 @@ export default class DialogsListMenu extends React.Component {
   }
 
   fetchDialog = async (currentRoom) => {
-    let groupInfo = null;
-    let groupList = await Api.fetchGroupList({ roomId: currentRoom._id });
-    if (_.findIndex(groupList.data.groups, { _id: currentRoom._id }) > -1) {
-      groupInfo = await Api.fetchGroupInfo({ roomId: currentRoom._id });
-    }
-    if (groupInfo && groupInfo.data) {
-      await this.props.fetchDialog({
-        count: 15,
-        room: currentRoom,
-        messagesCount: groupInfo.data.group.msgs
-      });
-    }
+    await this.props.fetchDialog({
+      room: currentRoom
+    });
   }
 
   componentDidMount() {

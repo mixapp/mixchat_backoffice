@@ -32,7 +32,8 @@ const getHeadera = () => {
 export const config = {
   companyId: '5bed9d260dec1f9f4f358399',
   backApiProcessId: '5bc49dd0574e7403e22ec1a0',
-  frontApiProcessId: '5bc49dd735b38203254872a5'
+  frontApiProcessId: '5bc49dd735b38203254872a5',
+  commentsPerPage: 15
 };
 
 export const fetchConfig = () => {
@@ -174,7 +175,7 @@ export const fetchDialog = async (data) => {
   }
 }
 
-export const fetchGroupList = async (data) => {
+export const fetchGroupList = async () => {
   try {
     return await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
       headers: getRocketChatHeaders()

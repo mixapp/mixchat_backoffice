@@ -42,13 +42,20 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
       yield put({ type: LOADER_ON });
-      let { count, room, messagesCount } = action.data;
+      let { room } = action.data;
       updateDialogs(readDialog(room));
       let dialogs = yield Api.fetchDialogs();
       setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
-      let messages = yield Api.fetchDialog({ roomId: room._id, count });
-      yield put({ type: FETCH_DIALOG_SUCCESS, data: { messages: messages, roomId: room._id, messagesCount: messagesCount } });
+      let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
+      let messages = yield Api.fetchDialog({ roomId: room._id, count: action.data.count });
+      yield put({
+        type: FETCH_DIALOG_SUCCESS, data: {
+          messages: messages,
+          roomId: room._id,
+          messagesCount: groupInfo.data.group.msgs
+        }
+      });
       yield put({ type: LOADER_OFF });
     } catch (err) {
       throw err;

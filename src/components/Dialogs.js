@@ -21,9 +21,7 @@ class DialogsList extends React.Component {
   }
 
   state = {
-    size: 'small',
     currentRoom: null,
-    loading: false,
     hasMore: true,
     pageItemsCount: 15,
     currentPage: 0,
@@ -65,8 +63,7 @@ class DialogsList extends React.Component {
       if (!err && this.state.currentRoom && values.userComment.replace(/\s/g, '').length) {
         this.props.sendMessage({
           roomId: this.state.currentRoom._id,
-          text: values.userComment,
-          messagesCount: this.props.messages.length
+          text: values.userComment
         });
       }
       this.props.form.resetFields('userComment');
@@ -93,12 +90,7 @@ class DialogsList extends React.Component {
   }
 
   async componentWillReceiveProps() {
-    let { messages, currentRoomId, messagesCount } = this.props;
-    if (messages) {
-      await this.setState({
-        loading: false
-      });
-    }
+    let { currentRoomId, messagesCount } = this.props;
     if (currentRoomId) {
       if (this.state.currentRoom && currentRoomId !== this.state.currentRoom._id) {
         await this.setState({
@@ -134,9 +126,6 @@ class DialogsList extends React.Component {
   }
 
   handleInfiniteOnLoad = async () => {
-    this.setState({
-      loading: true,
-    });
     if (this.state.currentPage * this.state.pageItemsCount >= this.state.messagesCount) {
       message.warning('Infinite List loaded all');
       this.setState({
@@ -169,7 +158,6 @@ class DialogsList extends React.Component {
               threshold={5}
             >
               <CommentClass
-                state={this.state} /* TODO */
                 messages={this.props.messages}
               />
             </InfiniteScroll>
