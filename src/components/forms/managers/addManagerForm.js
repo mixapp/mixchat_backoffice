@@ -1,27 +1,10 @@
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Modal, message } from 'antd';
 
 const FormItem = Form.Item;
 
 class AddManagerForm extends React.Component {
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        this.props.addManager(values);
-      }
-    });
-  }
-
-/*   componentDidMount() {
-    this.props.form.setFieldsValue({
-      email: 'm2dev@mixapp.io',
-      nickname: 'manager2dev',
-      password: 'qwerty123456'
-    })
-  }
- */
   componentDidUpdate() {
     if (this.props.error_message && this.props.error_message.error) {
       message.error(this.props.error_message.error_message);
@@ -29,8 +12,11 @@ class AddManagerForm extends React.Component {
   }
 
   render() {
+    const {
+      visible, onCancel, onCreate, form,
+    } = this.props;
 
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = form;
 
     const formItemLayout = {
       wrapperCol: {
@@ -41,37 +27,41 @@ class AddManagerForm extends React.Component {
 
 
     return (
-      <Form onSubmit={this.handleSubmit} layout='vertical'>
+      <Modal
+        visible={visible}
+        title="Add new manager"
+        okText="Create"
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout='vertical'>
 
-        <FormItem {...formItemLayout} label='E-mail'>
-          {getFieldDecorator('email', {
-            rules: [
-              { required: true }
-            ],
-          })(<Input placeholder='email@gmail.com' />)}
-        </FormItem>
+          <FormItem {...formItemLayout} label='E-mail'>
+            {getFieldDecorator('email', {
+              rules: [
+                { required: true }
+              ],
+            })(<Input placeholder='email@gmail.com' />)}
+          </FormItem>
 
-        <FormItem {...formItemLayout} label='Nickname'>
-          {getFieldDecorator('nickname', {
-            rules: [
-              { required: true }
-            ],
-          })(<Input placeholder='BestNickname' />)}
-        </FormItem>
+          <FormItem {...formItemLayout} label='Nickname'>
+            {getFieldDecorator('nickname', {
+              rules: [
+                { required: true }
+              ],
+            })(<Input placeholder='BestNickname' />)}
+          </FormItem>
 
-        <FormItem {...formItemLayout} label='Password'>
-          {getFieldDecorator('password', {
-            rules: [
-              { required: true }
-            ],
-          })(<Input placeholder='*********' type='password' />)}
-        </FormItem>
+          <FormItem {...formItemLayout} label='Password'>
+            {getFieldDecorator('password', {
+              rules: [
+                { required: true }
+              ],
+            })(<Input placeholder='*********' type='password' />)}
+          </FormItem>
 
-        <FormItem {...formItemLayout}>
-          <Button type='primary' htmlType='submit'>Add</Button>
-        </FormItem>
-
-      </Form>
+        </Form>
+      </Modal>
     );
   }
 }
