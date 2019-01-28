@@ -30,10 +30,7 @@ export default class CommentItem extends React.Component {
             key={item._id}
             author={item.u.shortName}
             avatar={(
-              <Avatar
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                alt={item.u.shortName}
-              />
+              <Avatar>U</Avatar>
             )}
             content={(
               <div>
