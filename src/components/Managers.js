@@ -9,7 +9,6 @@ export default class ManagersList extends React.Component {
   }
 
   render() {
-    console.log(this.props.managers)
     let columns = [
       { title: '№', dataIndex: 'number', key: 'number' },
       { title: 'email', dataIndex: 'email', key: 'email' },
@@ -23,8 +22,8 @@ export default class ManagersList extends React.Component {
               throw err;
             }
           }
-          return <Button onClick={removeManager.bind(this)} type="primary" shape="circle" icon="delete" size='large' />
-        }
+          return <Button onClick={removeManager.bind(this)} type="danger">Delete</Button>
+        }, fixed: 'right', width: 100
       }
     ];
     return (
