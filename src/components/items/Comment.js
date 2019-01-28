@@ -3,7 +3,7 @@ import Parser from 'html-react-parser';
 import { List, Avatar, Comment, Tooltip } from 'antd';
 import * as Api from '../../api';
 
-export default class CommentClass extends React.Component {
+export default class CommentItem extends React.Component {
   render() {
     return <List
       size="small"

@@ -20,6 +20,7 @@ class Wrapper extends React.Component {
 
   render() {
     let { pathname } = this.props.location;
+    let contentClass = 'content ' + pathname.replace('/', '');
     return (
       <Layout className="main_layout">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
@@ -38,7 +39,7 @@ class Wrapper extends React.Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content className="content" style={{ overflow: 'hidden' }}>{this.props.children}</Content>
+          <Content className={contentClass} id='asas'>{this.props.children}</Content>
         </Layout>
       </Layout>
     );

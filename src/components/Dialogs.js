@@ -2,7 +2,7 @@ import React from 'react';
 import * as Scroll from 'react-scroll';
 import { Row, Col, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
-import CommentClass from './items/Comment';
+import CommentItem from './items/Comment';
 const { TextArea } = Input
 const FormItem = Form.Item;
 
@@ -140,15 +140,22 @@ class DialogsList extends React.Component {
     this.scrollTo(150, { duration: 0 });
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      document.getElementById('chat-conteiner').style.height = document.getElementById('asas').clientHeight - 55 + 'px'
+    }, 0);
+  }
+
   render() {
     const {
       getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
     } = this.props.form;
+    console.log();
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
         <Col span={24} style={{ overflow: 'hidden', border: 'none' }}>
-          <div style={{ height: '600px', width: '100%', overflow: 'auto', padding: '15px' }} id='chat-conteiner'> {/* TODO width: 104% */}
+          <div style={{ width: '100%', overflow: 'auto', padding: '15px', borderBottom: '2px solid #f0f2f5' }} id='chat-conteiner'> {/* TODO width: 104% */}
             <InfiniteScroll
               initialLoad={false}
               isReverse={true}
@@ -157,7 +164,7 @@ class DialogsList extends React.Component {
               useWindow={false}
               threshold={5}
             >
-              <CommentClass
+              <CommentItem
                 messages={this.props.messages}
               />
             </InfiniteScroll>
@@ -173,20 +180,22 @@ class DialogsList extends React.Component {
               help={userCommentError || ''}
               style={{ marginBottom: '0' }}
             >
-              {getFieldDecorator('userComment', {
-                rules: [{ required: true, message: 'Please input your message!' }],
-              })(
-                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} style={{ borderRadius: '5px', backgroundColor: '#f6f6f6' }} />
-              )}
-            </FormItem>
-            <FormItem>
-              <Button
-                type="primary"
-                htmlType="submit"
-                disabled={hasErrors(getFieldsError())}
-              >
-                Send
-          </Button>
+              <div style={{ display: 'flex' }}>
+                {getFieldDecorator('userComment', {
+                  rules: [{ required: true, message: 'Please input your message!' }],
+                })(
+                  <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} style={{ resize: 'none', border: 'none', borderRadius: 0 }} />
+                )}
+                <div style={{ width: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <Button
+                    shape="circle"
+                    type="primary"
+                    icon="right"
+                    htmlType="submit"
+                    disabled={hasErrors(getFieldsError())}
+                  />
+                </div>
+              </div>
             </FormItem>
           </Form>
         </Col>

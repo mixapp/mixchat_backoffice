@@ -9,9 +9,10 @@ export default class ManagersList extends React.Component {
   }
 
   render() {
+    console.log(this.props.managers)
     let columns = [
       { title: '№', dataIndex: 'number', key: 'number' },
-      { title: '_id', dataIndex: '_id', key: '_id' },
+      { title: 'email', dataIndex: 'email', key: 'email' },
       { title: 'Nickname', key: 'nickname', dataIndex: 'nickname' },
       {
         title: 'Action', dataIndex: '', key: '', render: (obj) => {
