@@ -19,6 +19,7 @@ export default class DialogsListMenu extends React.Component {
 
   fetchDialog = async (currentRoom) => {
     await this.props.fetchDialog({
+      count: 15,
       room: currentRoom
     });
   }

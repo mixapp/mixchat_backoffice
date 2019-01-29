@@ -39,7 +39,7 @@ class Wrapper extends React.Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content className={contentClass} id='asas'>{this.props.children}</Content>
+          <Content className={contentClass}>{this.props.children}</Content>
         </Layout>
       </Layout>
     );

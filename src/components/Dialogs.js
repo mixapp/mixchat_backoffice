@@ -3,16 +3,12 @@ import * as Scroll from 'react-scroll';
 import { Row, Col, Input, Form, Button, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import CommentItem from './items/Comment';
+import SendButton from '../components/svg/send_button';
 const { TextArea } = Input
 const FormItem = Form.Item;
 
 /* Scroll */
 const scroll = Scroll.animateScroll;
-
-function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
-
 
 class DialogsList extends React.Component {
   constructor(props) {
@@ -70,6 +66,28 @@ class DialogsList extends React.Component {
     });
   }
 
+  fetchData = async () => {
+    this.props.fetchDialog({
+      count: this.state.currentPage * this.state.pageItemsCount,
+      room: this.state.currentRoom
+    });
+  }
+
+  handleInfiniteOnLoad = async () => {
+    if (this.state.currentPage * this.state.pageItemsCount >= this.state.messagesCount) {
+      message.warning('Infinite List loaded all');
+      this.setState({
+        hasMore: false
+      });
+      return;
+    }
+    this.setState({
+      currentPage: ++this.state.currentPage
+    })
+    this.fetchData();
+    this.scrollTo(150, { duration: 0 });
+  }
+
   async componentDidUpdate() {
     let { messages, message } = this.props;
     if (messages) {
@@ -118,44 +136,38 @@ class DialogsList extends React.Component {
     });
   }
 
-  fetchData = async () => {
-    this.props.fetchDialog({
-      count: this.state.currentPage * this.state.pageItemsCount,
-      room: this.state.currentRoom
-    });
-  }
-
-  handleInfiniteOnLoad = async () => {
-    if (this.state.currentPage * this.state.pageItemsCount >= this.state.messagesCount) {
-      message.warning('Infinite List loaded all');
-      this.setState({
-        hasMore: false
-      });
-      return;
-    }
-    this.setState({
-      currentPage: ++this.state.currentPage
-    })
-    this.fetchData();
-    this.scrollTo(150, { duration: 0 });
-  }
-
   componentDidMount() {
+    /*
+    var tx = document.getElementsByTagName('textarea');
+    for (var i = 0; i < tx.length; i++) {
+      tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;');
+      tx[i].addEventListener("input", OnInput, false);
+    }
+
+    function OnInput() {
+      if (this.scrollHeight < 100) {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      }
+    }
+    */
+
     setTimeout(() => {
-      document.getElementById('chat-conteiner').style.height = document.getElementById('asas').clientHeight - 55 + 'px'
+      this.commentConteiner = document.getElementsByClassName('content dialogs')[0];
+      this.chatConteiner = document.getElementsByClassName('chat-conteiner')[0];
+      this.chatConteiner.style.height = this.commentConteiner.clientHeight - 55 + 'px'
     }, 0);
   }
 
   render() {
     const {
-      getFieldDecorator, getFieldsError, getFieldError, isFieldTouched,
+      getFieldDecorator, getFieldError, isFieldTouched,
     } = this.props.form;
-    console.log();
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
       <Row key='1'>
         <Col span={24} style={{ overflow: 'hidden', border: 'none' }}>
-          <div style={{ width: '100%', overflow: 'auto', padding: '15px', borderBottom: '2px solid #f0f2f5' }} id='chat-conteiner'> {/* TODO width: 104% */}
+          <div className='chat-conteiner' id='chat-conteiner'> {/* TODO width: 104% */}
             <InfiniteScroll
               initialLoad={false}
               isReverse={true}
@@ -184,16 +196,19 @@ class DialogsList extends React.Component {
                 {getFieldDecorator('userComment', {
                   rules: [{ required: true, message: 'Please input your message!' }],
                 })(
-                  <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} style={{ resize: 'none', border: 'none', borderRadius: 0 }} />
+                  <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
                 )}
-                <div style={{ width: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <Button
-                    shape="circle"
-                    type="primary"
-                    icon="right"
-                    htmlType="submit"
-                    disabled={hasErrors(getFieldsError())}
-                  />
+                <div
+                  onClick={this.handleSubmit}
+                  style={{
+                    width: '50px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '.8em',
+                    cursor: 'pointer'
+                  }}>
+                  <SendButton />
                 </div>
               </div>
             </FormItem>

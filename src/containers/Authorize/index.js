@@ -29,7 +29,7 @@ class Authorize extends React.Component {
 
     }
     render() {
-        return <div>ddd</div>;
+        return <div></div>;
     }
 }
 
