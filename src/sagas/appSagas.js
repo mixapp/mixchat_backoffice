@@ -15,6 +15,7 @@ import {
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
   FETCH_REQUESTS_REQUEST, FETCH_REQUESTS_SUCCESS, //FETCH_REQUESTS_ERROR
   DELETE_REQUESTS_REQUEST, //DELETE_REQUESTS_SUCCESS, //DELETE_REQUESTS_ERROR
+  FETCH_CONFIG_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
@@ -161,8 +162,8 @@ function* fetchSettingsSaga() {
   yield takeLatest(FETCH_SETTINGS_REQUEST, function* (action) {
     try {
       yield put({ type: LOADER_ON });
-      let widgetSettings = yield Api.fetchSettings();
-      yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings });
+      yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings: yield Api.fetchSettings() });
+      yield put({ type: FETCH_CONFIG_SUCCESS, config: yield Api.fetchConfig() });
       yield put({ type: LOADER_OFF });
     } catch (err) {
       throw err;

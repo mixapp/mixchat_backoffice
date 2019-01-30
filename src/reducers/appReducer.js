@@ -11,7 +11,8 @@ import {
   SOCKET_ROOMS_CHANGED_EVENT,
   FETCH_ROLE_SUCCESS,
   FETCH_REQUESTS_SUCCESS,
-  DELETE_REQUESTS_SUCCESS
+  DELETE_REQUESTS_SUCCESS,
+  FETCH_CONFIG_SUCCESS
 } from '../constants';
 const initialState = {
   user: null,
@@ -62,6 +63,8 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, requests: action.messages };
     case DELETE_REQUESTS_SUCCESS:
       return { ...state, result: action };
+    case FETCH_CONFIG_SUCCESS:
+      return { ...state, config: action.config };
     default:
       return state;
   }
