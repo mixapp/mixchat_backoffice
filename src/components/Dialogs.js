@@ -137,7 +137,7 @@ class DialogsList extends React.Component {
   }
 
   componentDidMount() {
-    /*
+    let commentConteiner, chatConteiner, chatHeight;
     var tx = document.getElementsByTagName('textarea');
     for (var i = 0; i < tx.length; i++) {
       tx[i].setAttribute('style', 'height:' + (tx[i].scrollHeight) + 'px;');
@@ -148,20 +148,23 @@ class DialogsList extends React.Component {
       if (this.scrollHeight < 100) {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
+        if (this.scrollHeight - 50 > -1) {
+          chatConteiner.style.height = chatHeight - (this.scrollHeight - 50) + 'px';
+        }
       }
     }
-    */
 
     setTimeout(() => {
-      this.commentConteiner = document.getElementsByClassName('content dialogs')[0];
-      this.chatConteiner = document.getElementsByClassName('chat-conteiner')[0];
-      this.chatConteiner.style.height = this.commentConteiner.clientHeight - 55 + 'px'
+      commentConteiner = document.getElementsByClassName('content dialogs')[0];
+      chatConteiner = document.getElementsByClassName('chat-conteiner')[0];
+      chatHeight = commentConteiner.clientHeight - 55;
+      chatConteiner.style.height = chatHeight + 'px'
     }, 0);
   }
 
   render() {
     const {
-      getFieldDecorator, getFieldError, isFieldTouched,
+      getFieldError, isFieldTouched,
     } = this.props.form;
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
@@ -193,11 +196,7 @@ class DialogsList extends React.Component {
               style={{ marginBottom: '0' }}
             >
               <div style={{ display: 'flex' }}>
-                {getFieldDecorator('userComment', {
-                  rules: [{ required: true, message: 'Please input your message!' }],
-                })(
-                  <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
-                )}
+                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
                 <div
                   onClick={this.handleSubmit}
                   style={{

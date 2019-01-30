@@ -3,6 +3,9 @@
 
 textarea {
     margin: 0;
+    border: none !important;
+    resize: none;
+    overflow: hidden;
 }
 
 textarea:focus {
@@ -69,7 +72,6 @@ textarea:focus {
 }
 
 .chat-conteiner {
-    width: 100%;
     overflow: auto;
     padding: 15px;
     border-bottom: 2px solid #f0f2f5;
