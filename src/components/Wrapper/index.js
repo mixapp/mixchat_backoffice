@@ -4,6 +4,7 @@ import { Layout, Icon } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
 import DialogsList from '../../containers/DialogsList';
+import { Spin } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
@@ -39,7 +40,12 @@ class Wrapper extends React.Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content className={contentClass}>{this.props.children}</Content>
+          {pathname === '/dialogs'
+            ? <Content className={contentClass}>{this.props.children}</Content>
+            : <Spin spinning={this.props.loader} delay={0}>
+              <Content className={contentClass}>{this.props.children}</Content>
+            </Spin>
+          }
         </Layout>
       </Layout>
     );

@@ -53,9 +53,11 @@ class DialogsList extends React.Component {
   }
 
   handleSubmit = (e) => {
+    console.log(e)
     if (e)
       e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      console.log(e);
       if (!err && this.state.currentRoom && values.userComment.replace(/\s/g, '').length) {
         this.props.sendMessage({
           roomId: this.state.currentRoom._id,
@@ -164,7 +166,7 @@ class DialogsList extends React.Component {
 
   render() {
     const {
-      getFieldError, isFieldTouched,
+      getFieldError, isFieldTouched, getFieldDecorator
     } = this.props.form;
     const userCommentError = isFieldTouched('userComment') && getFieldError('userComment');
     return [
@@ -196,17 +198,15 @@ class DialogsList extends React.Component {
               style={{ marginBottom: '0' }}
             >
               <div style={{ display: 'flex' }}>
-                <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
+                {getFieldDecorator('userComment', {
+                  rules: [{ required: true, message: 'Please input your message!' }],
+                })(
+                  <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
+                )}
                 <div
                   onClick={this.handleSubmit}
-                  style={{
-                    width: '50px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '.8em',
-                    cursor: 'pointer'
-                  }}>
+                  className='send-button'
+                >
                   <SendButton />
                 </div>
               </div>

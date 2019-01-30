@@ -25,14 +25,12 @@ class Router extends React.Component {
     return <ConnectedRouter history={history}>
       <div>
         <Route path="/authorize" exact component={Authorize} />
-        <Wrapper role={this.props.app.role}>
-          <Spin spinning={this.props.app.loader} delay={0}>
-            <PrivateRoute path='/' exact component={MainPage} />
-            <PrivateRoute path='/settings' exact component={Settings} />
-            <PrivateRoute path='/dialogs' exact component={Dialogs} />
-            <PrivateRoute path='/managers' exact component={Managers} />
-            <PrivateRoute path='/requests' exact component={Requests} />
-          </Spin>
+        <Wrapper role={this.props.app.role} loader={this.props.app.loader}>
+          <PrivateRoute path='/' exact component={MainPage} />
+          <PrivateRoute path='/settings' exact component={Settings} />
+          <PrivateRoute path='/dialogs' exact component={Dialogs} />
+          <PrivateRoute path='/managers' exact component={Managers} />
+          <PrivateRoute path='/requests' exact component={Requests} />
         </Wrapper>
       </div>
     </ConnectedRouter>;
