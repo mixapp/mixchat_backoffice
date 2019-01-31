@@ -19,6 +19,9 @@ class Router extends React.Component {
   componentDidMount() {
     this.props.fetchRole();
     this.props.loaderOff();
+    if (history.location.pathname === '/') {
+      history.push('/dialogs');
+    }
   }
   render() {
     return <ConnectedRouter history={history}>

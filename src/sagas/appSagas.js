@@ -175,7 +175,6 @@ function* loginSaga() {
   yield takeLatest(SET_AUTHORIZE, function* (action) {
     try {
       localStorage.setItem('user', JSON.stringify(action.data))
-
       //Get RocketChat Token
       let result = yield Api.getXauthToken();
       localStorage.setItem('XUSER', JSON.stringify(result));

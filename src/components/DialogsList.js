@@ -24,10 +24,6 @@ export default class DialogsListMenu extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.props.fetchDialogs();
-  }
-
   render() {
     let dialogs = _.sortBy(this.props.app.dialogs, 'nmsgs').reverse();
     let menuItems = [];

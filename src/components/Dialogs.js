@@ -53,9 +53,7 @@ class DialogsList extends React.Component {
     }
   }
 
-  handleSubmit = (e) => {
-    if (e)
-      e.preventDefault();
+  handleSubmit = () => {
     this.props.form.validateFields((err, values) => {
       if (!err && this.state.currentRoom && values.userComment.replace(/\s/g, '').length) {
         this.props.sendMessage({

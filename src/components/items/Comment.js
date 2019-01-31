@@ -4,6 +4,11 @@ import { List, Avatar, Comment, Tooltip } from 'antd';
 import * as Api from '../../api';
 
 export default class CommentItem extends React.Component {
+
+  componentDidMount() {
+    this.client = JSON.parse(localStorage.getItem('XUSER')).data.userId;
+  }
+
   render() {
     return <List
       size="small"
@@ -28,9 +33,9 @@ export default class CommentItem extends React.Component {
         return (
           <Comment
             key={item._id}
-            author={item.u.shortName}
+            author={<b>{item.u.shortName}</b>}
             avatar={(
-              <Avatar>U</Avatar>
+              <Avatar style={{ backgroundColor: item.u._id === this.client ? '#77a2ff' : '#ff87a3' }}>U</Avatar>
             )}
             content={(
               <div>

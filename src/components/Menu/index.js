@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 class MenuPanel extends React.Component {
 
   state = {
-    currentMenuKey: 0
+    currentMenuKey: 2
   }
 
   componentWillMount() {
@@ -21,8 +21,11 @@ class MenuPanel extends React.Component {
       case '/requests':
         key = 5;
         break;
-      default:
+      case '/settings':
         key = 1;
+        break;
+      default:
+        key = 2;
     }
     this.setState({
       currentMenuKey: key
