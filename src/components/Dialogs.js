@@ -4,6 +4,7 @@ import { Row, Col, Input, Form, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import CommentItem from './items/Comment';
 import SendButton from '../components/svg/send_button';
+import { Spin } from 'antd';
 const { TextArea } = Input
 const FormItem = Form.Item;
 
@@ -53,11 +54,9 @@ class DialogsList extends React.Component {
   }
 
   handleSubmit = (e) => {
-    console.log(e)
     if (e)
       e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(e);
       if (!err && this.state.currentRoom && values.userComment.replace(/\s/g, '').length) {
         this.props.sendMessage({
           roomId: this.state.currentRoom._id,
@@ -165,6 +164,7 @@ class DialogsList extends React.Component {
   }
 
   render() {
+    if (this.state.currentRoom) { }
     const {
       getFieldError, isFieldTouched, getFieldDecorator
     } = this.props.form;
@@ -172,20 +172,22 @@ class DialogsList extends React.Component {
     return [
       <Row key='1'>
         <Col span={24} style={{ overflow: 'hidden', border: 'none' }}>
-          <div className='chat-conteiner' id='chat-conteiner'> {/* TODO width: 104% */}
-            <InfiniteScroll
-              initialLoad={false}
-              isReverse={true}
-              loadMore={this.handleInfiniteOnLoad}
-              hasMore={!this.state.loading && this.state.hasMore}
-              useWindow={false}
-              threshold={5}
-            >
-              <CommentItem
-                messages={this.props.messages}
-              />
-            </InfiniteScroll>
-          </div>
+          <Spin spinning={this.props.loader} delay={0}>
+            <div className='chat-conteiner' id='chat-conteiner'> {/* TODO width: 104% */}
+              <InfiniteScroll
+                initialLoad={false}
+                isReverse={true}
+                loadMore={this.handleInfiniteOnLoad}
+                hasMore={!this.state.loading && this.state.hasMore}
+                useWindow={false}
+                threshold={5}
+              >
+                <CommentItem
+                  messages={this.props.messages}
+                />
+              </InfiniteScroll>
+            </div>
+          </Spin>
         </Col>
         <Col span={0}></Col>
       </Row >,

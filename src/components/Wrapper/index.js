@@ -21,6 +21,7 @@ class Wrapper extends React.Component {
 
   render() {
     let { pathname } = this.props.location;
+    let dialogsListShow = pathname === '/dialogs' ? '' : 'none';
     let contentClass = 'content ' + pathname.replace('/', '');
     return (
       <Layout className="main_layout">
@@ -30,7 +31,7 @@ class Wrapper extends React.Component {
           </div>
           <MenuPanel role={this.props.role} />
         </Sider>
-        {pathname === '/dialogs' && <DialogsList />}
+        <DialogsList dialogsListShow={dialogsListShow} />
 
         <Layout>
           <Header className="header">

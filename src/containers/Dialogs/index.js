@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import DialogsView from '../../components/DialogsView';
-import { fetchDialogs, fetchDialog, sendMessage } from '../../actions/settings';
+import { fetchDialogs, fetchDialog, sendMessage, loaderOff } from '../../actions/settings';
 
 const Dialogs = (props) => {
     return <DialogsView {...props} />;
@@ -18,6 +18,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         fetchDialogs: () => { dispatch(fetchDialogs()) },
         fetchDialog: (data) => { dispatch(fetchDialog(data)) },
         sendMessage: (data) => { dispatch(sendMessage(data)) },
+        loaderOff: () => { dispatch(loaderOff()) }
     }
 }
 

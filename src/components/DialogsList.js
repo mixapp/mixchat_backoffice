@@ -56,19 +56,20 @@ export default class DialogsListMenu extends React.Component {
           </Menu.Item>
         );
     })
-
-    return <Sider trigger={null} collapsible collapsed={false} className='dialogs-item-sider'>
-      <div className="logo_container">
-        <div className="logo">
-          <Search
-            placeholder="Dialog name"
-            onSearch={value => this.searchDialog(value)}
-          />
+    return (
+      <Sider style={{ display: this.props.dialogsListShow }} className='dialogs-item-sider' >
+        <div className="logo_container">
+          <div className="logo">
+            <Search
+              placeholder="Dialog name"
+              onSearch={value => this.searchDialog(value)}
+            />
+          </div>
         </div>
-      </div>
-      <Menu theme="dark" mode="inline" className='dialogs-item-sider'>
-        {menuItems}
-      </Menu>
-    </Sider>
+        <Menu theme="dark" mode="inline" className='dialogs-item-sider'>
+          {menuItems}
+        </Menu>
+      </Sider>
+    )
   }
 }

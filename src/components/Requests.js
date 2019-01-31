@@ -6,7 +6,8 @@ import {
 export default class RequestsListView extends React.Component {
 
   state = {
-    loading: false
+    loading: false,
+    msgsIdToDelete: []
   }
 
   deleteRequest = async (item) => {
@@ -14,7 +15,7 @@ export default class RequestsListView extends React.Component {
       this.setState({
         loading: true
       })
-      await this.props.deleteRequest({ msgId: item._id });
+      this.props.deleteRequest({ msgId: item._id });
     } catch (err) {
       throw err;
     }
@@ -44,7 +45,13 @@ export default class RequestsListView extends React.Component {
     key: '_id',
     render: (item) => {
       function del() {
-        this.deleteRequest(item);
+        if (this.state.msgsIdToDelete.length > 0) {
+          this.state.msgsIdToDelete.forEach(item => {
+            this.deleteRequest(item);
+          });
+        } else {
+          this.deleteRequest(item);
+        }
       }
       return (<Button onClick={del.bind(this)} type="danger">Delete</Button>)
     },
@@ -53,8 +60,11 @@ export default class RequestsListView extends React.Component {
   }];
 
   rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    onChange: async (selectedRowKeys, selectedRows) => {
+      //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      await this.setState({
+        msgsIdToDelete: selectedRows
+      });
     },
     getCheckboxProps: record => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked

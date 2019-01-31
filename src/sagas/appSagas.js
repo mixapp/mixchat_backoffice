@@ -233,10 +233,12 @@ function* fetchRequests() {
 function* deleteRequest() {
   yield takeLatest(DELETE_REQUESTS_REQUEST, function* (data) {
     try {
-      let config = Api.fetchConfig();
-      let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
-      yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data.msgId });
-      yield put({ type: FETCH_REQUESTS_REQUEST });
+      yield put({ type: LOADER_ON });
+      //let config = Api.fetchConfig();
+      //let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
+      //yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data.msgId });
+      //yield put({ type: FETCH_REQUESTS_REQUEST });
+      //yield put({ type: LOADER_OFF });
     } catch (err) {
       throw err;
     }

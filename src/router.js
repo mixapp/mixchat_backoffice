@@ -14,7 +14,6 @@ import Managers from './containers/Managers';
 import Requests from './containers/Requests';
 import { connect } from 'react-redux';
 import { fetchSettings, saveSettings, fetchRole, loaderOff } from './actions/settings';
-import { Spin } from 'antd';
 
 class Router extends React.Component {
   componentDidMount() {
