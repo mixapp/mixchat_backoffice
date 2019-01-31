@@ -10,12 +10,12 @@ export default class RequestsListView extends React.Component {
     msgsIdToDelete: []
   }
 
-  deleteRequest = async (item) => {
+  deleteRequest = async (data) => {
     try {
       this.setState({
         loading: true
       })
-      this.props.deleteRequest({ msgId: item._id });
+      this.props.deleteRequest(data);
     } catch (err) {
       throw err;
     }
@@ -46,9 +46,7 @@ export default class RequestsListView extends React.Component {
     render: (item) => {
       function del() {
         if (this.state.msgsIdToDelete.length > 0) {
-          this.state.msgsIdToDelete.forEach(item => {
-            this.deleteRequest(item);
-          });
+          this.deleteRequest(this.state.msgsIdToDelete);
         } else {
           this.deleteRequest(item);
         }
