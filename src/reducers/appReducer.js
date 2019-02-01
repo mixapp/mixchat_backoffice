@@ -20,8 +20,8 @@ const initialState = {
   message: null,
   dialogs: [],
   loader: false,
-  currentRoomId: null,
   messagesCount: null,
+  currentRoom: null,
   currentPage: 1,
   requests: []
 };
@@ -47,14 +47,14 @@ export default function reducer(state = initialState, action = {}) {
     case LOADER_OFF:
       return { ..._.omit(state, 'error_message'), loader: false };
     case FETCH_DIALOG_SUCCESS:
-      state.currentRoomId = action.data.roomId;
+      state.currentRoom = action.data.room;
       state.messagesCount = action.data.messagesCount;
       state.currentPage = 1;
       return { ...state, messages: action.data.messages.reverse() };
     case SOCKET_ROOMS_CHANGED_EVENT:
       let lastMsg = action.data.fields.args[1].lastMessage;
       if (lastMsg)
-        return { ...state, message: lastMsg, messages: state.currentRoomId === lastMsg.rid ? [...state.messages, lastMsg] : state.messages };
+        return { ...state, message: lastMsg, messages: state.currentRoom._id === lastMsg.rid ? [...state.messages, lastMsg] : state.messages };
       else
         return { ...state, message: null, messages: state.messages }
     case FETCH_ROLE_SUCCESS:

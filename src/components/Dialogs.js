@@ -57,6 +57,7 @@ class DialogsList extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err && this.state.currentRoom && values.userComment.replace(/\s/g, '').length) {
         this.props.sendMessage({
+          room: this.state.currentRoom,
           roomId: this.state.currentRoom._id,
           text: values.userComment
         });
@@ -107,18 +108,16 @@ class DialogsList extends React.Component {
   }
 
   async componentWillReceiveProps() {
-    let { currentRoomId, messagesCount } = this.props;
-    if (currentRoomId) {
-      if (this.state.currentRoom && currentRoomId !== this.state.currentRoom._id) {
+    let { currentRoom, messagesCount } = this.props;
+    if (currentRoom) {
+      if (this.state.currentRoom && currentRoom._id !== this.state.currentRoom._id) {
         await this.setState({
           hasMore: true,
           currentPage: 0
         });
       }
       await this.setState({
-        currentRoom: {
-          _id: currentRoomId
-        }
+        currentRoom: currentRoom
       });
     }
     if (messagesCount) {

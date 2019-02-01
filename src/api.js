@@ -224,14 +224,14 @@ export const fetchRole = async () => {
   }
 }
 
-export const sendMessageSaga = async (data) => {
+export const sendMessageSaga = async (room, text) => {
   try {
     let result = await axios({
       method: 'POST',
       url: 'https://chat.mixapp.io/api/v1/chat.postMessage',
       data: {
-        roomId: data.roomId,
-        text: data.text
+        roomId: room._id,
+        text: text
       },
       headers: getRocketChatHeaders(true)
     });

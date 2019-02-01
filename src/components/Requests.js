@@ -59,7 +59,6 @@ export default class RequestsListView extends React.Component {
 
   rowSelection = {
     onChange: async (selectedRowKeys, selectedRows) => {
-      //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       await this.setState({
         msgsIdToDelete: selectedRows
       });

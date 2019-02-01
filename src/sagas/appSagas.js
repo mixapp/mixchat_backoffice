@@ -24,7 +24,8 @@ import * as _ from 'underscore';
 function* sendMessageSaga() {
   yield takeLatest(SEND_MESSAGE_REQUEST, function* (action) {
     try {
-      let result = yield Api.sendMessageSaga(action.data);
+      let { room, text } = action.data;
+      let result = yield Api.sendMessageSaga(room, text);
       let lsDialogs = getDialogs();
       let lsDialog = _.findIndex(lsDialogs, { _id: action.data.roomId });
       lsDialogs[lsDialog].nmsgs = 0;
@@ -45,7 +46,7 @@ function* fetchDialogSaga() {
       yield put({ type: LOADER_ON });
       let { room } = action.data;
       updateDialogs(readDialog(room));
-      let dialogs = yield Api.memo(Api.fetchDialogs)();
+      let dialogs = yield Api.fetchDialogs();
       setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
@@ -54,6 +55,7 @@ function* fetchDialogSaga() {
         type: FETCH_DIALOG_SUCCESS, data: {
           messages: messages,
           roomId: room._id,
+          room: room,
           messagesCount: groupInfo.data.group.msgs
         }
       });
