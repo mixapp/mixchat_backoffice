@@ -220,7 +220,7 @@ function* fetchRequests() {
       _.each(messages, (value, key) => {
         let time = typeof value.ts === 'string' ? new Date(value.ts) : new Date(value.ts.$date);
         value.key = value._id;
-        value.ts = Api.formatDate(time)
+        value.ts = time.toLocaleDateString() + ', ' + time.toLocaleTimeString();
       });
       yield put({ type: FETCH_REQUESTS_SUCCESS, messages: messages.reverse() });
     } catch (err) {

@@ -263,7 +263,7 @@ export const formatDate = (date, lang) => {
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
-  return day + ' ' + ('0' + (month + 1)).slice(-2) + ' ' + year + ', ' + hours + ':' + minutes;
+  return day + ' ' + ('0' + (month + 1)).slice(-2) + ' ' + year + ', ' + ("0" + hours).slice(-2) + ':' + minutes;
 }
 
 export const websocketInitRoomsChanged = () => {
