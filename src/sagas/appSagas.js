@@ -45,7 +45,7 @@ function* fetchDialogSaga() {
       yield put({ type: LOADER_ON });
       let { room } = action.data;
       updateDialogs(readDialog(room));
-      let dialogs = yield Api.fetchDialogs();
+      let dialogs = yield Api.memo(Api.fetchDialogs)();
       setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });

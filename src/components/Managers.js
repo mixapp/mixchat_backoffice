@@ -1,12 +1,30 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Modal } from 'antd';
 import AddManagerForm from './forms/managers/addManagerForm';
+const confirm = Modal.confirm;
 
 export default class ManagersList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     size: 'small',
     managers: [],
     visible: false,
+  }
+
+  showConfirm(obj) {
+    let { removeManager } = this.props;
+    confirm({
+      title: 'Do you Want to delete manager?',
+      //content: 'Some descriptions',
+      onOk() {
+        removeManager(obj);
+      },
+      onCancel() {
+      },
+    });
   }
 
   showModal = () => {
@@ -42,11 +60,12 @@ export default class ManagersList extends React.Component {
         title: 'Action', dataIndex: '', key: '', render: (obj) => {
           async function removeManager() {
             try {
-              await this.props.removeManager(obj);
+              this.showConfirm(obj);
             } catch (err) {
               throw err;
             }
           }
+          //removeManager.bind(this)
           return <Button onClick={removeManager.bind(this)} type="danger">Delete</Button>
         }, fixed: 'right', width: 100
       }
