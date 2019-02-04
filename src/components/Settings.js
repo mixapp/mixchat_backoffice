@@ -28,7 +28,7 @@ class RegistrationForm extends React.Component {
     const companyId = this.props.config ? this.props.config.companyId : ' pending... ';
     return (
       <div>
-        <label><b>Use this.code into body of your HTML</b></label>
+        <label><b>Use this code into body of your HTML</b></label>
         <Alert message={"<script> window.onload = () => { Omni.Widget({ companyId: '" + companyId + "' }); } </script>"} type="info" />
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>

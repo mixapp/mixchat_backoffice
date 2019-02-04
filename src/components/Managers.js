@@ -4,10 +4,6 @@ import AddManagerForm from './forms/managers/addManagerForm';
 const confirm = Modal.confirm;
 
 export default class ManagersList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     size: 'small',
     managers: [],

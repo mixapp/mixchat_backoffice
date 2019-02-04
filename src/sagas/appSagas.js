@@ -18,7 +18,7 @@ import {
   FETCH_CONFIG_SUCCESS
 } from '../constants';
 import * as Api from '../api';
-import { readDialog, updateDialogs, getDialogs, setDialogs } from '../lsApi';
+import * as lsApi from '../lsApi';
 import * as _ from 'underscore';
 
 function* sendMessageSaga() {
@@ -26,11 +26,13 @@ function* sendMessageSaga() {
     try {
       let { room, text } = action.data;
       let result = yield Api.sendMessageSaga(room, text);
-      let lsDialogs = getDialogs();
+
+      let lsDialogs = lsApi.getDialogs();
       let lsDialog = _.findIndex(lsDialogs, { _id: action.data.roomId });
       lsDialogs[lsDialog].nmsgs = 0;
       lsDialogs[lsDialog].msgs = lsDialogs[lsDialog].msgs + 1;
-      updateDialogs(lsDialogs);
+      lsApi.updateDialogs(lsDialogs);
+
       if (result.status === 200) {
         yield put({ type: SEND_MESSAGE_SUCCESS });
       }
@@ -45,16 +47,17 @@ function* fetchDialogSaga() {
     try {
       yield put({ type: LOADER_ON });
       let { room } = action.data;
-      updateDialogs(readDialog(room));
+
+      lsApi.updateDialogs(lsApi.readDialog(room));
       let dialogs = yield Api.fetchDialogs();
-      setDialogs(dialogs);
+      lsApi.setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
+
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
-      let messages = yield Api.fetchDialog({ roomId: room._id, count: action.data.count });
+      let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: action.data.count });
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
           messages: messages,
-          roomId: room._id,
           room: room,
           messagesCount: groupInfo.data.group.msgs
         }
@@ -66,12 +69,14 @@ function* fetchDialogSaga() {
   })
 }
 
-function* fetchDialogs() {
+function* fetchDialogsSaga() {
   yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
     try {
       yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
-      setDialogs(dialogs);
+
+      lsApi.setDialogs(dialogs);
+
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       yield put({ type: LOADER_OFF });
       /* NEW */
@@ -89,7 +94,7 @@ function* fetchDialogs() {
   })
 }
 
-function* removeManager() {
+function* removeManagerSaga() {
   yield takeLatest(REMOVE_MANAGER_REQUEST, function* (action) {
     try {
 
@@ -107,10 +112,9 @@ function* removeManager() {
   })
 }
 
-function* addManager() {
+function* addManagerSaga() {
   yield takeLatest(ADD_MANAGER_REQUEST, function* (action) {
     try {
-
       yield put({ type: LOADER_ON });
       let result = yield Api.addManager(action.data);
       if (!result.data.error) {
@@ -120,14 +124,13 @@ function* addManager() {
         yield put({ type: ADD_MANAGER_ERROR, result });
       }
       yield put({ type: LOADER_OFF });
-
     } catch (err) {
       throw err;
     }
   })
 }
 
-function* fetchManagers() {
+function* fetchManagersSaga() {
   yield takeLatest(FETCH_MANAGERS_REQUEST, function* (action) {
     try {
 
@@ -200,7 +203,7 @@ function* loaderOff() {
   });
 }
 
-function* fetchRole() {
+function* fetchRoleSaga() {
   yield takeLatest(FETCH_ROLE_REQUEST, function* (action) {
     try {
       let role = yield Api.fetchRole();
@@ -213,7 +216,7 @@ function* fetchRole() {
   });
 }
 
-function* fetchRequests() {
+function* fetchRequestsSaga() {
   yield takeLatest(FETCH_REQUESTS_REQUEST, function* () {
     try {
       let config = Api.fetchConfig();
@@ -231,7 +234,7 @@ function* fetchRequests() {
   })
 }
 
-function* deleteRequest() {
+function* deleteRequestSaga() {
   yield takeLatest(DELETE_REQUESTS_REQUEST, function* (data) {
     try {
       yield put({ type: LOADER_ON });
@@ -257,15 +260,15 @@ export default function* ordersSaga() {
     fork(loginSaga),
     fork(fetchSettingsSaga),
     fork(saveSettingsSaga),
-    fork(fetchManagers),
-    fork(addManager),
-    fork(removeManager),
-    fork(fetchDialogs),
+    fork(fetchManagersSaga),
+    fork(addManagerSaga),
+    fork(removeManagerSaga),
+    fork(fetchDialogsSaga),
     fork(fetchDialogSaga),
     fork(sendMessageSaga),
     fork(loaderOff),
-    fork(fetchRole),
-    fork(fetchRequests),
-    fork(deleteRequest)
+    fork(fetchRoleSaga),
+    fork(fetchRequestsSaga),
+    fork(deleteRequestSaga)
   ];
 }

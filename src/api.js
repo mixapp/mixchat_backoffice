@@ -30,7 +30,8 @@ const getHeadera = () => {
 }
 
 export const config = {
-  companyId: '5bed9d260dec1f9f4f358399',
+  //companyId: '5bed9d260dec1f9f4f358399',
+  companyId: '5c581cc10dec1f9f4f3b4b30',
   backApiProcessId: '5bc49dd0574e7403e22ec1a0',
   frontApiProcessId: '5bc49dd735b38203254872a5',
   commentsPerPage: 15
@@ -198,12 +199,12 @@ export const fetchGroupInfo = async (data) => {
 
 export const deleteRequest = async (data) => {
   try {
-    let result = await axios({
-      method: 'POST',
-      url: 'https://chat.mixapp.io/api/v1/chat.delete',
-      data: data,
-      headers: getRocketChatHeaders(true)
-    });
+    const uri = getUrl(config.backApiProcessId, config.companyId, 'request-close');
+    let result = await axios.post(uri, {
+      data: data
+    }, {
+        headers: getHeadera(),
+      });
     return result;
   } catch (err) {
     throw err;
