@@ -32,7 +32,6 @@ export default class DialogsListMenu extends React.Component {
       let result = item.name.split('_');
       let companyid = result[result.length - 1];
       item.name = item.name.replace(companyid, '');
-
       async function fetchDialog() {
         try {
           await this.fetchDialog(item);
@@ -46,7 +45,7 @@ export default class DialogsListMenu extends React.Component {
           <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
             <div className='dialogs-item-container'>
               <Avatar size='small'>U</Avatar>
-              <span>{item.name}</span>
+              <span>{item.name.substring(0, item.name.length - 1)}</span>
               {item.nmsgs > 0 && <Tag color="#f50">{item.nmsgs}</Tag>}
             </div>
           </Menu.Item>
