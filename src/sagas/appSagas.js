@@ -45,6 +45,7 @@ function* sendMessageSaga() {
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
+      
       yield put({ type: LOADER_ON });
       let { room } = action.data;
 
@@ -63,6 +64,7 @@ function* fetchDialogSaga() {
         }
       });
       yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -72,6 +74,7 @@ function* fetchDialogSaga() {
 function* fetchDialogsSaga() {
   yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
     try {
+
       yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
 
@@ -79,6 +82,7 @@ function* fetchDialogsSaga() {
 
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       yield put({ type: LOADER_OFF });
+
       /* NEW */
       let socket = yield call(Api.websocketInitRoomsChanged);
       while (true) {
@@ -115,6 +119,7 @@ function* removeManagerSaga() {
 function* addManagerSaga() {
   yield takeLatest(ADD_MANAGER_REQUEST, function* (action) {
     try {
+
       yield put({ type: LOADER_ON });
       let result = yield Api.addManager(action.data);
       if (!result.data.error) {
@@ -124,6 +129,7 @@ function* addManagerSaga() {
         yield put({ type: ADD_MANAGER_ERROR, result });
       }
       yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -144,6 +150,7 @@ function* fetchManagersSaga() {
       }
       yield put({ type: FETCH_MANAGERS_SUCCESS, managers });
       yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -153,10 +160,12 @@ function* fetchManagersSaga() {
 function* saveSettingsSaga() {
   yield takeLatest(SAVE_SETTINGS_REQUEST, function* (action) {
     try {
+
       yield put({ type: LOADER_ON });
       yield Api.saveSettings(action.data);
       yield put({ type: SAVE_SETTINGS_SUCCESS });
       yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -166,10 +175,12 @@ function* saveSettingsSaga() {
 function* fetchSettingsSaga() {
   yield takeLatest(FETCH_SETTINGS_REQUEST, function* (action) {
     try {
+
       yield put({ type: LOADER_ON });
       yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings: yield Api.fetchSettings() });
       yield put({ type: FETCH_CONFIG_SUCCESS, config: yield Api.fetchConfig() });
       yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -206,10 +217,14 @@ function* loaderOff() {
 function* fetchRoleSaga() {
   yield takeLatest(FETCH_ROLE_REQUEST, function* (action) {
     try {
+
+      yield put({ type: LOADER_ON });
       let role = yield Api.fetchRole();
       if (!role.error) {
         yield put({ type: FETCH_ROLE_SUCCESS, role: role.role });
       }
+      yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -219,6 +234,8 @@ function* fetchRoleSaga() {
 function* fetchRequestsSaga() {
   yield takeLatest(FETCH_REQUESTS_REQUEST, function* () {
     try {
+
+      yield put({ type: LOADER_ON });
       let config = Api.fetchConfig();
       let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
       let messages = yield Api.fetchDialog({ roomId: groupInfo.data.group._id, count: 9999 });
@@ -228,6 +245,8 @@ function* fetchRequestsSaga() {
         value.ts = time.toLocaleDateString() + ', ' + time.toLocaleTimeString();
       });
       yield put({ type: FETCH_REQUESTS_SUCCESS, messages: messages.reverse() });
+      yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
@@ -237,6 +256,7 @@ function* fetchRequestsSaga() {
 function* deleteRequestSaga() {
   yield takeLatest(DELETE_REQUESTS_REQUEST, function* (data) {
     try {
+
       yield put({ type: LOADER_ON });
       let config = Api.fetchConfig();
       let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
@@ -249,6 +269,7 @@ function* deleteRequestSaga() {
       }
       yield put({ type: FETCH_REQUESTS_REQUEST });
       yield put({ type: LOADER_OFF });
+
     } catch (err) {
       throw err;
     }
