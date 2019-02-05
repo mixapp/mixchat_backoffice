@@ -30,8 +30,8 @@ const getHeadera = () => {
 }
 
 export const config = {
-  //companyId: '5bed9d260dec1f9f4f358399',
-  companyId: '5c581cc10dec1f9f4f3b4b30',
+  companyId: '5bed9d260dec1f9f4f358399',
+  //companyId: '5c581cc10dec1f9f4f3b4b30',
   backApiProcessId: '5bc49dd0574e7403e22ec1a0',
   frontApiProcessId: '5bc49dd735b38203254872a5',
   commentsPerPage: 15
@@ -200,11 +200,9 @@ export const fetchGroupInfo = async (data) => {
 export const deleteRequest = async (data) => {
   try {
     const uri = getUrl(config.backApiProcessId, config.companyId, 'request-close');
-    let result = await axios.post(uri, {
-      data: data
-    }, {
-        headers: getHeadera(),
-      });
+    let result = await axios.post(uri, data, {
+      headers: getHeadera(),
+    });
     return result;
   } catch (err) {
     throw err;
@@ -264,7 +262,7 @@ export const formatDate = (date, lang) => {
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
-  return day + ' ' + ('0' + (month + 1)).slice(-2) + ' ' + year + ', ' + ("0" + hours).slice(-2) + ':' + minutes;
+  return ('0' + (day + 1)).slice(-2) + '.' + ('0' + (month + 1)).slice(-2) + '.' + year + ', ' + ("0" + hours).slice(-2) + ':' + minutes;
 }
 
 export const websocketInitRoomsChanged = () => {
