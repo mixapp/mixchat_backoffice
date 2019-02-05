@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Radio, Collapse, Alert } from 'antd';
+import { Form, Input, Button, Radio, Collapse, Alert, message } from 'antd';
 import { CirclePicker } from 'react-color';
 
 const FormItem = Form.Item;
@@ -7,6 +7,10 @@ const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 
 class RegistrationForm extends React.Component {
+
+  state = {
+    widgetCode: true
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -23,13 +27,34 @@ class RegistrationForm extends React.Component {
     });
   }
 
+  fallbackCopyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+    textArea.value = this.widgetCode;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'successful' : 'unsuccessful';
+      message.success('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+      message.error('Fallback: Oops, unable to copy', err);
+    }
+    document.body.removeChild(textArea);
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const companyId = this.props.config ? this.props.config.companyId : ' pending... ';
+    this.widgetCode = "<script> window.onload = () => { Omni.Widget({ companyId: '" + companyId + "' }); } </script>";
     return (
       <div>
-        <label><b>Use this code into body of your HTML</b></label>
-        <Alert message={"<script> window.onload = () => { Omni.Widget({ companyId: '" + companyId + "' }); } </script>"} type="info" />
+        <label><b>Copy this code into body of your HTML</b></label>
+        <div style={{ display: 'flex' }}>
+          <Alert message={this.widgetCode} type="info" style={{ borderRadius: 0 }} />
+          <Button type="primary" icon="copy" size="large" style={{ borderRadius: 0 }} onClick={this.fallbackCopyTextToClipboard.bind(this)} />
+        </div>
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
           <FormItem label='Company name'>
