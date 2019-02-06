@@ -1,10 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Layout, Icon } from 'antd';
+import { Layout, Icon, Dropdown, Menu } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
 import DialogsList from '../../containers/DialogsList';
 import { Spin } from 'antd';
+import { withNamespaces } from 'react-i18next';
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -13,6 +15,10 @@ class Wrapper extends React.Component {
     collapsed: false
   };
 
+  changeLanguage = async (lng) => {
+    this.props.i18n.changeLanguage(lng);
+  }
+
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
@@ -20,9 +26,25 @@ class Wrapper extends React.Component {
   }
 
   render() {
-    let { pathname } = this.props.location;
-    let dialogsListShow = pathname === '/dialogs' ? '' : 'none';
-    let contentClass = 'content ' + pathname.replace('/', '');
+    let { location, lng, t } = this.props;
+    let dialogsListShow = location.pathname === '/dialogs' ? '' : 'none';
+    let contentClass = 'content ' + location.pathname.replace('/', '');
+
+    /* Lng menu */
+
+    let lngMenu = (
+      <Menu>
+        <Menu.Item key="0" onClick={this.changeLanguage.bind(this, 'ru')}>
+          <span>Russian</span>
+        </Menu.Item>
+        <Menu.Item key="1" onClick={this.changeLanguage.bind(this, 'en')}>
+          <div>English</div>
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="3">3rd menu item</Menu.Item>
+      </Menu>
+    );
+
     return (
       <Layout className="main_layout">
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
@@ -40,8 +62,15 @@ class Wrapper extends React.Component {
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
+            <div>
+              <Dropdown overlay={lngMenu} trigger={['click']}>
+                <a className="ant-dropdown-link" href="#">
+                  {lng} <Icon type="down" />
+                </a>
+              </Dropdown>
+            </div>
           </Header>
-          {pathname === '/dialogs'
+          {location.pathname === '/dialogs'
             ? <Content className={contentClass}>{this.props.children}</Content>
             : <Spin spinning={this.props.loader} delay={0}>
               <Content className={contentClass}>{this.props.children}</Content>
@@ -53,4 +82,4 @@ class Wrapper extends React.Component {
   }
 }
 
-export default withRouter(props => <Wrapper {...props} />);
+export default withNamespaces()(withRouter(props => <Wrapper {...props} />));

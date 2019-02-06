@@ -1,21 +1,35 @@
 .main_layout {
     height: 100vh;
 }
+
 .main_layout .header {
-    background: #fff; 
+    background: #fff;
     padding: 0 20px;
 }
+
 .main_layout .content {
-    margin: 24px 16px; 
-    padding: 24px; 
+    margin: 24px 16px;
+    padding: 24px;
     background: #fff;
     min-height: auto;
 }
+
 .logo_container {
     height: 60px;
 }
+
 .logo {
     color: #fff;
     text-align: center;
     padding: 21px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.header>div {
+    margin-left: auto;
+    cursor: pointer;
 }

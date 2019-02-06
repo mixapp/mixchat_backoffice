@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
+import { withNamespaces } from 'react-i18next';
 
 class MenuPanel extends React.Component {
 
@@ -33,12 +34,14 @@ class MenuPanel extends React.Component {
   }
 
   render() {
+    const t = this.props.t;
+
     return <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.state.currentMenuKey.toString()]}>
 
       <Menu.Item key="2">
         <Link to='/dialogs'>
           <Icon type="database" />
-          <span>Диалоги</span>
+          <span>{t('Dialogs')}</span>
         </Link>
       </Menu.Item>
 
@@ -75,4 +78,4 @@ class MenuPanel extends React.Component {
   }
 }
 
-export default withRouter(props => <MenuPanel {...props} />);
+export default withNamespaces()(withRouter(props => <MenuPanel {...props} />));
