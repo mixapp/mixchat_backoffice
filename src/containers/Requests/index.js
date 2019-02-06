@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import RequestsView from '../../components/RequestsView';
 import { fetchRequests, deleteRequest } from '../../actions/settings';
+import { withNamespaces } from 'react-i18next';
 
 const Settings = (props) => {
     return <RequestsView {...props} />;
@@ -20,4 +21,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(Settings));

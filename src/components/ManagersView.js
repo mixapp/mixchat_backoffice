@@ -7,9 +7,7 @@ export default class ManagersListView extends React.Component {
   }
   render() {
     return <Managers
-      error_message={this.props.app.error_message}
-      addManager={this.props.addManager}
-      removeManager={this.props.removeManager}
-      managers={this.props.app.managers} />;
+      {... this.props}
+    />;
   }
 }

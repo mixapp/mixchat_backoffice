@@ -5,7 +5,7 @@ import * as _ from 'underscore';
 const { Sider } = Layout;
 const Search = Input.Search;
 
-export default class DialogsListMenu extends React.Component {
+class DialogsListMenu extends React.Component {
 
   state = {
     searchDialogText: ''
@@ -25,6 +25,7 @@ export default class DialogsListMenu extends React.Component {
   }
 
   render() {
+    let { t } = this.props;
     let dialogs = _.sortBy(this.props.app.dialogs, 'nmsgs').reverse();
     let menuItems = [];
     if (!dialogs) dialogs = [];
@@ -56,7 +57,7 @@ export default class DialogsListMenu extends React.Component {
         <div className="logo_container">
           <div className="logo">
             <Search
-              placeholder="Dialog name"
+              placeholder={t("dialogsList.dialogName")}
               onSearch={value => this.searchDialog(value)}
             />
           </div>
@@ -68,3 +69,5 @@ export default class DialogsListMenu extends React.Component {
     )
   }
 }
+
+export default DialogsListMenu;

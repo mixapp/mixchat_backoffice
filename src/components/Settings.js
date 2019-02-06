@@ -16,7 +16,7 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.onSave(values);
+        this.props.saveSettings(values);
       }
     });
   }
@@ -28,6 +28,7 @@ class RegistrationForm extends React.Component {
   }
 
   fallbackCopyTextToClipboard(text) {
+    let { t } = this.props;
     var textArea = document.createElement("textarea");
     textArea.value = this.widgetCode;
     document.body.appendChild(textArea);
@@ -36,8 +37,10 @@ class RegistrationForm extends React.Component {
 
     try {
       var successful = document.execCommand('copy');
-      var msg = successful ? 'successful' : 'unsuccessful';
-      message.success('Fallback: Copying text command was ' + msg);
+      if (successful)
+        message.success(t('Code copied'));
+      else
+        message.error(t('Copy failed'));
     } catch (err) {
       message.error('Fallback: Oops, unable to copy', err);
     }
@@ -45,50 +48,52 @@ class RegistrationForm extends React.Component {
   }
 
   render() {
+    let { t } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const companyId = this.props.config ? this.props.config.companyId : ' pending... ';
+    const companyId = this.props.app.config ? this.props.app.config.companyId : ' pending... ';
     this.widgetCode = "<script> window.onload = () => { Omni.Widget({ companyId: '" + companyId + "' }); } </script>";
+
     return (
       <div>
-        <label><b>Copy this code into body of your HTML</b></label>
+        <label><b>{t('Copy this code into body of your HTML')}</b></label>
         <div style={{ display: 'flex' }}>
           <Alert message={this.widgetCode} type="info" style={{ borderRadius: 0 }} />
           <Button type="primary" icon="copy" size="large" style={{ borderRadius: 0 }} onClick={this.fallbackCopyTextToClipboard.bind(this)} />
         </div>
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
-          <FormItem label='Company name'>
+          <FormItem label={t('Company name')}>
             {getFieldDecorator('companyName', {
-              initialValue: this.props.widgetSettings ? this.props.widgetSettings.companyName : '',
+              initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.companyName : '',
               rules: [
                 { required: true }
               ],
-            })(<Input placeholder='Company name' />)}
+            })(<Input placeholder={t('Company name')} />)}
           </FormItem>
 
-          <FormItem label='Widget is active'>
+          <FormItem label={t('Widget is active')}>
             {getFieldDecorator('isActive', {
-              initialValue: this.props.widgetSettings ? this.props.widgetSettings.isActive : '',
+              initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.isActive : '',
               rules: []
             })(<RadioGroup>
-              <Radio value={true}>yes</Radio>
-              <Radio value={false}>no</Radio>
+              <Radio value={true}>{t('Yes')}</Radio>
+              <Radio value={false}>{t('No')}</Radio>
             </RadioGroup>)}
           </FormItem>
 
-          <FormItem label='Chat should be open?'>
+          <FormItem label={t('Chat should be open?')}>
             {getFieldDecorator('openChat', {
-              initialValue: this.props.widgetSettings ? this.props.widgetSettings.openChat : '',
+              initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.openChat : '',
               rules: []
             })(<RadioGroup>
-              <Radio value={true}>yes</Radio>
-              <Radio value={false}>no</Radio>
+              <Radio value={true}>{t('Yes')}</Radio>
+              <Radio value={false}>{t('No')}</Radio>
             </RadioGroup>)}
           </FormItem>
 
-          <FormItem label='Widget color'>
+          <FormItem label={t('Widget color')}>
             {getFieldDecorator('colorR', {
-              initialValue: this.props.widgetSettings ? this.props.widgetSettings.colorR : '',
+              initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.colorR : '',
               rules: [],
             })(<CirclePicker onChangeComplete={this.handleChange.bind(this)} />)}
           </FormItem>
@@ -96,104 +101,104 @@ class RegistrationForm extends React.Component {
 
           <FormItem>
             {getFieldDecorator('color', {
-              initialValue: this.props.widgetSettings ? this.props.widgetSettings.color : '',
+              initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.color : '',
               rules: [],
             })(<Input placeholder='Color picker soon ...' />)}
           </FormItem>
 
           <Collapse bordered={false} accordion defaultActiveKey={['1']} onChange={this.callback}>
             <Panel header="Telegram" key="1">
-              <FormItem label='Bot name'>
+              <FormItem label={t('Bot name')}>
                 {getFieldDecorator('telegram_bot_name', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.telegram_bot_name : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.telegram_bot_name : '',
                   rules: [],
-                })(<Input placeholder='Bot name' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='Bot token'>
+              <FormItem label={t('Bot token')}>
                 {getFieldDecorator('telegram_token', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.telegram_token : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.telegram_token : '',
                   rules: [],
-                })(<Input placeholder='Bot token' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
             </Panel>
 
             <Panel header="Viber" key="2">
-              <FormItem label='Bot name'>
+              <FormItem label={t('Bot name')}>
                 {getFieldDecorator('viber_bot_name', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.viber_bot_name : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.viber_bot_name : '',
                   rules: [],
-                })(<Input placeholder='Bot name' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='Bot token'>
+              <FormItem label={t('Bot token')}>
                 {getFieldDecorator('viber_token', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.viber_token : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.viber_token : '',
                   rules: [],
-                })(<Input placeholder='Bot token' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
             </Panel>
 
-            <Panel header="Sms settings" key="3">
-              <FormItem label='Phone'>
+            <Panel header="Plusofon" key="3">
+              <FormItem label={t('Phone')}>
                 {getFieldDecorator('sms_phone', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.sms_phone : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.sms_phone : '',
                   rules: [],
-                })(<Input placeholder='Phone' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='API token'>
+              <FormItem label={t('API token')}>
                 {getFieldDecorator('sms_token', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.sms_token : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.sms_token : '',
                   rules: [],
-                })(<Input placeholder='API token' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
             </Panel>
 
-            <Panel header="VK settings" key="4">
-              <FormItem label='Group name'>
+            <Panel header="VK" key="4">
+              <FormItem label={t('Group name')}>
                 {getFieldDecorator('vk_group_name', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.vk_group_name : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.vk_group_name : '',
                   rules: [],
-                })(<Input placeholder='Group name' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='Group token'>
+              <FormItem label={t('Group token')}>
                 {getFieldDecorator('vk_token', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.vk_token : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.vk_token : '',
                   rules: [],
-                })(<Input placeholder='Group token' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='Confirmation code'>
+              <FormItem label={t('Confirmation code')}>
                 {getFieldDecorator('vk_confirmation_code', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.vk_confirmation_code : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.vk_confirmation_code : '',
                   rules: [],
-                })(<Input placeholder='Confirmation code' />)
+                })(<Input placeholder='' />)
                 }
               </FormItem>
             </Panel>
 
-            <Panel header="FB Messenger settings" key="5">
-              <FormItem label='API key'>
+            <Panel header="FB Messenger" key="5">
+              <FormItem label={t('API key')}>
                 {getFieldDecorator('fbm_api_key', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.fbm_api_key : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.fbm_api_key : '',
                   rules: [],
-                })(<Input placeholder='API key' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='Secret'>
+              <FormItem label={t('Secret')}>
                 {getFieldDecorator('fbm_secret', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.fbm_secret : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.fbm_secret : '',
                   rules: [],
-                })(<Input placeholder='Secret' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
 
-              <FormItem label='Page URL'>
+              <FormItem label={t('Page URL')}>
                 {getFieldDecorator('fbm_page', {
-                  initialValue: this.props.widgetSettings ? this.props.widgetSettings.fbm_page : '',
+                  initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.fbm_page : '',
                   rules: [],
-                })(<Input placeholder='Page URL' />)}
+                })(<Input placeholder='' />)}
               </FormItem>
             </Panel>
 
@@ -202,7 +207,7 @@ class RegistrationForm extends React.Component {
             <br />
           </FormItem>
           <FormItem>
-            <Button type='primary' htmlType='submit'>Save</Button>
+            <Button type='primary' htmlType='submit'>{t('Save')}</Button>
           </FormItem>
         </Form >
       </div>

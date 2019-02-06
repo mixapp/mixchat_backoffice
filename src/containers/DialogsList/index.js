@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchDialog } from '../../actions/settings';
 import DialogsListMenu from '../../components/DialogsList';
+import { withNamespaces } from 'react-i18next';
 
 const DialogsList = (props) => {
     return <DialogsListMenu {...props} />
@@ -19,4 +20,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DialogsList);
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(DialogsList));

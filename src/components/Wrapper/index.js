@@ -26,7 +26,7 @@ class Wrapper extends React.Component {
   }
 
   render() {
-    let { location, lng, t } = this.props;
+    let { location, lng } = this.props;
     let dialogsListShow = location.pathname === '/dialogs' ? '' : 'none';
     let contentClass = 'content ' + location.pathname.replace('/', '');
 
@@ -40,8 +40,6 @@ class Wrapper extends React.Component {
         <Menu.Item key="1" onClick={this.changeLanguage.bind(this, 'en')}>
           <div>English</div>
         </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item key="3">3rd menu item</Menu.Item>
       </Menu>
     );
 
@@ -64,9 +62,9 @@ class Wrapper extends React.Component {
             />
             <div>
               <Dropdown overlay={lngMenu} trigger={['click']}>
-                <a className="ant-dropdown-link" href="#">
+                <span className="ant-dropdown-link" href="">
                   {lng} <Icon type="down" />
-                </a>
+                </span>
               </Dropdown>
             </div>
           </Header>

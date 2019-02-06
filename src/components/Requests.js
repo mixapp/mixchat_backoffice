@@ -21,41 +21,7 @@ export default class RequestsListView extends React.Component {
     }
   }
 
-  columns = [{
-    title: 'Message',
-    render: (item) => {
-      return (
-        <div>
-          <Row>
-            <Col span={3}><b>от: {item.u.username}</b></Col>
-          </Row>
-          <Row>
-            <Col span={24}>{item.msg}</Col>
-          </Row>
-          <br />
-          <Row>
-            <Col style={{ fontSize: "0.5em", color: "grey" }} span={3}>{item.ts}</Col>
-          </Row>
-        </div>
-      );
-    },
-    key: 'msg',
-  }, {
-    title: 'Action',
-    key: '_id',
-    render: (item) => {
-      function del() {
-        if (this.state.msgsIdToDelete.length > 0) {
-          this.deleteRequest(this.state.msgsIdToDelete);
-        } else {
-          this.deleteRequest(item);
-        }
-      }
-      return (<Button onClick={del.bind(this)} type="danger">Delete</Button>)
-    },
-    fixed: 'right',
-    width: 100
-  }];
+
 
   rowSelection = {
     onChange: async (selectedRowKeys, selectedRows) => {
@@ -70,7 +36,7 @@ export default class RequestsListView extends React.Component {
   };
 
   componentWillReceiveProps() {
-    if (this.props.requests) {
+    if (this.props.app.requests) {
       this.setState({
         loading: false,
       });
@@ -78,6 +44,49 @@ export default class RequestsListView extends React.Component {
   }
 
   render() {
-    return <Table rowSelection={this.rowSelection} scroll={{ x: 1800 }} pagination={{ hideOnSinglePage: true }} loading={this.state.loading} columns={this.columns} dataSource={this.props.requests} />;
+    let { t } = this.props;
+    let columns = [{
+      title: t('Message'),
+      render: (item) => {
+        return (
+          <div>
+            <Row>
+              <Col span={3}><b>от: {item.u.username}</b></Col>
+            </Row>
+            <Row>
+              <Col span={24}>{item.msg}</Col>
+            </Row>
+            <br />
+            <Row>
+              <Col style={{ fontSize: "0.5em", color: "grey" }} span={3}>{item.ts}</Col>
+            </Row>
+          </div>
+        );
+      },
+      key: 'msg',
+    }, {
+      title: t('Action'),
+      key: '_id',
+      render: (item) => {
+        function del() {
+          if (this.state.msgsIdToDelete.length > 0) {
+            this.deleteRequest(this.state.msgsIdToDelete);
+          } else {
+            this.deleteRequest(item);
+          }
+        }
+        return (<Button onClick={del.bind(this)} type="danger">{t('Delete')}</Button>)
+      },
+      fixed: 'right',
+      width: 100
+    }];
+
+    return <Table
+      rowSelection={this.rowSelection}
+      scroll={{ x: 1800 }}
+      pagination={{ hideOnSinglePage: true }}
+      loading={this.state.loading}
+      columns={columns}
+      dataSource={this.props.app.requests} />;
   }
 }

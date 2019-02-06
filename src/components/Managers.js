@@ -11,10 +11,11 @@ export default class ManagersList extends React.Component {
   }
 
   showConfirm(obj) {
-    let { removeManager } = this.props;
+    let { removeManager, t } = this.props;
     confirm({
-      title: 'Do you Want to delete manager?',
-      //content: 'Some descriptions',
+      title: t('Do you want to delete manager?'),
+      okText: t('Yes'),
+      cancelText: t('Cancel'),
       onOk() {
         removeManager(obj);
       },
@@ -48,12 +49,13 @@ export default class ManagersList extends React.Component {
   }
 
   render() {
+    let { t } = this.props;
     let columns = [
       { title: '№', dataIndex: 'number', key: 'number' },
-      { title: 'email', dataIndex: 'email', key: 'email' },
-      { title: 'Nickname', key: 'nickname', dataIndex: 'nickname' },
+      { title: t('Email'), dataIndex: 'email', key: 'email' },
+      { title: t('Nickname'), key: 'nickname', dataIndex: 'nickname' },
       {
-        title: 'Action', dataIndex: '', key: '', render: (obj) => {
+        title: t('Action'), dataIndex: '', key: '', render: (obj) => {
           async function removeManager() {
             try {
               this.showConfirm(obj);
@@ -61,24 +63,22 @@ export default class ManagersList extends React.Component {
               throw err;
             }
           }
-          //removeManager.bind(this)
-          return <Button onClick={removeManager.bind(this)} type="danger">Delete</Button>
+          return <Button onClick={removeManager.bind(this)} type="danger">{t('Delete')}</Button>
         }, fixed: 'right', width: 100
       }
     ];
     return (
       <div>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: "20px" }}>
-          Add manager
+          {t('buttons.addManager')}
         </Button>
-        <Table {...this.state} columns={columns} dataSource={this.props.managers} />
+        <Table {...this.state} columns={columns} dataSource={this.props.app.managers} />
         <AddManagerForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
-          addManager={this.props.addManager}
-          error_message={this.props.error_message}
+          {... this.props}
         />
       </div>
     );

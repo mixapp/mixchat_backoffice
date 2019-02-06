@@ -1,8 +1,50 @@
 {
-    "Dialogs": "Диалоги",
-    "LOGO": "ЛОГО",
-    "REQUESTS": "Заявки",
-    "Managers": "Менеджеры",
-    "Settings": "Настройки",
-    "Exit": "Выход"
+    "Message": "Сообщение",
+    "Action": "Действие",
+    "Delete": "Удалить",
+    "Email": "Эл.Почта",
+    "Nickname": "Никнэйм",
+    "mainMenu": {
+        "dialogs": "Диалоги",
+        "requests": "Заявки",
+        "managers": "Менеджеры",
+        "settings": "Настройки",
+        "logout": "Выход"
+    },
+    "dialogsList": {
+        "dialogName": "Имя диалога"
+    },
+    "requests": {
+        "table": {}
+    },
+    "buttons": {
+        "addManager": "Добавить менеджера"
+    },
+    "Do you want to delete manager?": "Вы хотите удалить менеджера?",
+    "Yes": "Да",
+    "No": "Нет",
+    "Cancel": "Отмена",
+    "Add": "Добавить",
+    "Password": "Пароль",
+    "This field is required": "Обязательное поле",
+    "User already exist": "Пользователь уже существует",
+    "Copy this code into body of your HTML": "Скопируйте этот код в body вашего HTML документа",
+    "successful": "успешно",
+    "unsuccessful": "неудачно",
+    "Code copied": "Копирование завершено",
+    "Copy failed": "Ошибка копирования",
+    "Company name": "Имя компании",
+    "Chat should be open?": "Чат должен быть открыт",
+    "Widget color": "Цвет виджета",
+    "Bot name": "Имя бота",
+    "Bot token": "Токен бота",
+    "Phone": "телефон",
+    "API token": "API токен",
+    "Group name": "Имя группы",
+    "Group token": "Токен группы",
+    "Confirmation code": "Код подтверждения",
+    "API key": "API ключ",
+    "Secret": "Секрет",
+    "Page URL": "URL страницы",
+    "Save": "Сохранить"
 }

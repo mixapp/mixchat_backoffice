@@ -1,4 +1,9 @@
 {
-    "Dialogs": "Dialogs",
-    "LOGO": "LOGO"
+    "mainMenu": {
+        "dialogs": "Dialogs",
+        "requests": "Requests",
+        "managers": "Managers",
+        "settings": "Settings",
+        "logout": "Logout"
+    }
 }

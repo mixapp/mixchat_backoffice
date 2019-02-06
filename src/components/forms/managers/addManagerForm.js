@@ -6,14 +6,15 @@ const FormItem = Form.Item;
 class AddManagerForm extends React.Component {
 
   componentDidUpdate() {
-    if (this.props.error_message && this.props.error_message.error) {
-      message.error(this.props.error_message.error_message);
+    let { t } = this.props;
+    if (this.props.app.error_message && this.props.app.error_message.error) {
+      message.error(t(this.props.app.error_message.error_message));
     }
   }
 
   render() {
     const {
-      visible, onCancel, onCreate, form,
+      visible, onCancel, onCreate, form, t
     } = this.props;
 
     const { getFieldDecorator } = form;
@@ -29,33 +30,34 @@ class AddManagerForm extends React.Component {
     return (
       <Modal
         visible={visible}
-        title="Add new manager"
-        okText="Create"
+        title={t('buttons.addManager')}
+        okText={t('Add')}
+        cancelText={t('Cancel')}
         onCancel={onCancel}
         onOk={onCreate}
       >
         <Form layout='vertical'>
 
-          <FormItem {...formItemLayout} label='E-mail'>
+          <FormItem {...formItemLayout} label={t('Email')}>
             {getFieldDecorator('email', {
               rules: [
-                { required: true }
+                { required: true, message: t('This field is required') }
               ],
             })(<Input placeholder='email@gmail.com' />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label='Nickname'>
+          <FormItem {...formItemLayout} label={t('Nickname')}>
             {getFieldDecorator('nickname', {
               rules: [
-                { required: true }
+                { required: true, message: t('This field is required') }
               ],
             })(<Input placeholder='BestNickname' />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label='Password'>
+          <FormItem {...formItemLayout} label={t('Password')}>
             {getFieldDecorator('password', {
               rules: [
-                { required: true }
+                { required: true, message: t('This field is required') }
               ],
             })(<Input placeholder='*********' type='password' />)}
           </FormItem>

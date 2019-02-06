@@ -41,14 +41,14 @@ class MenuPanel extends React.Component {
       <Menu.Item key="2">
         <Link to='/dialogs'>
           <Icon type="database" />
-          <span>{t('Dialogs')}</span>
+          <span>{t('mainMenu.dialogs')}</span>
         </Link>
       </Menu.Item>
 
       <Menu.Item key="5">
         <Link to='/requests'>
           <Icon type="inbox" />
-          <span>Заявки</span>
+          <span>{t('mainMenu.requests')}</span>
         </Link>
       </Menu.Item>
 
@@ -56,7 +56,7 @@ class MenuPanel extends React.Component {
         <Menu.Item key="3">
           <Link to='/managers'>
             <Icon type="team" />
-            <span>Менеджеры</span>
+            <span>{t('mainMenu.managers')}</span>
           </Link>
         </Menu.Item> : null}
 
@@ -64,14 +64,14 @@ class MenuPanel extends React.Component {
         <Menu.Item key="1">
           <Link to='/settings'>
             <Icon type="setting" />
-            <span>Настройки</span>
+            <span>{t('mainMenu.settings')}</span>
           </Link>
         </Menu.Item> : null}
 
       <Menu.Item key="4">
         <Link to='/logout'>
           <Icon type="upload" />
-          <span>Выход</span>
+          <span>{t('mainMenu.logout')}</span>
         </Link>
       </Menu.Item>
     </Menu>

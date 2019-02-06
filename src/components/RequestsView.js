@@ -6,6 +6,8 @@ export default class SettinggsView extends React.Component {
     this.props.fetchRequests();
   }
   render() {
-    return <Requests requests={this.props.app.requests} deleteRequest={this.props.deleteRequest} />
+    return <Requests
+      {... this.props}
+    />
   }
 }

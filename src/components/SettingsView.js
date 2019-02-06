@@ -7,8 +7,7 @@ export default class SettinggsView extends React.Component {
   }
   render() {
     return <Settings
-      config={this.props.app.config}
-      widgetSettings={this.props.app.widgetSettings}
-      onSave={this.props.saveSettings.bind(this)} />
+      {... this.props}
+    />
   }
 }
