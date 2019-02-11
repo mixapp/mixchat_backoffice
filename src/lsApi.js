@@ -25,22 +25,18 @@ function setDialogs(dialogs) {
             localStorage.setItem('dialogs', JSON.stringify(dialogs));
             return true;
         } else {
-            if (lsDialogs.length > dialogs.length) {
-                lsDialogs.forEach(dialog => {
-                    let _dialog = _.findIndex(dialogs, { _id: dialog._id });
-                    if (_dialog === -1) {
-                        removeDialog(dialog);
-                    }
-                })
-            }
-            if (lsDialogs.length < dialogs.length) {
-                dialogs.forEach(dialog => {
-                    let _dialog = _.findIndex(lsDialogs, { _id: dialog._id });
-                    if (_dialog === -1) {
-                        addDialog(dialog);
-                    }
-                })
-            }
+            lsDialogs.forEach(dialog => {
+                let _dialog = _.findIndex(dialogs, { _id: dialog._id });
+                if (_dialog === -1) {
+                    removeDialog(dialog);
+                }
+            })
+            dialogs.forEach(dialog => {
+                let _dialog = _.findIndex(lsDialogs, { _id: dialog._id });
+                if (_dialog === -1) {
+                    addDialog(dialog);
+                }
+            })
         }
     }
     return false;
