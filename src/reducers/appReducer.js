@@ -50,7 +50,6 @@ export default function reducer(state = initialState, action = {}) {
       state.currentRoom = action.data.room;
       state.messagesCount = action.data.messagesCount;
       state.currentPage = 1;
-      console.log(action)
       return { ...state, messages: action.data.messages.reverse() };
     case SOCKET_ROOMS_CHANGED_EVENT:
       let { lastMessage } = action.data.fields.args[1];
