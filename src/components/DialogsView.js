@@ -1,6 +1,7 @@
 import React from 'react';
-import { Row, Col, Alert } from 'antd';
+import { Row, Col, Empty } from 'antd';
 import Dialogs from './Dialogs';
+
 
 export default class DialogsListView extends React.Component {
 
@@ -14,7 +15,17 @@ export default class DialogsListView extends React.Component {
 
     if (!this.props.app.currentRoom) {
       return <Row style={{ height: '100%' }} type="flex" justify="space-around" align="middle">
-        <Col span={20}><Alert message={t('First of all select a dialog')} type="info" showIcon /></Col>
+        <Col span={20}>
+          <Empty
+            image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+            description={
+              <span>
+                {t('First of all select a dialog')}
+              </span>
+            }
+          >
+          </Empty>
+        </Col>
       </Row>
     } else {
       return <Dialogs
