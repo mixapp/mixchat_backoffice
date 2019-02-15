@@ -15,7 +15,13 @@ import Dialogs from './containers/Dialogs';
 import Managers from './containers/Managers';
 import Requests from './containers/Requests';
 import { connect } from 'react-redux';
-import { fetchSettings, saveSettings, fetchRole, loaderOff } from './actions/settings';
+import {
+  fetchSettings,
+  saveSettings,
+  fetchRole,
+  loaderOff,
+  logout
+} from './actions/settings';
 
 class Router extends React.Component {
   componentDidMount() {
@@ -24,6 +30,16 @@ class Router extends React.Component {
     if (history.location.pathname === '/') {
       history.push('/dialogs');
     }
+
+    history.listen((location, done) => {
+      switch (location.pathname) {
+        case '/logout':
+          this.props.logout();
+          break;
+        default:
+          break;
+      }
+    })
   }
 
   render() {
@@ -62,7 +78,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchSettings: () => { dispatch(fetchSettings()) },
     saveSettings: (data) => { dispatch(saveSettings(data)) },
     fetchRole: () => { dispatch(fetchRole()) },
-    loaderOff: () => { dispatch(loaderOff()) }
+    loaderOff: () => { dispatch(loaderOff()) },
+    logout: () => { dispatch(logout()) }
   }
 }
 

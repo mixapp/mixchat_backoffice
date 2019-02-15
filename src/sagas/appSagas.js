@@ -15,7 +15,8 @@ import {
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
   FETCH_REQUESTS_REQUEST, FETCH_REQUESTS_SUCCESS, //FETCH_REQUESTS_ERROR
   DELETE_REQUESTS_REQUEST, //DELETE_REQUESTS_SUCCESS, //DELETE_REQUESTS_ERROR
-  FETCH_CONFIG_SUCCESS
+  FETCH_CONFIG_SUCCESS,
+  LOGOUT
 } from '../constants';
 import * as Api from '../api';
 import * as lsApi from '../lsApi';
@@ -276,6 +277,20 @@ function* deleteRequestSaga() {
   });
 }
 
+function* logoutSaga() {
+  yield takeLatest(LOGOUT, function* () {
+    try {
+
+      yield put({ type: FETCH_ROLE_SUCCESS, role: false });
+      localStorage.clear();
+      window.location.href = Api.getCurrentURL();
+
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -290,6 +305,7 @@ export default function* ordersSaga() {
     fork(loaderOff),
     fork(fetchRoleSaga),
     fork(fetchRequestsSaga),
-    fork(deleteRequestSaga)
+    fork(deleteRequestSaga),
+    fork(logoutSaga)
   ];
 }

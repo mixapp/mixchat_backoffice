@@ -12,6 +12,7 @@ import {
   FETCH_ROLE_REQUEST,
   FETCH_REQUESTS_REQUEST,
   DELETE_REQUESTS_REQUEST,
+  LOGOUT,
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -96,5 +97,11 @@ export const deleteRequest = (data) => {
   return {
     type: DELETE_REQUESTS_REQUEST,
     data
+  }
+}
+
+export const logout = () => {
+  return {
+    type: LOGOUT
   }
 }
