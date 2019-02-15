@@ -58,7 +58,7 @@ class RegistrationForm extends React.Component {
         <label><b>{t('Copy this code into body of your HTML')}</b></label>
         <div style={{ display: 'flex' }}>
           <Alert message={this.widgetCode} type="info" style={{ borderRadius: 0 }} />
-          <Button type="primary" icon="copy" size="large" style={{ borderRadius: 0 }} onClick={this.fallbackCopyTextToClipboard.bind(this)} />
+          <Button type="primary" icon="copy" size="large" style={{ borderRadius: 0, height: 'auto' }} onClick={this.fallbackCopyTextToClipboard.bind(this)} />
         </div>
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
