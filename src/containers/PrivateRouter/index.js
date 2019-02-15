@@ -14,7 +14,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       localStorage.setItem('redirect', rest.path);
       let uri = getURL(protocol + '//' + hostname + (port !== 80 ? ':' + port : 80));
       //console.log(uri);
-      //window.location.href = uri;
+      window.location.href = uri;
       return null;
     }
     return rest.app.user ? <Component {...props} /> : null;

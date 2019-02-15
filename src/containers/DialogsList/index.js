@@ -5,19 +5,22 @@ import DialogsListMenu from '../../components/DialogsList';
 import { withNamespaces } from 'react-i18next';
 
 const DialogsList = (props) => {
-    return <DialogsListMenu {...props} />
+  if (props.app.role)
+    return <DialogsListMenu {...props} />;
+  else
+    return <div></div>;
 };
 
 const mapStateToProps = (state, ownProps) => {
-    return {
-        app: state.app
-    }
+  return {
+    app: state.app
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        fetchDialog: (data) => { dispatch(fetchDialog(data)) }
-    }
+  return {
+    fetchDialog: (data) => { dispatch(fetchDialog(data)) }
+  }
 }
 
 export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(DialogsList));
