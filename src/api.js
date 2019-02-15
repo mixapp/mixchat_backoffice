@@ -3,13 +3,26 @@ import DDP from 'ddp.js';
 import { getDialogsNmsgs } from '../src/lsApi';
 import { eventChannel } from 'redux-saga';
 
+export const getAuthUrl = (site) => {
+  return 'https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=' + site + '/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup';
+}
+
 const getUrl = (processId, companyId, path) => {
   return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
 }
 
 const getToken = () => {
-  let { token } = JSON.parse(localStorage.getItem('user'));
-  return token;
+  let token = localStorage.getItem('user');
+  try {
+    token = JSON.parse(token);
+    if (!token) {
+      let { protocol, hostname, port } = window.location;
+      window.location.href = getAuthUrl(protocol + '//' + hostname + (port !== 80 ? ':' + port : 80));
+    }
+    return token.token;
+  } catch (err) {
+    throw err;
+  }
 }
 
 const getRocketChatHeaders = (json) => {
@@ -22,6 +35,7 @@ const getRocketChatHeaders = (json) => {
 }
 
 const getHeadera = () => {
+  console.log(getToken())
   return {
     'Authorization': 'Bearer ' + getToken(),
     'Content-Type': 'application/json;charset=UTF-8',
