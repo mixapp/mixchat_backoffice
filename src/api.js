@@ -35,7 +35,6 @@ const getRocketChatHeaders = (json) => {
 }
 
 const getHeadera = () => {
-  console.log(getToken())
   return {
     'Authorization': 'Bearer ' + getToken(),
     'Content-Type': 'application/json;charset=UTF-8',
