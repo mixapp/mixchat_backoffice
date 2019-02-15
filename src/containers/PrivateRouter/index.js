@@ -7,10 +7,8 @@ import * as Api from '../../api';
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => {
     if (!rest.app.user) {
-      let { protocol, hostname, port } = window.location;
       localStorage.setItem('redirect', rest.path);
-      let uri = Api.getAuthUrl(protocol + '//' + hostname + (port !== 80 ? ':' + port : 80));
-      window.location.href = uri;
+      Api.getAuthUrl();
       return null;
     }
     return rest.app.user ? <Component {...props} /> : null;
