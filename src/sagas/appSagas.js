@@ -45,7 +45,7 @@ function* sendMessageSaga() {
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
-      
+
       yield put({ type: LOADER_ON });
       let { room } = action.data;
 

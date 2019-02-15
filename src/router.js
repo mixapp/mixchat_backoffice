@@ -2,6 +2,8 @@ import React from 'react';
 import { history } from './store';
 import { ConnectedRouter } from "react-router-redux";
 import { Route } from "react-router";
+import { Spin } from 'antd';
+
 import PrivateRoute from './containers/PrivateRouter';
 
 import MainPage from './containers/MainPage';
@@ -23,9 +25,19 @@ class Router extends React.Component {
       history.push('/dialogs');
     }
   }
+
   render() {
+    let { role } = this.props.app;
+    let localLoader = 'flex';
+    if (role) {
+      localLoader = 'none';
+    }
     return <ConnectedRouter history={history}>
       <div>
+        <div style={{ display: localLoader, zIndex: 100, height: '100vh', justifyContent: 'center', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}><h1>Omnichennal BackOffice</h1></div>
+          <Spin size="large" />
+        </div>
         <Route path="/authorize" exact component={Authorize} />
         <Wrapper role={this.props.app.role} loader={this.props.app.loader}>
           <PrivateRoute path='/' exact component={MainPage} />
@@ -35,7 +47,7 @@ class Router extends React.Component {
           <PrivateRoute path='/requests' exact component={Requests} />
         </Wrapper>
       </div>
-    </ConnectedRouter>;
+    </ConnectedRouter >;
   }
 }
 
