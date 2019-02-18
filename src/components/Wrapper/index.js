@@ -26,7 +26,6 @@ class Wrapper extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     let { location, lng } = this.props;
     let dialogsListShow = location.pathname === '/dialogs' ? '' : 'none';
     let contentClass = 'content ' + location.pathname.replace('/', '');
