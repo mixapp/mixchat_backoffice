@@ -7,10 +7,10 @@ import translationRU from '../src/locales/ru/translation.json';
 
 // the translations
 const resources = {
-  en: {
+  'en-US': {
     translation: translationEN
   },
-  ru: {
+  'ru-RU': {
     translation: translationRU
   }
 };
@@ -19,8 +19,13 @@ i18n
   .use(detector) // auto detect the user language
   .use(reactI18nextModule) // passes i18n down to react-i18next
   .init({
+    debug: true,
+    detection: {
+      // order and from where user language should be detected
+      order: ['localStorage'],
+    },
     resources,
-    fallbackLng: "en", // use en if detected lng is not available
+    fallbackLng: ['ru-RU', 'en-US'], // use en if detected lng is not available
 
     //keySeparator: false, // we do not use keys in form messages.welcome
 
