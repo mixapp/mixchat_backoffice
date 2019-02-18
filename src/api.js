@@ -28,8 +28,9 @@ const getToken = () => {
     token = JSON.parse(token);
     if (!token) {
       getAuthUrl();
+    } else {
+      return token.token;
     }
-    return token.token;
   } catch (err) {
     throw err;
   }
