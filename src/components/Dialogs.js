@@ -89,22 +89,18 @@ class DialogsList extends React.Component {
   }
 
   async componentDidUpdate() {
-    console.log('componentDidUpdate')
     let { messages, message } = this.props;
     if (messages) {
       let lm = messages[messages.length - 1];
       if (this.lm) {
         if (message && this.lm._id !== message._id) {
-          console.log(1);
           this.lm = lm;
           this.scrollToBottom({ delay: 50, duration: 0 });
         }
         if (this.state.currentPage === 0) {
-          console.log(2);
           this.scrollToBottom({ delay: 50, duration: 0 });
         }
       } else {
-        console.log(3);
         this.lm = lm;
         this.scrollToBottom({ delay: 50, duration: 0 });
       }
