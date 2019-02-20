@@ -45,7 +45,11 @@ textarea:focus {
 .dialogs-item-sider {
     background-color: #2d3248;
     overflow: auto;
-    min-width: 300px !important;
+}
+
+.dialogs-item-sider::-webkit-scrollbar {
+    width: 0;
+    -webkit-appearance: none;
 }
 
 .dialogs-item-container {
@@ -100,4 +104,34 @@ textarea:focus {
     /* Internet Explorer/Edge */
     user-select: none;
     /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.dialogs-list-container {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.dialogs-list-container>div:first-child>span>input {
+    background-color: #2d3248;
+    border: 0;
+    border-radius: 0;
+    color: white;
+    box-shadow: none;
+}
+
+.dialogs-list-container>div:first-child>span>span>i {
+    color: white;
+}
+
+.dialogs-list-container>div:last-child {
+    height: 100vh;
+}
+
+.dialogs-list-container>div:last-child>ul {
+    padding-bottom: 50px;
+    height: 100%;
+}
+
+.content-container {
+    width: 100%;
 }

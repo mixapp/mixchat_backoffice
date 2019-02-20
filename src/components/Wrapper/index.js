@@ -43,16 +43,7 @@ class Wrapper extends React.Component {
       </Menu>
     );
 
-    return (
-      <div className='wrapper'>
-        <div>
-          <MenuPanel role={this.props.role} />
-        </div>
-        <div>
-          <Layout className="main_layout">
-            <DialogsList dialogsListShow={dialogsListShow} />
-            <Layout>
-              {/*               <Header className="header">
+    {/*               <Header className="header">
                 <div>
                   <Dropdown overlay={lngMenu} trigger={['click']}>
                     <span className="ant-dropdown-link" href="">
@@ -61,14 +52,22 @@ class Wrapper extends React.Component {
                   </Dropdown>
                 </div>
               </Header>
- */}              {location.pathname === '/dialogs'
-                ? <Content className={contentClass}>{this.props.children}</Content>
-                : <Spin spinning={this.props.loader} delay={0}>
-                  <Content className={contentClass}>{this.props.children}</Content>
-                </Spin>
-              }
-            </Layout>
-          </Layout>
+ */}
+    return (
+      <div className='wrapper'>
+        <div>
+          <MenuPanel role={this.props.role} />
+        </div>
+        <div>
+          <DialogsList dialogsListShow={dialogsListShow} />
+          <div className='content-container'>
+            {location.pathname === '/dialogs'
+              ? <Content className={contentClass}>{this.props.children}</Content>
+              : <Spin spinning={this.props.loader} delay={0}>
+                <Content className={contentClass}>{this.props.children}</Content>
+              </Spin>
+            }
+          </div>
         </div>
       </div>
     );

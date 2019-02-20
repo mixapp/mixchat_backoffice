@@ -1,8 +1,7 @@
 import React from 'react';
-import { Layout, Menu, Input, Tag, Avatar } from 'antd';
+import { Menu, Input, Tag, Avatar } from 'antd';
 import * as _ from 'underscore';
 
-const { Sider } = Layout;
 const Search = Input.Search;
 
 class DialogsListMenu extends React.Component {
@@ -27,7 +26,8 @@ class DialogsListMenu extends React.Component {
   render() {
     let { t } = this.props;
     let dialogs = _.sortBy(this.props.app.dialogs, 'nmsgs').reverse();
-    let menuItems = [];
+    let unreaded = [];
+    let readed = [];
     if (!dialogs) dialogs = [];
     dialogs.forEach(item => {
       let result = item.name.split('_');
@@ -41,31 +41,44 @@ class DialogsListMenu extends React.Component {
         }
       }
 
-      if (item.name.search(this.state.searchDialogText) !== -1)
-        menuItems.push(
-          <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
-            <div className='dialogs-item-container'>
-              <Avatar size='small'>U</Avatar>
-              <span>{item.name.substring(0, item.name.length - 1)}</span>
-              {item.nmsgs > 0 && <Tag color="#f50">{item.nmsgs}</Tag>}
-            </div>
-          </Menu.Item>
-        );
+      if (item.name.search(this.state.searchDialogText) !== -1) {
+        let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
+          <div className='dialogs-item-container'>
+            <Avatar size='small'>U</Avatar>
+            <span>{item.name.substring(0, item.name.length - 1)}</span>
+            {item.nmsgs > 0 && <Tag color="#f50">{item.nmsgs}</Tag>}
+          </div>
+        </Menu.Item>;
+        if (item.nmsgs > 0) {
+          unreaded.push(dialog);
+        } else {
+          readed.push(dialog);
+        }
+      }
     })
     return (
-      <Sider style={{ display: this.props.dialogsListShow }} className='dialogs-item-sider' >
-        <div className="logo_container">
-          <div className="logo">
-            <Search
-              placeholder={t("dialogsList.dialogName")}
-              onSearch={value => this.searchDialog(value)}
-            />
-          </div>
+      <div className='dialogs-list-container' style={{ display: this.props.dialogsListShow }}>
+        <div>
+          <Search
+            placeholder={t("dialogsList.dialogName")}
+            onSearch={value => this.searchDialog(value)}
+          />
         </div>
-        <Menu theme="dark" mode="inline" className='dialogs-item-sider'>
-          {menuItems}
-        </Menu>
-      </Sider>
+        <div>
+          <Menu theme="dark" mode="inline" className='dialogs-item-sider'>
+            {unreaded.length > 0 ?
+              <Menu.Item>
+                Unreaded
+            </Menu.Item> : null}
+            {unreaded}
+            {readed.length > 0 ?
+              <Menu.Item>
+                Readed
+            </Menu.Item> : null}
+            {readed}
+          </Menu>
+        </div>
+      </div>
     )
   }
 }
