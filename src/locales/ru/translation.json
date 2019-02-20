@@ -6,16 +6,12 @@
     "Nickname": "Никнэйм",
     "mainMenu": {
         "dialogs": "Диалоги",
-        "requests": "Заявки",
-        "managers": "Менеджеры",
+        "managers": "Операторы",
         "settings": "Настройки",
         "logout": "Выход"
     },
     "dialogsList": {
         "dialogName": "Имя диалога"
-    },
-    "requests": {
-        "table": {}
     },
     "buttons": {
         "addManager": "Добавить менеджера"

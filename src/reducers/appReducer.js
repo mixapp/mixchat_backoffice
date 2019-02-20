@@ -10,8 +10,6 @@ import {
   FETCH_DIALOG_SUCCESS,
   SOCKET_ROOMS_CHANGED_EVENT,
   FETCH_ROLE_SUCCESS,
-  FETCH_REQUESTS_SUCCESS,
-  DELETE_REQUESTS_SUCCESS,
   FETCH_CONFIG_SUCCESS
 } from '../constants';
 const initialState = {
@@ -23,7 +21,6 @@ const initialState = {
   messagesCount: null,
   currentRoom: null,
   currentPage: 1,
-  requests: []
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -65,10 +62,6 @@ export default function reducer(state = initialState, action = {}) {
         return { ...state, message: null, messages: state.messages }
     case FETCH_ROLE_SUCCESS:
       return { ...state, role: action.role };
-    case FETCH_REQUESTS_SUCCESS:
-      return { ...state, requests: action.messages };
-    case DELETE_REQUESTS_SUCCESS:
-      return { ...state, result: action };
     case FETCH_CONFIG_SUCCESS:
       return { ...state, config: action.config };
     default:

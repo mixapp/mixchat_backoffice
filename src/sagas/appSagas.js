@@ -13,8 +13,6 @@ import {
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
   LOADER_TURN_OFF,
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
-  FETCH_REQUESTS_REQUEST, FETCH_REQUESTS_SUCCESS, //FETCH_REQUESTS_ERROR
-  DELETE_REQUESTS_REQUEST, //DELETE_REQUESTS_SUCCESS, //DELETE_REQUESTS_ERROR
   FETCH_CONFIG_SUCCESS,
   LOGOUT
 } from '../constants';
@@ -232,51 +230,6 @@ function* fetchRoleSaga() {
   });
 }
 
-function* fetchRequestsSaga() {
-  yield takeLatest(FETCH_REQUESTS_REQUEST, function* () {
-    try {
-
-      yield put({ type: LOADER_ON });
-      let config = Api.fetchConfig();
-      let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
-      let messages = yield Api.fetchDialog({ roomId: groupInfo.data.group._id, count: 9999 });
-      _.each(messages, (value, key) => {
-        let time = typeof value.ts === 'string' ? new Date(value.ts) : new Date(value.ts.$date);
-        value.key = value._id;
-        value.ts = time.toLocaleDateString() + ', ' + time.toLocaleTimeString();
-      });
-      yield put({ type: FETCH_REQUESTS_SUCCESS, messages: messages.reverse() });
-      yield put({ type: LOADER_OFF });
-
-    } catch (err) {
-      throw err;
-    }
-  })
-}
-
-function* deleteRequestSaga() {
-  yield takeLatest(DELETE_REQUESTS_REQUEST, function* (data) {
-    try {
-
-      yield put({ type: LOADER_ON });
-      let config = Api.fetchConfig();
-      let groupInfo = yield Api.fetchGroupInfo({ roomName: 'Requests_' + config.companyId });
-      if (data.data.length > 0) {
-        for (let i = 0; i < data.data.length; i++) {
-          yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data[i]._id });
-        }
-      } else {
-        yield Api.deleteRequest({ roomId: groupInfo.data.group._id, msgId: data.data._id });
-      }
-      yield put({ type: FETCH_REQUESTS_REQUEST });
-      yield put({ type: LOADER_OFF });
-
-    } catch (err) {
-      throw err;
-    }
-  });
-}
-
 function* logoutSaga() {
   yield takeLatest(LOGOUT, function* () {
     try {
@@ -304,8 +257,6 @@ export default function* ordersSaga() {
     fork(sendMessageSaga),
     fork(loaderOff),
     fork(fetchRoleSaga),
-    fork(fetchRequestsSaga),
-    fork(deleteRequestSaga),
     fork(logoutSaga)
   ];
 }

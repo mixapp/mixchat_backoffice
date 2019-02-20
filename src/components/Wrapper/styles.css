@@ -1,3 +1,15 @@
+.wrapper {
+    display: flex;
+}
+
+.wrapper>div:first-child {
+    background-color: #24293e;
+}
+
+.wrapper>div:last-child {
+    width: 100%;
+}
+
 .main_layout {
     height: 100vh;
 }

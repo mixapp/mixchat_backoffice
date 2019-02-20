@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Layout, Icon, Dropdown, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
 import DialogsList from '../../containers/DialogsList';
@@ -8,11 +8,11 @@ import { Spin } from 'antd';
 import { withNamespaces } from 'react-i18next';
 
 
-const { Header, Sider, Content } = Layout;
+const { Content } = Layout;
 
 class Wrapper extends React.Component {
   state = {
-    collapsed: false
+    collapsed: true
   };
 
   changeLanguage = async (lng) => {
@@ -44,38 +44,33 @@ class Wrapper extends React.Component {
     );
 
     return (
-      <Layout className="main_layout">
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo_container">
-            <div className="logo">LOGO</div>
-          </div>
+      <div className='wrapper'>
+        <div>
           <MenuPanel role={this.props.role} />
-        </Sider>
-        <DialogsList dialogsListShow={dialogsListShow} />
-
-        <Layout>
-          <Header className="header">
-            <Icon
-              className="trigger"
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
-            <div>
-              <Dropdown overlay={lngMenu} trigger={['click']}>
-                <span className="ant-dropdown-link" href="">
-                  {lng} <Icon type="down" />
-                </span>
-              </Dropdown>
-            </div>
-          </Header>
-          {location.pathname === '/dialogs'
-            ? <Content className={contentClass}>{this.props.children}</Content>
-            : <Spin spinning={this.props.loader} delay={0}>
-              <Content className={contentClass}>{this.props.children}</Content>
-            </Spin>
-          }
-        </Layout>
-      </Layout>
+        </div>
+        <div>
+          <Layout className="main_layout">
+            <DialogsList dialogsListShow={dialogsListShow} />
+            <Layout>
+              {/*               <Header className="header">
+                <div>
+                  <Dropdown overlay={lngMenu} trigger={['click']}>
+                    <span className="ant-dropdown-link" href="">
+                      {lng} <Icon type="down" />
+                    </span>
+                  </Dropdown>
+                </div>
+              </Header>
+ */}              {location.pathname === '/dialogs'
+                ? <Content className={contentClass}>{this.props.children}</Content>
+                : <Spin spinning={this.props.loader} delay={0}>
+                  <Content className={contentClass}>{this.props.children}</Content>
+                </Spin>
+              }
+            </Layout>
+          </Layout>
+        </div>
+      </div>
     );
   }
 }

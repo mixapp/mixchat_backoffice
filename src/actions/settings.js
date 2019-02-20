@@ -10,8 +10,6 @@ import {
   LOADER_OFF,
   LOADER_ON,
   FETCH_ROLE_REQUEST,
-  FETCH_REQUESTS_REQUEST,
-  DELETE_REQUESTS_REQUEST,
   LOGOUT,
 } from '../constants'
 
@@ -83,20 +81,6 @@ export const loaderOn = () => {
 export const fetchRole = () => {
   return {
     type: FETCH_ROLE_REQUEST
-  }
-}
-
-export const fetchRequests = (data) => {
-  return {
-    type: FETCH_REQUESTS_REQUEST,
-    data
-  }
-}
-
-export const deleteRequest = (data) => {
-  return {
-    type: DELETE_REQUESTS_REQUEST,
-    data
   }
 }
 

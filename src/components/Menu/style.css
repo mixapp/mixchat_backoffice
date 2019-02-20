@@ -1,0 +1,47 @@
+.main-menu {
+    color: white;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.main-menu>ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.main-menu>ul>li {
+    width: 100%;
+    height: 80px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main-menu>ul>li.active>a {
+    color: white;
+}
+
+.main-menu>ul>li>a {
+    display: flex;
+    flex-direction: column;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+}
+
+.main-menu>ul>li>a:hover {
+    color: white;
+}
+
+.main-menu>ul>li>a>span {
+    font-size: .8em;
+    margin-top: 5px;
+}
+
+.main-menu>ul>li>a>i {
+    font-size: 1.4em;
+}

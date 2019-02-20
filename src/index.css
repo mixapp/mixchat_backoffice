@@ -43,7 +43,7 @@ textarea:focus {
 }
 
 .dialogs-item-sider {
-    background-color: #262e47;
+    background-color: #2d3248;
     overflow: auto;
     min-width: 300px !important;
 }

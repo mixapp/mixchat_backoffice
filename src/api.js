@@ -221,18 +221,6 @@ export const fetchGroupInfo = async (data) => {
   }
 }
 
-export const deleteRequest = async (data) => {
-  try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'request-close');
-    let result = await axios.post(uri, data, {
-      headers: getHeadera(),
-    });
-    return result;
-  } catch (err) {
-    throw err;
-  }
-}
-
 export const fetchRole = async () => {
   try {
 

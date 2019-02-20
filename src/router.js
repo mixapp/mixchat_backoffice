@@ -13,7 +13,6 @@ import Authorize from './containers/Authorize';
 import Settings from './containers/Settings';
 import Dialogs from './containers/Dialogs';
 import Managers from './containers/Managers';
-import Requests from './containers/Requests';
 import { connect } from 'react-redux';
 import {
   fetchSettings,
@@ -60,7 +59,6 @@ class Router extends React.Component {
           <PrivateRoute path='/settings' exact component={Settings} />
           <PrivateRoute path='/dialogs' exact component={Dialogs} />
           <PrivateRoute path='/managers' exact component={Managers} />
-          <PrivateRoute path='/requests' exact component={Requests} />
         </Wrapper>
       </div>
     </ConnectedRouter >;
