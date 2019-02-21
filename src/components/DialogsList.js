@@ -42,19 +42,15 @@ class DialogsListMenu extends React.Component {
       }
 
       if (item.name.search(this.state.searchDialogText) !== -1) {
-        let newDialog = '';
-        if (item.nmsgs > 0 && item.msgs === 1) {
-          newDialog = 'new-dialog'
-        }
         let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
-          <div className={'dialogs-item-container ' + newDialog}>
+          <div className={'dialogs-item-container ' + (item.new ? ' new-dialog' : '')}>
             <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
             <span>{item.name.substring(0, item.name.length - 1)}</span>
-            {item.nmsgs > 0 && <Tag color="#f50">{item.nmsgs}</Tag>}
+            {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
           </div>
         </Menu.Item>;
-        if (item.nmsgs > 0) {
-          console.log(item)
+        console.log(item.new)
+        if (item.nmsgs > 0 || item.new) {
           unreaded.push(dialog);
         } else {
           readed.push(dialog);
