@@ -155,7 +155,7 @@ class DialogsList extends React.Component {
     setTimeout(() => {
       commentConteiner = document.getElementsByClassName('content dialogs')[0];
       chatConteiner = document.getElementsByClassName('chat-conteiner')[0];
-      chatHeight = commentConteiner.clientHeight - 55;
+      chatHeight = commentConteiner.clientHeight - 55 - 85; //TODO auto calc height
       chatConteiner.style.height = chatHeight + 'px'
     }, 0);
   }
@@ -197,9 +197,7 @@ class DialogsList extends React.Component {
               style={{ marginBottom: '0' }}
             >
               <div style={{ display: 'flex' }}>
-                {getFieldDecorator('userComment', {
-                  rules: [{ required: true, message: 'Please input your message!' }],
-                })(
+                {getFieldDecorator('userComment')(
                   <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
                 )}
                 <div

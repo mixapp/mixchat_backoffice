@@ -49,7 +49,6 @@ class DialogsListMenu extends React.Component {
             {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
           </div>
         </Menu.Item>;
-        console.log(item.new)
         if (item.nmsgs > 0 || item.new) {
           unreaded.push(dialog);
         } else {
