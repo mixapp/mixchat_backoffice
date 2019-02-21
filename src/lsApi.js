@@ -34,6 +34,7 @@ function setDialogs(dialogs) {
             dialogs.forEach(dialog => {
                 let _dialog = _.findIndex(lsDialogs, { _id: dialog._id });
                 if (_dialog === -1) {
+                    dialog.nmsgs = dialog.msgs;
                     addDialog(dialog);
                 }
             })

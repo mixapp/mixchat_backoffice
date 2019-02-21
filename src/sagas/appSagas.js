@@ -89,6 +89,7 @@ function* fetchDialogsSaga() {
         yield put(action);
         //TODO
         let dialogs = yield Api.fetchDialogs();
+        lsApi.setDialogs(dialogs);
         yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       }
     } catch (err) {

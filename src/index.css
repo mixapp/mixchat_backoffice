@@ -146,3 +146,8 @@ textarea:focus {
 .content-container {
     width: 100%;
 }
+
+.new-dialog {
+    font-weight: 640;
+    color: white;
+}
