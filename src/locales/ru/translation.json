@@ -43,5 +43,9 @@
     "Secret": "Секрет",
     "Page URL": "URL страницы",
     "Save": "Сохранить",
-    "First of all select a dialog": "Сначала выберите диалог"
+    "First of all select a dialog": "Сначала выберите диалог",
+    "Readed": "Прочитано",
+    "Unread": "Не прочитано",
+    "New": "Новые",
+    "Dialogs": "Диалоги"
 }

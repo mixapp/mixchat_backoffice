@@ -25,7 +25,7 @@ class DialogsListMenu extends React.Component {
 
   render() {
     let { t } = this.props;
-    let dialogs = _.sortBy(this.props.app.dialogs, 'nmsgs').reverse();
+    let dialogs = _.sortBy(this.props.app.dialogs, '_updatedAt').reverse();
     let unreaded = [];
     let readed = [];
     if (!dialogs) dialogs = [];
@@ -68,13 +68,13 @@ class DialogsListMenu extends React.Component {
           <Menu theme="dark" mode="inline" className='dialogs-item-sider'>
             {unreaded.length > 0 ?
               <Menu.Item>
-                Unreaded
-            </Menu.Item> : null}
+                {t('Unread')}
+              </Menu.Item> : null}
             {unreaded}
             {readed.length > 0 ?
               <Menu.Item>
-                Readed
-            </Menu.Item> : null}
+                {t('Dialogs')}
+              </Menu.Item> : null}
             {readed}
           </Menu>
         </div>
