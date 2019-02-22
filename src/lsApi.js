@@ -34,7 +34,6 @@ function setDialogs(dialogs) {
             dialogs.forEach(dialog => {
                 let _dialog = _.findIndex(lsDialogs, { _id: dialog._id });
                 if (_dialog === -1) {
-                    dialog.new = true;
                     addDialog(dialog);
                 }
             })
@@ -85,7 +84,6 @@ function getDialogsNmsgs(dialogs) {
         lsDialogs.forEach((lsDialog) => {
             let dialog = _.findIndex(dialogs, { _id: lsDialog._id });
             if (dialogs[dialog]) {
-                dialogs[dialog].new = lsDialog.new;
                 if (dialogs[dialog].msgs > lsDialog.msgs) {
                     dialogs[dialog].nmsgs = dialogs[dialog].msgs - lsDialog.msgs;
                 } else {
@@ -101,7 +99,6 @@ function readDialog(dialog) {
     let lsDialogs = getDialogs();
     if (lsDialogs) {
         let lsDialog = _.findIndex(lsDialogs, { _id: dialog._id });
-        dialog.new = false;
         lsDialogs[lsDialog] = dialog;
         return lsDialogs;
     }

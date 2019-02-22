@@ -172,6 +172,18 @@ export const removeManager = async (data) => {
   }
 }
 
+export const takeRequest = async (data) => {
+  try {
+    const uri = getUrl(config.backApiProcessId, config.companyId, 'take-request');
+    let result = await axios.get(uri, data, {
+      headers: getHeadera()
+    });
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const fetchDialogs = async () => {
   try {
 
