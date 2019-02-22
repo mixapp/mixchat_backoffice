@@ -54,6 +54,13 @@ function* fetchDialogSaga() {
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
 
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
+      if (groupInfo.data.group.customFields.newRequest) {
+        let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+        let res = yield Api.takeRequest({
+          roomId: room._id,
+          userId: userId
+        });
+      }
       let groupMembers = yield Api.fetchGroupMembers({ roomId: room._id });
       let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: action.data.count });
       yield put({

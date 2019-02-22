@@ -175,7 +175,7 @@ export const removeManager = async (data) => {
 export const takeRequest = async (data) => {
   try {
     const uri = getUrl(config.backApiProcessId, config.companyId, 'take-request');
-    let result = await axios.get(uri, data, {
+    let result = await axios.post(uri, data, {
       headers: getHeadera()
     });
     return result;
