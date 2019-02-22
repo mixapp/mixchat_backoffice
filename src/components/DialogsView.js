@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Empty, Statistic, Icon, Avatar, List } from 'antd';
+import { Row, Col, Empty, Avatar, List, Badge } from 'antd';
 import Dialogs from './Dialogs';
 import * as Api from '../api';
 
@@ -12,9 +12,8 @@ export default class DialogsListView extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const t = this.props.t;
-    let { currentRoom, messagesCount, users } = this.props.app;
+    let { currentRoom, groupMembers } = this.props.app;
     if (!this.props.app.currentRoom) {
       return <Row style={{ height: '100%' }} type="flex" justify="space-around" align="middle">
         <Col span={20}>
@@ -55,33 +54,39 @@ export default class DialogsListView extends React.Component {
               <span>{t('Detail')}:</span>
             </div>
             <div>
-              <div style={{ display: 'flex' }}>
-                <Statistic title={t('Messages')} value={messagesCount} prefix={<Icon type="message" />} />
-                <Statistic style={{ marginLeft: '50px' }} title={t('Users')} value={currentRoom.usersCount} suffix="/ 100" />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', marginTop: '20px' }}>
-                <div style={{ fontSize: '22px', fontWeight: '600', marginBottom: '20px' }}>{t('Client')}:</div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', justifyContent: 'left', alignContent: 'center', marginBottom: '20px' }}>
-                  <Avatar size={64} icon="user" />
+                  <Avatar size={48} icon="user" />
                   <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '15px' }}>
-                    <span style={{ fontSize: '22px', fontWeight: '600' }}>{currentRoom.name}</span>
+                    <span style={{ fontSize: '16px', fontWeight: '600' }}>{currentRoom.name}</span>
                     <span style={{ fontSize: '10px', color: '#d9d9d9' }}>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
                   </div>
                 </div>
-                <div style={{ fontSize: '22px', fontWeight: '600', marginBottom: '20px' }}>{t('Users')}:</div>
+                <div style={{ fontSize: '16px', fontWeight: '600' }}>{t('Members')}:</div>
                 <div>
                   <List
+                    size="small"
                     itemLayout="horizontal"
-                    dataSource={users}
-                    renderItem={item => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                          title={<a href="https://ant.design">{item.title}</a>}
-                          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                        />
-                      </List.Item>
-                    )}
+                    dataSource={groupMembers.members}
+                    renderItem={item => {
+                      let status = '';
+                      switch (item.status) {
+                        case "online":
+                          status = <Badge status="success" />;
+                          break;
+                        default:
+                          status = <Badge status="default" />;
+                          break;
+                      }
+                      return (
+                        <List.Item style={{ border: 'none' }}>
+                          <List.Item.Meta
+                            avatar={<Avatar size='48' icon="user" />}
+                            title={<a href={"https://www.google.com/search?q=" + item._id} target="_blank">{status}{item.name}</a>}
+                          />
+                        </List.Item>
+                      )
+                    }}
                   />
                 </div>
               </div>

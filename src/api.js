@@ -221,6 +221,17 @@ export const fetchGroupInfo = async (data) => {
   }
 }
 
+export const fetchGroupMembers = async (data) => {
+  try {
+    return await axios.get('https://chat.mixapp.io/api/v1/groups.members', {
+      params: data,
+      headers: getRocketChatHeaders()
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const fetchRole = async () => {
   try {
 

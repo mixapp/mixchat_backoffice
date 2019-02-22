@@ -54,9 +54,11 @@ function* fetchDialogSaga() {
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
 
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
+      let groupMembers = yield Api.fetchGroupMembers({ roomId: room._id });
       let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: action.data.count });
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
+          groupMembers: groupMembers,
           messages: messages,
           room: room,
           messagesCount: groupInfo.data.group.msgs

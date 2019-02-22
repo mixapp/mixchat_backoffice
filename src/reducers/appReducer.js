@@ -44,10 +44,11 @@ export default function reducer(state = initialState, action = {}) {
     case LOADER_OFF:
       return { ..._.omit(state, 'error_message'), loader: false };
     case FETCH_DIALOG_SUCCESS:
-      state.currentRoom = action.data.room;
-      state.messagesCount = action.data.messagesCount;
+      let { room, messagesCount, groupMembers } = action.data;
+      state.currentRoom = room;
+      state.messagesCount = messagesCount;
       state.currentPage = 1;
-      return { ...state, messages: action.data.messages.reverse() };
+      return { ...state, messages: action.data.messages.reverse(), groupMembers: groupMembers.data };
     case SOCKET_ROOMS_CHANGED_EVENT:
       let { lastMessage } = action.data.fields.args[1];
       if (lastMessage) {
