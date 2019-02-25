@@ -1,49 +1,50 @@
 .wrapper {
-    display: flex;
+  display: flex;
 }
 
 .wrapper>div:first-child {
-    background-color: #24293e;
-    height: 100vh;
+  background-color: #24293e;
+  height: 100vh;
 }
 
 .wrapper>div:last-child {
-    width: 100%;
-    display: flex;
+  width: 100%;
+  display: flex;
+  overflow: auto;
 }
 
 .main_layout {
-    height: 100vh;
+  height: 100vh;
 }
 
 .main_layout .header {
-    background: #fff;
-    padding: 0 20px;
+  background: #fff;
+  padding: 0 20px;
 }
 
 .main_layout .content {
-    margin: 24px 16px;
-    padding: 24px;
-    background: #fff;
-    min-height: auto;
+  margin: 24px 16px;
+  padding: 24px;
+  background: #fff;
+  min-height: auto;
 }
 
 .logo_container {
-    height: 60px;
+  height: 60px;
 }
 
 .logo {
-    color: #fff;
-    text-align: center;
-    padding: 21px;
+  color: #fff;
+  text-align: center;
+  padding: 21px;
 }
 
 .header {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .header>div {
-    margin-left: auto;
-    cursor: pointer;
+  margin-left: auto;
+  cursor: pointer;
 }
