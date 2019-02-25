@@ -2,7 +2,7 @@ import React from 'react';
 import * as Scroll from 'react-scroll';
 import { Row, Col, Input, Form, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
-import CommentItem from './items/Comment';
+import CommentList from './items/CommentList';
 import SendButton from '../components/svg/send_button';
 import { Spin } from 'antd';
 const { TextArea } = Input
@@ -179,7 +179,7 @@ class DialogsList extends React.Component {
                 useWindow={false}
                 threshold={5}
               >
-                <CommentItem
+                <CommentList
                   messages={this.props.messages}
                 />
               </InfiniteScroll>

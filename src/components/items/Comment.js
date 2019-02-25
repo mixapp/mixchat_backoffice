@@ -1,58 +1,36 @@
 import React from 'react';
 import Parser from 'html-react-parser';
-import { List, Avatar, Comment, Tooltip } from 'antd';
+import { Avatar, Comment, Tooltip } from 'antd';
 import * as Api from '../../api';
 
-export default class CommentItem extends React.Component {
+export default class CommentList extends React.Component {
 
   componentDidMount() {
     this.client = JSON.parse(localStorage.getItem('XUSER')).data.userId;
   }
 
   render() {
-    return <List
-      size="small"
-      dataSource={this.props.messages}
-      renderItem={item => {
-        let time = typeof item.ts === 'string' ? new Date(item.ts) : new Date(item.ts.$date);
-        if (item.u.name)
-          item.u.name.length > 15 ? item.u.shortName = item.u.name.substring(0, 15) + '...' : item.u.shortName = item.u.name;
-        if (item.file) {
-          switch (item.file.type) {
-            case 'image/png':
-              item.fileLink = <img height='150px' src={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name} alt={item.file.name} />;
-              break;
-            case 'text/plain':
-              item.fileLink = <a href={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name}>{item.file.name}</a>;
-              break;
-            default:
-              item.fileLink = null;
-              break;
-          }
-        }
-        return (
-          <Comment
-            key={item._id}
-            author={<b>{item.u.shortName}</b>}
-            avatar={(
-              <Avatar style={{ backgroundColor: item.u._id === this.client ? '#77a2ff' : '#ff87a3' }}>U</Avatar>
-            )}
-            content={(
-              <div>
-                {Parser(item.msg.replace(/\n/g, '<br/>'))}
-                <div>{item.fileLink ? item.fileLink : ''}</div>
-              </div>
-            )}
-            datetime={(
-              <Tooltip title="">
-                <span>{Api.formatDate(time)}</span>
-              </Tooltip>
-            )}
-          />
-        );
-      }
-      }
-    >
-    </List>;
+    let { item } = this.props;
+    let time = typeof item.ts === 'string' ? new Date(item.ts) : new Date(item.ts.$date);
+    return (
+      <Comment
+        key={item._id}
+        author={<b>{item.u.shortName}</b>}
+        avatar={(
+          <Avatar style={{ backgroundColor: item.u._id === this.client ? '#77a2ff' : '#ff87a3' }}>U</Avatar>
+        )}
+        content={(
+          <div>
+            {Parser(item.msg.replace(/\n/g, '<br/>'))}
+            <div>{item.fileLink ? item.fileLink : ''}</div>
+          </div>
+        )}
+        datetime={(
+          <Tooltip title="">
+            <span>{Api.formatDate(time)}</span>
+          </Tooltip>
+        )}
+      />
+    );
   }
 }
