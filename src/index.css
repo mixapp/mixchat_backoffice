@@ -2,208 +2,211 @@
 /* Remove outline on the forms and links */
 
 textarea {
-    margin: 0;
-    border: none !important;
-    resize: none;
-    overflow: hidden;
+  margin: 0;
+  border: none !important;
+  resize: none;
+  overflow: hidden;
 }
 
 textarea:focus {
-    box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .dialogs {
-    padding: 0px !important;
-    height: 100%;
+  padding: 0px !important;
+  height: 100%;
 }
 
 .demo-infinite-container {
-    border: 1px solid #e8e8e8;
-    border-radius: 4px;
-    overflow: auto;
-    padding: 8px 24px;
-    height: 300px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  overflow: auto;
+  padding: 8px 24px;
+  height: 300px;
 }
 
 .demo-loading-container {
-    position: absolute;
-    top: 40px;
-    width: 100%;
-    text-align: center;
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
 }
 
 .messages-count-badge {
-    background-color: #fff;
-    color: #999;
-    box-shadow: 0 0 0 1px #d9d9d9 inset;
-    box-shadow: #FFFFFF 0px 0px 1px 5px;
-    position: absolute;
-    right: 5px;
-    border-radius: 100%;
+  background-color: #fff;
+  color: #999;
+  box-shadow: 0 0 0 1px #d9d9d9 inset;
+  box-shadow: #FFFFFF 0px 0px 1px 5px;
+  position: absolute;
+  right: 5px;
+  border-radius: 100%;
 }
 
 .dialogs-item-sider {
-    background-color: #2d3248;
-    overflow: auto;
+  background-color: #2d3248;
+  overflow: auto;
 }
 
 .dialogs-item-sider::-webkit-scrollbar {
-    width: 0;
-    -webkit-appearance: none;
+  width: 0;
+  -webkit-appearance: none;
 }
 
 .dialogs-item-container {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
 }
 
 .dialogs-item-container>span {
-    display: inline-block;
+  display: inline-block;
 }
 
 .dialogs-item-container>span:nth-child(2) {
-    display: inline-block;
-    width: 75%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-left: 10px;
+  display: inline-block;
+  width: 75%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 10px;
 }
 
 .dialogs-item-container>div {
-    display: inline-block;
-    margin-left: auto;
+  display: inline-block;
+  margin-left: auto;
 }
 
 .chat-conteiner {
-    overflow: auto;
-    padding: 15px;
-    border-bottom: 2px solid #f0f2f5;
+  overflow: auto;
+  border-bottom: 2px solid #f0f2f5;
 }
 
 .chat-conteiner::-webkit-scrollbar {
-    width: 0;
-    -webkit-appearance: none;
+  width: 0;
+  -webkit-appearance: none;
 }
 
 .send-button {
-    width: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .8em;
-    cursor: pointer;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .8em;
+  cursor: pointer;
 }
 
 .noselect {
-    -webkit-touch-callout: none;
-    /* iOS Safari */
-    -webkit-user-select: none;
-    /* Safari */
-    -khtml-user-select: none;
-    /* Konqueror HTML */
-    -moz-user-select: none;
-    /* Firefox */
-    -ms-user-select: none;
-    /* Internet Explorer/Edge */
-    user-select: none;
-    /* Non-prefixed version, currently supported by Chrome and Opera */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
 .dialogs-list-container {
-    height: 100vh;
-    overflow: hidden;
-    width: 350px;
+  height: 100vh;
+  overflow: hidden;
+  width: 350px;
 }
 
 .dialogs-list-container>div:first-child>span>input {
-    background-color: #2d3248;
-    border: 0;
-    border-radius: 0;
-    color: white;
-    box-shadow: none;
+  background-color: #2d3248;
+  border: 0;
+  border-radius: 0;
+  color: white;
+  box-shadow: none;
 }
 
 .dialogs-list-container>div:first-child {
-    background-color: #2d3248;
-    padding-left: 2px;
-    padding-top: 10px;
+  background-color: #2d3248;
+  padding-left: 2px;
+  padding-top: 10px;
 }
 
 .dialogs-list-container>div:first-child>span>span>i {
-    color: white;
+  color: white;
 }
 
 .dialogs-list-container>div:last-child {
-    height: 100vh;
+  height: 100vh;
 }
 
 .dialogs-list-container>div:last-child>ul {
-    padding-bottom: 50px;
-    height: 100%;
+  padding-bottom: 50px;
+  height: 100%;
 }
 
 .dialogs-list-container>div:last-child>ul>li {
-    padding-left: 14px !important;
+  padding-left: 14px !important;
 }
 
 .content-container {
-    width: 100%;
-    height: 100vh;
+  width: 100%;
+  height: 100vh;
 }
 
 .new-dialog {
-    font-weight: 640;
-    color: white;
+  font-weight: 640;
+  color: white;
 }
 
 .dialog-layout {
-    display: flex;
+  display: flex;
 }
 
 .dialog-layout>div:first-child {
-    flex: auto;
+  flex: auto;
 }
 
 .dialog-layout-header {
-    height: 80px;
-    display: flex;
-    flex-direction: row;
-    font-weight: 600;
-    align-items: center;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  font-weight: 600;
+  align-items: center;
 }
 
 .dialog-layout-header>div {
-    font-size: 22px;
-    margin-left: 15px;
-    display: flex;
-    flex-direction: column;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog-layout-header>div>span:last-child {
-    font-size: 10px;
-    color: #d9d9d9;
+  font-size: 10px;
+  color: #d9d9d9;
 }
 
 .dialog-layout>div:last-child {
-    width: 300px;
+  width: 300px;
 }
 
 .dialog-layout-detail {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden; /* TODO */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  /* TODO */
 }
 
 .dialog-layout-detail>div:first-child {
-    height: 80px;
-    display: flex;
-    align-items: center;
+  height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 .dialog-layout-detail>div:first-child>span {
-    font-size: 22px;
-    font-weight: 600;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.content {
+  margin: 15px 15px 0px 15px;
 }
