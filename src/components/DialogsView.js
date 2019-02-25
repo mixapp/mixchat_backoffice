@@ -38,7 +38,7 @@ export default class DialogsListView extends React.Component {
                 <span>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
               </div>
             </div>
-            <Dialogs
+            <Dialogs //TODO
               loader={this.props.app.loader}
               messagesCount={this.props.app.messagesCount}
               currentRoom={this.props.app.currentRoom}

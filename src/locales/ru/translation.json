@@ -6,7 +6,7 @@
     "Nickname": "Никнэйм",
     "mainMenu": {
         "dialogs": "Диалоги",
-        "managers": "Операторы",
+        "operators": "Операторы",
         "settings": "Настройки",
         "logout": "Выход"
     },
@@ -14,9 +14,9 @@
         "dialogName": "Имя диалога"
     },
     "buttons": {
-        "addManager": "Добавить менеджера"
+        "addOperator": "Добавить оператора"
     },
-    "Do you want to delete manager?": "Вы хотите удалить менеджера?",
+    "Do you want to delete operator?": "Вы хотите удалить оператора?",
     "Yes": "Да",
     "No": "Нет",
     "Cancel": "Отмена",

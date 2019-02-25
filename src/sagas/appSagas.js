@@ -56,7 +56,7 @@ function* fetchDialogSaga() {
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
       if (groupInfo.data.group.customFields.newRequest) {
         let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
-        let res = yield Api.takeRequest({
+        yield Api.takeRequest({
           roomId: room._id,
           userId: userId
         });

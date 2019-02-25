@@ -13,7 +13,7 @@ export default class ManagersList extends React.Component {
   showConfirm(obj) {
     let { removeManager, t } = this.props;
     confirm({
-      title: t('Do you want to delete manager?'),
+      title: t('Do you want to delete operator?'),
       okText: t('Yes'),
       cancelText: t('Cancel'),
       onOk() {
@@ -69,8 +69,9 @@ export default class ManagersList extends React.Component {
     ];
     return (
       <div>
+        <h2>{t('mainMenu.operators')}</h2>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: "20px" }}>
-          {t('buttons.addManager')}
+          {t('buttons.addOperator')}
         </Button>
         <Table {...this.state} columns={columns} dataSource={this.props.app.managers} />
         <AddManagerForm

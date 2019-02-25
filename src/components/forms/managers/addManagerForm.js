@@ -30,7 +30,7 @@ class AddManagerForm extends React.Component {
     return (
       <Modal
         visible={visible}
-        title={t('buttons.addManager')}
+        title={t('buttons.addOperator')}
         okText={t('Add')}
         cancelText={t('Cancel')}
         onCancel={onCancel}

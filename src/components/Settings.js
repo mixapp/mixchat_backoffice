@@ -55,6 +55,7 @@ class RegistrationForm extends React.Component {
 
     return (
       <div>
+        <h2>{t('mainMenu.settings')}</h2>
         <label><b>{t('Copy this code into body of your HTML')}</b></label>
         <div style={{ display: 'flex' }}>
           <Alert message={this.widgetCode} type="info" style={{ borderRadius: 0 }} />
