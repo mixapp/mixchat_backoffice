@@ -1,8 +1,6 @@
 import React from 'react';
-import Parser from 'html-react-parser';
 import Comment from './Comment';
-import { List, Avatar, Tooltip } from 'antd';
-import * as Api from '../../api';
+import { List } from 'antd';
 
 export default class CommentList extends React.Component {
 

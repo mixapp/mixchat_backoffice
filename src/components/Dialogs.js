@@ -1,10 +1,9 @@
 import React from 'react';
 import * as Scroll from 'react-scroll';
-import { Row, Col, Input, Form, message } from 'antd';
+import { Row, Col, Input, Form, message, Spin } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import CommentList from './items/CommentList';
 import SendButton from '../components/svg/send_button';
-import { Spin } from 'antd';
 const { TextArea } = Input
 const FormItem = Form.Item;
 
@@ -161,7 +160,6 @@ class DialogsList extends React.Component {
   }
 
   render() {
-    if (this.state.currentRoom) { }
     const {
       getFieldError, isFieldTouched, getFieldDecorator
     } = this.props.form;
