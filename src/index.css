@@ -81,10 +81,12 @@ textarea:focus {
   border-bottom: 2px solid #f0f2f5;
 }
 
+/*
 .chat-conteiner::-webkit-scrollbar {
   width: 0;
   -webkit-appearance: none;
 }
+*/
 
 .send-button {
   width: 50px;

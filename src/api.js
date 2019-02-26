@@ -22,6 +22,11 @@ const getUrl = (processId, companyId, path) => {
   return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
 }
 
+const getRocketCahtUrl = () => {
+  return 'chat.mixapp.io';
+  return 'api.mixapp.io/chat';
+}
+
 const getToken = () => {
   let token = localStorage.getItem('user');
   try {
@@ -187,7 +192,7 @@ export const takeRequest = async (data) => {
 export const fetchDialogs = async () => {
   try {
 
-    let result = await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
+    let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', {
       headers: getRocketChatHeaders()
     });
     return getDialogsNmsgs(result.data.groups);
@@ -201,7 +206,7 @@ export const fetchDialogs = async () => {
 export const fetchDialog = async (data) => {
   try {
 
-    let result = await axios.get('https://chat.mixapp.io/api/v1/groups.history', {
+    let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.history', {
       params: data,
       headers: getRocketChatHeaders()
     });
@@ -214,7 +219,7 @@ export const fetchDialog = async (data) => {
 
 export const fetchGroupList = async () => {
   try {
-    return await axios.get('https://chat.mixapp.io/api/v1/groups.list', {
+    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', {
       headers: getRocketChatHeaders()
     });
   } catch (err) {
@@ -224,7 +229,7 @@ export const fetchGroupList = async () => {
 
 export const fetchGroupInfo = async (data) => {
   try {
-    return await axios.get('https://chat.mixapp.io/api/v1/groups.info', {
+    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.info', {
       params: data,
       headers: getRocketChatHeaders()
     });
@@ -235,7 +240,7 @@ export const fetchGroupInfo = async (data) => {
 
 export const fetchGroupMembers = async (data) => {
   try {
-    return await axios.get('https://chat.mixapp.io/api/v1/groups.members', {
+    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.members', {
       params: data,
       headers: getRocketChatHeaders()
     });
@@ -262,7 +267,7 @@ export const sendMessageSaga = async (room, text) => {
   try {
     let result = await axios({
       method: 'POST',
-      url: 'https://chat.mixapp.io/api/v1/chat.postMessage',
+      url: 'https://' + getRocketCahtUrl() + '/api/v1/chat.postMessage',
       data: {
         roomId: room._id,
         text: text
@@ -305,7 +310,7 @@ export const websocketInitRoomsChanged = () => {
   return eventChannel(emitter => {
     // init the connection here
     const options = {
-      endpoint: 'wss://chat.mixapp.io/websocket',
+      endpoint: 'wss://' + getRocketCahtUrl() + '/websocket',
       SocketConstructor: WebSocket
     };
     var ddp = new DDP(options);
@@ -323,19 +328,4 @@ export const websocketInitRoomsChanged = () => {
       // do whatever to interrupt the socket communication here
     }
   })
-}
-
-var cache = {};
-export const memo = (func) => {
-  return function () {
-    var key = JSON.stringify(arguments);
-    if (cache[key]) {
-      return cache[key];
-    }
-    else {
-      let val = func.apply(null, arguments);
-      cache[key] = val;
-      return val;
-    }
-  }
 }

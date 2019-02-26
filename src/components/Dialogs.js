@@ -66,7 +66,7 @@ class DialogsList extends React.Component {
   }
 
   fetchData = async () => {
-    this.props.fetchDialog({
+    this.props.fetchHistory({
       count: this.state.currentPage * this.state.pageItemsCount,
       room: this.state.currentRoom
     });
@@ -84,7 +84,7 @@ class DialogsList extends React.Component {
       currentPage: ++this.state.currentPage
     })
     this.fetchData();
-    this.scrollTo(150, { duration: 0 });
+    this.scrollTo(50, { duration: 0 });
   }
 
   async componentDidUpdate() {
@@ -110,17 +110,17 @@ class DialogsList extends React.Component {
     let { currentRoom, messagesCount } = this.props;
     if (currentRoom) {
       if (this.state.currentRoom && currentRoom._id !== this.state.currentRoom._id) {
-        await this.setState({
+        this.setState({
           hasMore: true,
           currentPage: 0
         });
       }
-      await this.setState({
+      this.setState({
         currentRoom: currentRoom
       });
     }
     if (messagesCount) {
-      await this.setState({
+      this.setState({
         messagesCount: messagesCount
       });
     }
@@ -134,6 +134,12 @@ class DialogsList extends React.Component {
   }
 
   componentDidMount() {
+    let { messagesCount, currentRoom } = this.props;
+    this.setState({
+      messagesCount: messagesCount,
+      currentRoom: currentRoom
+    });
+
     let commentConteiner, chatConteiner, chatHeight;
     var tx = document.getElementsByTagName('textarea');
     for (var i = 0; i < tx.length; i++) {
@@ -160,6 +166,7 @@ class DialogsList extends React.Component {
   }
 
   render() {
+    let { dialogLoader } = this.props.app;
     const {
       getFieldError, isFieldTouched, getFieldDecorator
     } = this.props.form;
@@ -167,15 +174,15 @@ class DialogsList extends React.Component {
     return [
       <Row key='1'>
         <Col span={24} style={{ overflow: 'hidden', border: 'none' }}>
-          <Spin spinning={this.props.loader} delay={0}>
-            <div className='chat-conteiner' id='chat-conteiner'> {/* TODO width: 104% */}
+          <Spin spinning={dialogLoader} delay={0}>
+            <div className='chat-conteiner' id='chat-conteiner'>
               <InfiniteScroll
                 initialLoad={false}
                 isReverse={true}
                 loadMore={this.handleInfiniteOnLoad}
                 hasMore={!this.state.loading && this.state.hasMore}
                 useWindow={false}
-                threshold={5}
+                threshold={1}
               >
                 <CommentList
                   messages={this.props.messages}

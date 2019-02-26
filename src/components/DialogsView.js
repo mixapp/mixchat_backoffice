@@ -28,77 +28,79 @@ export default class DialogsListView extends React.Component {
           </Empty>
         </Col>
       </Row>
-    } else {
-      if (!loader) {
-        return <div className='dialog-layout'>
-          <div>
-            <div className='dialog-layout-header'>
-              <div>
-                <span>{currentRoom.name}</span>
-                <span>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
-              </div>
+    }
+    if (loader) {
+      return <Spin spinning={true} delay={0} style={{ width: '100%', marginTop: '50%' }} />;
+    }
+
+    return (
+      <div className='dialog-layout'>
+        <div>
+          <div className='dialog-layout-header'>
+            <div>
+              <span>{currentRoom.name}</span>
+              <span>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
             </div>
-            <Dialogs //TODO
-              loader={this.props.app.loader}
-              messagesCount={this.props.app.messagesCount}
-              currentRoom={this.props.app.currentRoom}
-              fetchDialog={this.props.fetchDialog}
-              messages={this.props.app.messages}
-              message={this.props.app.message}
-              dialogs={this.props.app.dialogs}
-              sendMessage={this.props.sendMessage}
-            />
           </div>
-          <div>
-            <div className='dialog-layout-detail'>
-              <div>
-                <span>{t('Detail')}:</span>
-              </div>
-              <div>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ display: 'flex', justifyContent: 'left', alignContent: 'center', marginBottom: '20px' }}>
-                    <Avatar size={48} icon="user" />
-                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '15px' }}>
-                      <span style={{ fontSize: '16px', fontWeight: '600' }}>{currentRoom.name}</span>
-                      <span style={{ fontSize: '10px', color: '#d9d9d9' }}>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
-                    </div>
+          <Dialogs //TODO
+            {...this.props}
+            loader={this.props.app.loader}
+            messagesCount={this.props.app.messagesCount}
+            currentRoom={this.props.app.currentRoom}
+            fetchDialog={this.props.fetchDialog}
+            messages={this.props.app.messages}
+            message={this.props.app.message}
+            dialogs={this.props.app.dialogs}
+            sendMessage={this.props.sendMessage}
+          />
+        </div>
+        <div>
+          <div className='dialog-layout-detail'>
+            <div>
+              <span>{t('Detail')}:</span>
+            </div>
+            <div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', justifyContent: 'left', alignContent: 'center', marginBottom: '20px' }}>
+                  <Avatar size={48} icon="user" />
+                  <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '15px' }}>
+                    <span style={{ fontSize: '16px', fontWeight: '600' }}>{currentRoom.name}</span>
+                    <span style={{ fontSize: '10px', color: '#d9d9d9' }}>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
                   </div>
-                  <div style={{ fontSize: '16px', fontWeight: '600' }}>{t('Members')}:</div>
-                  <div>
-                    <List
-                      size="small"
-                      itemLayout="horizontal"
-                      dataSource={groupMembers.members}
-                      renderItem={item => {
-                        let status = '';
-                        switch (item.status) {
-                          case "online":
-                            status = <Badge status="success" />;
-                            break;
-                          default:
-                            status = <Badge status="default" />;
-                            break;
-                        }
-                        return (
-                          <List.Item style={{ border: 'none' }}>
-                            <List.Item.Meta
-                              avatar={<Avatar size='48' icon="user" />}
-                              title={<a href={"https://www.google.com/search?q=" + item._id} target="_blank">{status}{item.name}</a>}
-                            />
-                          </List.Item>
-                        )
-                      }}
-                    />
-                  </div>
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: '600' }}>{t('Members')}:</div>
+                <div>
+                  <List
+                    size="small"
+                    itemLayout="horizontal"
+                    dataSource={groupMembers.members}
+                    renderItem={item => {
+                      let status = '';
+                      switch (item.status) {
+                        case "online":
+                          status = <Badge status="success" />;
+                          break;
+                        default:
+                          status = <Badge status="default" />;
+                          break;
+                      }
+                      return (
+                        <List.Item style={{ border: 'none' }}>
+                          <List.Item.Meta
+                            avatar={<Avatar size='48' icon="user" />}
+                            title={<a href={"https://www.google.com/search?q=" + item._id} target="_blank">{status}{item.name}</a>}
+                          />
+                        </List.Item>
+                      )
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
-          ;
-      } else {
-        return <Spin spinning={true} delay={0} style={{ width: '100%', marginTop: '50%' }} />
-      }
-    }
+      </div>
+    )
+
   }
 }

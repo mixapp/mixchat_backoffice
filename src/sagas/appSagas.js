@@ -13,6 +13,7 @@ import {
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
   LOADER_TURN_OFF,
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
+  FETCH_HISTORY_REQUEST, FETCH_HISTORY_SUCCESS, //FETCH_HISTORY_ERROR
   FETCH_CONFIG_SUCCESS,
   LOGOUT
 } from '../constants';
@@ -45,10 +46,11 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
 
-      yield put({ type: LOADER_ON });
-      let { room } = action.data;
-
+      
+      let { room, fetchNew } = action.data;
       lsApi.updateDialogs(lsApi.readDialog(room));
+
+      /* Update new message count */
       let dialogs = yield Api.fetchDialogs();
       lsApi.setDialogs(dialogs);
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
@@ -68,10 +70,28 @@ function* fetchDialogSaga() {
           groupMembers: groupMembers,
           messages: messages,
           room: room,
-          messagesCount: groupInfo.data.group.msgs
+          messagesCount: groupInfo.data.group.msgs,
+          fetchNew: fetchNew
         }
       });
-      yield put({ type: LOADER_OFF });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
+function* fetchHistorySaga() {
+  yield takeLatest(FETCH_HISTORY_REQUEST, function* (action) {
+    try {
+
+      let { room, count } = action.data;
+      let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: count });
+      yield put({
+        type: FETCH_HISTORY_SUCCESS, data: {
+          messages: messages
+        }
+      });
 
     } catch (err) {
       throw err;
@@ -267,6 +287,7 @@ export default function* ordersSaga() {
     fork(sendMessageSaga),
     fork(loaderOff),
     fork(fetchRoleSaga),
-    fork(logoutSaga)
+    fork(logoutSaga),
+    fork(fetchHistorySaga)
   ];
 }

@@ -10,6 +10,7 @@ import {
   LOADER_OFF,
   LOADER_ON,
   FETCH_ROLE_REQUEST,
+  FETCH_HISTORY_REQUEST,
   LOGOUT,
 } from '../constants'
 
@@ -87,5 +88,12 @@ export const fetchRole = () => {
 export const logout = () => {
   return {
     type: LOGOUT
+  }
+}
+
+export const fetchHistory = (data) => {
+  return {
+    type: FETCH_HISTORY_REQUEST,
+    data
   }
 }

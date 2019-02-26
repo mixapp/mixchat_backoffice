@@ -2,6 +2,7 @@ import * as _ from 'underscore';
 import {
   SET_AUTHORIZE,
   FETCH_SETTINGS_SUCCESS,
+  FETCH_DIALOG_REQUEST,
   FETCH_MANAGERS_SUCCESS,
   ADD_MANAGER_SUCCESS, ADD_MANAGER_ERROR,
   REMOVE_MANAGER_SUCCESS,
@@ -10,7 +11,9 @@ import {
   FETCH_DIALOG_SUCCESS,
   SOCKET_ROOMS_CHANGED_EVENT,
   FETCH_ROLE_SUCCESS,
-  FETCH_CONFIG_SUCCESS
+  FETCH_CONFIG_SUCCESS,
+  FETCH_HISTORY_SUCCESS,
+  FETCH_HISTORY_REQUEST,
 } from '../constants';
 const initialState = {
   user: null,
@@ -18,6 +21,7 @@ const initialState = {
   message: null,
   dialogs: [],
   loader: false,
+  dialogLoader: false,
   messagesCount: null,
   currentRoom: null,
   currentPage: 1,
@@ -43,12 +47,22 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, loader: true };
     case LOADER_OFF:
       return { ..._.omit(state, 'error_message'), loader: false };
+    case FETCH_DIALOG_REQUEST:
+      return { ...state, loader: true };
     case FETCH_DIALOG_SUCCESS:
-      let { room, messagesCount, groupMembers } = action.data;
-      state.currentRoom = room;
-      state.messagesCount = messagesCount;
-      state.currentPage = 1;
-      return { ...state, messages: action.data.messages.reverse(), groupMembers: groupMembers.data };
+      let { room, messagesCount, groupMembers, fetchNew } = action.data;
+      if (fetchNew) {
+        state.currentRoom = room;
+        state.messagesCount = messagesCount;
+        state.currentPage = 1;
+      }
+      return {
+        ...state,
+        loader: false,
+        dialogLoader: false,
+        messages: action.data.messages.reverse(),
+        groupMembers: groupMembers.data
+      };
     case SOCKET_ROOMS_CHANGED_EVENT:
       let { lastMessage } = action.data.fields.args[1];
       if (lastMessage) {
@@ -65,6 +79,11 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, role: action.role };
     case FETCH_CONFIG_SUCCESS:
       return { ...state, config: action.config };
+    case FETCH_HISTORY_REQUEST:
+      return { ...state, dialogLoader: true }
+    case FETCH_HISTORY_SUCCESS:
+      let { messages } = action.data;
+      return { ...state, messages: messages.reverse(), dialogLoader: false }
     default:
       return state;
   }

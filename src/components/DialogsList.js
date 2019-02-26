@@ -11,7 +11,7 @@ class DialogsListMenu extends React.Component {
   }
 
   async searchDialog(value) {
-    await this.setState({
+    this.setState({
       searchDialogText: value
     });
   }
@@ -19,7 +19,8 @@ class DialogsListMenu extends React.Component {
   fetchDialog = async (currentRoom) => {
     await this.props.fetchDialog({
       count: 15,
-      room: currentRoom
+      room: currentRoom,
+      fetchNew: true
     });
   }
 
