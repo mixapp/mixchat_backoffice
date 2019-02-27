@@ -12,6 +12,7 @@ import {
   FETCH_ROLE_REQUEST,
   FETCH_HISTORY_REQUEST,
   LOGOUT,
+  SET_CURRENT_COMPANY_REQUEST,
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -79,12 +80,6 @@ export const loaderOn = () => {
   }
 }
 
-export const fetchRole = () => {
-  return {
-    type: FETCH_ROLE_REQUEST
-  }
-}
-
 export const logout = () => {
   return {
     type: LOGOUT
@@ -94,6 +89,13 @@ export const logout = () => {
 export const fetchHistory = (data) => {
   return {
     type: FETCH_HISTORY_REQUEST,
+    data
+  }
+}
+
+export const setCurrentCompany = (data) => {
+  return {
+    type: SET_CURRENT_COMPANY_REQUEST,
     data
   }
 }

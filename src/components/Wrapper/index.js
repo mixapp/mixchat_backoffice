@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
 import DialogsList from '../../containers/DialogsList';
@@ -26,37 +26,13 @@ class Wrapper extends React.Component {
   }
 
   render() {
-    let { location, lng } = this.props;
+    let { location } = this.props;
     let dialogsListShow = location.pathname === '/dialogs' ? '' : 'none';
     let contentClass = 'content ' + location.pathname.replace('/', '');
-
-    /* Lng menu */
-
-    let lngMenu = (
-      <Menu>
-        <Menu.Item key="0" onClick={this.changeLanguage.bind(this, 'ru-RU')}>
-          <span>ru-RU</span>
-        </Menu.Item>
-        <Menu.Item key="1" onClick={this.changeLanguage.bind(this, 'en-US')}>
-          <div>en-US</div>
-        </Menu.Item>
-      </Menu>
-    );
-
-    {/*               <Header className="header">
-                <div>
-                  <Dropdown overlay={lngMenu} trigger={['click']}>
-                    <span className="ant-dropdown-link" href="">
-                      {lng} <Icon type="down" />
-                    </span>
-                  </Dropdown>
-                </div>
-              </Header>
- */}
     return (
       <div className='wrapper'>
         <div>
-          <MenuPanel role={this.props.role} />
+          <MenuPanel />
         </div>
         <div>
           <DialogsList dialogsListShow={dialogsListShow} />

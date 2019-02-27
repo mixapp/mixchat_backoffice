@@ -17,7 +17,6 @@ const transform = (data) => {
 
 class Authorize extends React.Component {
     componentDidMount() {
-
         let result = transform(this.props.location.hash);
         //console.log('TOKEN', result.token);
 

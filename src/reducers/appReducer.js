@@ -14,17 +14,22 @@ import {
   FETCH_CONFIG_SUCCESS,
   FETCH_HISTORY_SUCCESS,
   FETCH_HISTORY_REQUEST,
+  SET_COMPANIES,
+  SET_CURRENT_COMPANY_SUCCESS
 } from '../constants';
 const initialState = {
   user: null,
   messages: [],
   message: null,
   dialogs: [],
+  companies: [],
+  currentCompany: null,
   loader: false,
   dialogLoader: false,
   messagesCount: null,
   currentRoom: null,
   currentPage: 1,
+  role: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -76,6 +81,7 @@ export default function reducer(state = initialState, action = {}) {
       } else
         return { ...state, message: null, messages: state.messages }
     case FETCH_ROLE_SUCCESS:
+      state.role = action.role;
       return { ...state, role: action.role };
     case FETCH_CONFIG_SUCCESS:
       return { ...state, config: action.config };
@@ -83,7 +89,13 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, dialogLoader: true }
     case FETCH_HISTORY_SUCCESS:
       let { messages } = action.data;
-      return { ...state, messages: messages.reverse(), dialogLoader: false }
+      return { ...state, messages: messages.reverse(), dialogLoader: false };
+    case SET_COMPANIES:
+      state.companies = action.data;
+      return { ...state, companies: action.companies };
+    case SET_CURRENT_COMPANY_SUCCESS:
+      state.currentCompany = action.currentCompany;
+      return { ...state, currentCompany: action.currentCompany };
     default:
       return state;
   }

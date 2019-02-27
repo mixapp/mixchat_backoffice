@@ -32,7 +32,7 @@ const getToken = () => {
   try {
     token = JSON.parse(token);
     if (!token) {
-      getAuthUrl();
+      //getAuthUrl();
     } else {
       return token.token;
     }
@@ -59,8 +59,6 @@ const getHeadera = () => {
 }
 
 export const config = {
-  companyId: '5bed9d260dec1f9f4f358399',
-  //companyId: '5c581cc10dec1f9f4f3b4b30',
   backApiProcessId: '5bc49dd0574e7403e22ec1a0',
   frontApiProcessId: '5bc49dd735b38203254872a5',
   commentsPerPage: 15
@@ -68,6 +66,17 @@ export const config = {
 
 export const fetchConfig = () => {
   return config;
+}
+
+export const getCompany = async () => {
+  try {
+    let result = await axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-company', {
+      headers: getHeadera()
+    });
+    return result;
+  } catch (err) {
+    throw err;
+  }
 }
 
 export const getXauthToken = async () => {
@@ -133,9 +142,9 @@ export const saveSettings = async (settings) => {
   }
 }
 
-export const fetchManagers = async () => {
+export const fetchManagers = async (companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'listmanagers');
+    const uri = getUrl(config.backApiProcessId, companyId, 'listmanagers');
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
@@ -249,10 +258,10 @@ export const fetchGroupMembers = async (data) => {
   }
 }
 
-export const fetchRole = async () => {
+export const fetchRole = async (companyId) => {
   try {
 
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'fetch-role');
+    const uri = getUrl(config.backApiProcessId, companyId, 'fetch-role');
     let result = await axios.get(uri, {
       headers: getHeadera()
     });

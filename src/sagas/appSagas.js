@@ -1,4 +1,4 @@
-import { put, fork, takeLatest, call, take } from 'redux-saga/effects';
+import { put, fork, takeLatest, call, take, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import {
   SET_AUTHORIZE,
@@ -15,7 +15,10 @@ import {
   FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
   FETCH_HISTORY_REQUEST, FETCH_HISTORY_SUCCESS, //FETCH_HISTORY_ERROR
   FETCH_CONFIG_SUCCESS,
-  LOGOUT
+  LOGOUT,
+  SET_COMPANIES,
+  SET_CURRENT_COMPANY_REQUEST,
+  SET_CURRENT_COMPANY_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import * as lsApi from '../lsApi';
@@ -46,7 +49,6 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
 
-      
       let { room, fetchNew } = action.data;
       lsApi.updateDialogs(lsApi.readDialog(room));
 
@@ -166,11 +168,12 @@ function* addManagerSaga() {
 }
 
 function* fetchManagersSaga() {
-  yield takeLatest(FETCH_MANAGERS_REQUEST, function* (action) {
+  yield takeLatest(FETCH_MANAGERS_REQUEST, function* () {
     try {
 
       yield put({ type: LOADER_ON });
-      let managers = yield Api.fetchManagers();
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let managers = yield Api.fetchManagers(currentCompany);
       if (!managers.error) {
         managers.managers.forEach((value, key) => {
           value.key = String(key + 1);
@@ -220,13 +223,21 @@ function* loginSaga() {
   yield takeLatest(SET_AUTHORIZE, function* (action) {
     try {
       localStorage.setItem('user', JSON.stringify(action.data))
+      let companies = yield Api.getCompany();
+      localStorage.setItem('companies', JSON.stringify(companies));
+      yield put({ type: SET_COMPANIES, companies });
       //Get RocketChat Token
       let result = yield Api.getXauthToken();
       localStorage.setItem('XUSER', JSON.stringify(result));
-
-      const uri = localStorage.getItem('redirect');
+      const uri = localStorage.getItem('redirect') || '/';
       localStorage.removeItem('redirect');
-      yield put(push(uri || '/'));
+      if (companies.data.length > 1) {
+        yield put(push('/companies?redirect=' + uri));
+      } else {
+        yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id })
+        yield put(push(uri));
+      }
+
     } catch (err) {
       throw err;
     }
@@ -234,26 +245,9 @@ function* loginSaga() {
 }
 
 function* loaderOff() {
-  yield takeLatest(LOADER_TURN_OFF, function* (action) {
+  yield takeLatest(LOADER_TURN_OFF, function* () {
     try {
       yield put({ type: LOADER_OFF });
-    } catch (err) {
-      throw err;
-    }
-  });
-}
-
-function* fetchRoleSaga() {
-  yield takeLatest(FETCH_ROLE_REQUEST, function* (action) {
-    try {
-
-      yield put({ type: LOADER_ON });
-      let role = yield Api.fetchRole();
-      if (!role.error) {
-        yield put({ type: FETCH_ROLE_SUCCESS, role: role.role });
-      }
-      yield put({ type: LOADER_OFF });
-
     } catch (err) {
       throw err;
     }
@@ -274,6 +268,23 @@ function* logoutSaga() {
   });
 }
 
+function* setCurrentCompanySaga() {
+  yield takeLatest(SET_CURRENT_COMPANY_REQUEST, function* (action) {
+    try {
+
+      localStorage.setItem('currentCompany', action.data);
+      yield put({ type: SET_CURRENT_COMPANY_SUCCESS, currentCompany: action.data })
+      let role = yield Api.fetchRole(action.data);
+      if (!role.error) {
+        yield put({ type: FETCH_ROLE_SUCCESS, role: role.role });
+      }
+
+    } catch (err) {
+      throw err;
+    }
+  });
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -286,8 +297,8 @@ export default function* ordersSaga() {
     fork(fetchDialogSaga),
     fork(sendMessageSaga),
     fork(loaderOff),
-    fork(fetchRoleSaga),
     fork(logoutSaga),
-    fork(fetchHistorySaga)
+    fork(fetchHistorySaga),
+    fork(setCurrentCompanySaga)
   ];
 }
