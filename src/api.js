@@ -79,9 +79,9 @@ export const getCompany = async () => {
   }
 }
 
-export const getXauthToken = async () => {
+export const getXauthToken = async (companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'get-token');
+    const uri = getUrl(config.backApiProcessId, companyId, 'get-token');
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
@@ -91,9 +91,9 @@ export const getXauthToken = async () => {
   }
 };
 
-export const fetchSettings = async () => {
+export const fetchSettings = async (companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'widget-oidc');
+    const uri = getUrl(config.backApiProcessId, companyId, 'widget-oidc');
     let result = await axios.get(uri, {
       headers: getHeadera()
     });
@@ -107,10 +107,10 @@ export const fetchSettings = async () => {
   }
 };
 
-export const saveSettings = async (settings) => {
+export const saveSettings = async (settings, companyId) => {
   try {
 
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'settings');
+    const uri = getUrl(config.backApiProcessId, companyId, 'settings');
     let result = await axios.post(uri, {
       "companyName": settings.companyName,
       "widget": {
@@ -155,9 +155,9 @@ export const fetchManagers = async (companyId) => {
   }
 };
 
-export const addManager = async (data) => {
+export const addManager = async (data, companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'addmanagers');
+    const uri = getUrl(config.backApiProcessId, companyId, 'addmanagers');
     let result = await axios.post(uri, {
       "email": data.email,
       "nickname": data.nickname,
@@ -171,9 +171,9 @@ export const addManager = async (data) => {
   }
 }
 
-export const removeManager = async (data) => {
+export const removeManager = async (data, companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'removemanagers');
+    const uri = getUrl(config.backApiProcessId, companyId, 'removemanagers');
     let result = await axios.post(uri, {
       id: data._id,
       username: data.nickname
@@ -186,9 +186,9 @@ export const removeManager = async (data) => {
   }
 }
 
-export const takeRequest = async (data) => {
+export const takeRequest = async (data, companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, config.companyId, 'take-request');
+    const uri = getUrl(config.backApiProcessId, companyId, 'take-request');
     let result = await axios.post(uri, data, {
       headers: getHeadera()
     });

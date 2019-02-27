@@ -48,7 +48,7 @@ function* sendMessageSaga() {
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
-
+      const currentCompany = yield select((state) => state.app.currentCompany);
       let { room, fetchNew } = action.data;
       lsApi.updateDialogs(lsApi.readDialog(room));
 
@@ -63,7 +63,7 @@ function* fetchDialogSaga() {
         yield Api.takeRequest({
           roomId: room._id,
           userId: userId
-        });
+        }, currentCompany);
       }
       let groupMembers = yield Api.fetchGroupMembers({ roomId: room._id });
       let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: action.data.count });
@@ -134,7 +134,8 @@ function* removeManagerSaga() {
     try {
 
       yield put({ type: LOADER_ON });
-      let result = yield Api.removeManager(action.data);
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let result = yield Api.removeManager(action.data, currentCompany);
       if (!result.data.error) {
         yield put({ type: REMOVE_MANAGER_SUCCESS, result });
         yield put({ type: FETCH_MANAGERS_REQUEST });
@@ -152,7 +153,8 @@ function* addManagerSaga() {
     try {
 
       yield put({ type: LOADER_ON });
-      let result = yield Api.addManager(action.data);
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let result = yield Api.addManager(action.data, currentCompany);
       if (!result.data.error) {
         yield put({ type: ADD_MANAGER_SUCCESS, result });
         yield put({ type: FETCH_MANAGERS_REQUEST });
@@ -194,7 +196,8 @@ function* saveSettingsSaga() {
     try {
 
       yield put({ type: LOADER_ON });
-      yield Api.saveSettings(action.data);
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      yield Api.saveSettings(action.data, currentCompany);
       yield put({ type: SAVE_SETTINGS_SUCCESS });
       yield put({ type: LOADER_OFF });
 
@@ -209,7 +212,8 @@ function* fetchSettingsSaga() {
     try {
 
       yield put({ type: LOADER_ON });
-      yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings: yield Api.fetchSettings() });
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings: yield Api.fetchSettings(currentCompany) });
       yield put({ type: FETCH_CONFIG_SUCCESS, config: yield Api.fetchConfig() });
       yield put({ type: LOADER_OFF });
 
@@ -227,8 +231,6 @@ function* loginSaga() {
       localStorage.setItem('companies', JSON.stringify(companies));
       yield put({ type: SET_COMPANIES, companies });
       //Get RocketChat Token
-      let result = yield Api.getXauthToken();
-      localStorage.setItem('XUSER', JSON.stringify(result));
       const uri = localStorage.getItem('redirect') || '/';
       localStorage.removeItem('redirect');
       if (companies.data.length > 1) {
@@ -237,6 +239,10 @@ function* loginSaga() {
         yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id })
         yield put(push(uri));
       }
+
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let result = yield Api.getXauthToken(currentCompany);
+      localStorage.setItem('XUSER', JSON.stringify(result));
 
     } catch (err) {
       throw err;
