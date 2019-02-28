@@ -70,12 +70,12 @@ function* fetchDialogSaga() {
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
           groupMembers: groupMembers,
-          messages: messages,
           room: room,
           messagesCount: groupInfo.data.group.msgs,
           fetchNew: fetchNew
         }
       });
+      yield put({ type: FETCH_HISTORY_SUCCESS, data: { messages: messages } });
 
     } catch (err) {
       throw err;
