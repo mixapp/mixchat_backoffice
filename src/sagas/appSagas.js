@@ -214,7 +214,9 @@ function* fetchSettingsSaga() {
       yield put({ type: LOADER_ON });
       const currentCompany = yield select((state) => state.app.currentCompany);
       yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings: yield Api.fetchSettings(currentCompany) });
-      yield put({ type: FETCH_CONFIG_SUCCESS, config: yield Api.fetchConfig() });
+      let config = yield Api.fetchConfig();
+      config.companyId = currentCompany;
+      yield put({ type: FETCH_CONFIG_SUCCESS, config: config });
       yield put({ type: LOADER_OFF });
 
     } catch (err) {
