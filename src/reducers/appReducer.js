@@ -79,11 +79,8 @@ export default function reducer(state = initialState, action = {}) {
     case SOCKET_ROOMS_CHANGED_EVENT:
       let { lastMessage } = action.data.fields.args[1];
       if (lastMessage) {
-        let messages = null;
         if (state.currentRoom && state.currentRoom._id === lastMessage.rid) {
-          messages = [...state.messages, lastMessage];
-        } else {
-          messages = state.messages;
+          state.messages = [...state.messages, lastMessage];
         }
         state.message = lastMessage;
       } else {
