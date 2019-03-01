@@ -60,12 +60,12 @@ export default class DialogsListView extends React.Component {
               <span>{t('Detail')}:</span>
             </div>
             <div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'left', alignContent: 'center', marginBottom: '20px' }}>
-                  <Avatar size={48} icon="user" />
-                  <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '15px' }}>
-                    <span style={{ fontSize: '16px', fontWeight: '600' }}>{currentRoom.name}</span>
-                    <span style={{ fontSize: '10px', color: '#d9d9d9' }}>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
+              <div className='cerrent-dialog'>
+                <div className='cerrent-dialog-info'>
+                  <div><Avatar size={48} icon="user" /></div>
+                  <div className='current-dialog-info-user'>
+                    <span>{currentRoom.name}</span>
+                    <span>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
                   </div>
                 </div>
                 <div style={{ fontSize: '16px', fontWeight: '600' }}>{t('Members')}:</div>

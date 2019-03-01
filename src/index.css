@@ -115,7 +115,7 @@ textarea:focus {
 .dialogs-list-container {
   height: 100vh;
   overflow: hidden;
-  width: 350px;
+  min-width: 200px;
 }
 
 .dialogs-list-container>div:first-child>span>input {
@@ -165,7 +165,6 @@ textarea:focus {
 
 .dialog-layout>div:first-child {
   flex: auto;
-  max-width: 500px;
 }
 
 .dialog-layout-header {
@@ -195,9 +194,7 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
   padding-left: 10px;
-  /* TODO */
 }
 
 .dialog-layout-detail>div:first-child {
@@ -213,4 +210,35 @@ textarea:focus {
 
 .content {
   margin: 0 15px;
+}
+
+.cerrent-dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.cerrent-dialog-info {
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  margin-bottom: 20px;
+}
+
+.current-dialog-info-user {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.current-dialog-info-user>span:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.current-dialog-info-user>span:last-child {
+  font-size: 10px;
+  color: #d9d9d9;
 }
