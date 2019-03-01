@@ -165,6 +165,7 @@ textarea:focus {
 
 .dialog-layout>div:first-child {
   flex: auto;
+  max-width: 500px;
 }
 
 .dialog-layout-header {
