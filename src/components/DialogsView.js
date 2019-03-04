@@ -31,7 +31,7 @@ export default class DialogsListView extends React.Component {
       </Row>
     }
     if (loader) {
-      return <Spin spinning={true} delay={0} style={{ width: '100%', marginTop: '50%' }} />;
+      return <Spin spinning={true} delay={0} style={{ width: '100%' }} />;
     }
 
     if (currentRoom.lm) {
