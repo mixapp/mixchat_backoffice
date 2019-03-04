@@ -1,6 +1,7 @@
 import axios from 'axios';
 import DDP from 'ddp.js';
 import { eventChannel } from 'redux-saga';
+import memoizee from 'memoizee';
 
 export const getCurrentURL = () => {
   let { protocol, hostname, port } = window.location;
@@ -235,10 +236,10 @@ export const fetchGroupList = async () => {
   }
 }
 
-export const fetchGroupInfo = async (data) => {
+export const fetchGroupInfo = async (roomId) => {
   try {
     return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.info', {
-      params: data,
+      params: { roomId: roomId },
       headers: getRocketChatHeaders()
     });
   } catch (err) {
@@ -246,16 +247,20 @@ export const fetchGroupInfo = async (data) => {
   }
 }
 
-export const fetchGroupMembers = async (data) => {
+export const memoizedFetchGroupInfo = memoizee(fetchGroupInfo, { promise: true, maxAge: 600000 });
+
+export const fetchGroupMembers = async (roomId) => {
   try {
     return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.members', {
-      params: data,
+      params: { roomId: roomId },
       headers: getRocketChatHeaders()
     });
   } catch (err) {
     throw err;
   }
 }
+
+export const memoizedFetchGroupMembers = memoizee(fetchGroupMembers, { promise: true, maxAge: 600000 });
 
 export const fetchRole = async (companyId) => {
   try {
