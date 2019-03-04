@@ -13,6 +13,7 @@ export default class DialogsListView extends React.Component {
 
   render() {
     const t = this.props.t;
+    let lastTime = null;
     let { currentRoom, groupMembers, loader } = this.props.app;
     if (!this.props.app.currentRoom) {
       return <Row style={{ height: '100%' }} type="flex" justify="space-around" align="middle">
@@ -33,13 +34,19 @@ export default class DialogsListView extends React.Component {
       return <Spin spinning={true} delay={0} style={{ width: '100%', marginTop: '50%' }} />;
     }
 
+    if (currentRoom.lm) {
+      lastTime = Api.formatDate(new Date(currentRoom.lm));
+    } else {
+      lastTime = t('No activity');
+    }
+
     return (
       <div className='dialog-layout'>
         <div>
           <div className='dialog-layout-header'>
             <div>
               <span>{currentRoom.name}</span>
-              <span>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
+              <span>{t('Last activity')}: {lastTime}</span>
             </div>
           </div>
           <Dialogs //TODO
@@ -65,7 +72,7 @@ export default class DialogsListView extends React.Component {
                   <div><Avatar size={48} icon="user" /></div>
                   <div className='current-dialog-info-user'>
                     <span>{currentRoom.name}</span>
-                    <span>{t('last activity ')}{Api.formatDate(new Date(currentRoom.lm))}</span>
+                    <span>{t('Last activity')}: {lastTime}</span>
                   </div>
                 </div>
                 <div style={{ fontSize: '16px', fontWeight: '600' }}>{t('Members')}:</div>
