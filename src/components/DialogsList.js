@@ -25,6 +25,14 @@ class DialogsListMenu extends React.Component {
     });
   }
 
+  newLsDialog = function (lsDialogs, itemId) {
+    if (lsApi.isJson(lsDialogs)) {
+      lsDialogs = JSON.parse(lsDialogs);
+      return lsDialogs.indexOf(itemId) > -1;
+    }
+    return false;
+  }
+
   render() {
     let { t } = this.props;
     let dialogs = _.sortBy(this.props.app.dialogs, '_updatedAt').reverse();
@@ -32,7 +40,7 @@ class DialogsListMenu extends React.Component {
     let readed = [];
     if (!dialogs) dialogs = [];
     let lsDialogs = localStorage.getItem('dialogs');
-    lsDialogs = lsApi.isJson(lsDialogs) ? JSON.parse(lsDialogs) : [];
+    lsDialogs = lsDialogs ? lsDialogs : [];
     dialogs.forEach(item => {
       let result = item.name.split('_');
       let companyid = result[result.length - 1];
@@ -46,7 +54,7 @@ class DialogsListMenu extends React.Component {
       }
 
       if (item.name.search(this.state.searchDialogText) !== -1) {
-        let newDialog = item.customFields.newRequest || lsDialogs.indexOf(item._id) > -1 ? ' new-dialog' : '';
+        let newDialog = item.customFields.newRequest || this.newLsDialog(lsDialogs, item._id) ? ' new-dialog' : '';
         let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
           <div className={'dialogs-item-container ' + newDialog}>
             <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
