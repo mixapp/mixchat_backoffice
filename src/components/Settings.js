@@ -107,6 +107,13 @@ class RegistrationForm extends React.Component {
             })(<Input placeholder='Color picker soon ...' />)}
           </FormItem>
 
+          <FormItem label={t('eventWebhook')}>
+            {getFieldDecorator('eventWebhook', {
+              initialValue: this.props.app.widgetSettings ? this.props.app.widgetSettings.eventWebhook : '',
+              rules: [],
+            })(<Input />)}
+          </FormItem>
+
           <Collapse bordered={false} accordion defaultActiveKey={['1']} onChange={this.callback}>
             <Panel header="Telegram" key="1">
               <FormItem label={t('Bot name')}>

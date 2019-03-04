@@ -116,7 +116,8 @@ export const saveSettings = async (settings, companyId) => {
       "widget": {
         "isActive": settings.isActive,
         "color": settings.color,
-        "openChat": settings.openChat
+        "openChat": settings.openChat,
+        "eventWebhook": settings.eventWebhook
       },
       "settings": {
         "telegram_token": settings.telegram_token,
