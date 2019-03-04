@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, Input, Tag, Avatar } from 'antd';
 import * as _ from 'underscore';
+import * as lsApi from '../lsApi';
 
 const Search = Input.Search;
 
@@ -30,6 +31,8 @@ class DialogsListMenu extends React.Component {
     let unreaded = [];
     let readed = [];
     if (!dialogs) dialogs = [];
+    let lsDialogs = localStorage.getItem('dialogs');
+    lsDialogs = lsApi.isJson(lsDialogs) ? JSON.parse(lsDialogs) : [];
     dialogs.forEach(item => {
       let result = item.name.split('_');
       let companyid = result[result.length - 1];
@@ -43,14 +46,15 @@ class DialogsListMenu extends React.Component {
       }
 
       if (item.name.search(this.state.searchDialogText) !== -1) {
+        let newDialog = item.customFields.newRequest || lsDialogs.indexOf(item._id) > -1 ? ' new-dialog' : '';
         let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
-          <div className={'dialogs-item-container ' + (item.customFields.newRequest ? ' new-dialog' : '')}>
+          <div className={'dialogs-item-container ' + newDialog}>
             <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
             <span>{item.name.substring(0, item.name.length - 1)}</span>
             {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
           </div>
         </Menu.Item>;
-        if (item.nmsgs > 0 || item.customFields.newRequest) {
+        if (item.nmsgs > 0 || item.customFields.newRequest || lsDialogs.indexOf(item._id) > -1) {
           unreaded.push(dialog);
         } else {
           readed.push(dialog);

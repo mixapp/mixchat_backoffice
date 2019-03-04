@@ -1,6 +1,5 @@
 import axios from 'axios';
 import DDP from 'ddp.js';
-import { getDialogsNmsgs } from '../src/lsApi';
 import { eventChannel } from 'redux-saga';
 
 export const getCurrentURL = () => {
@@ -24,7 +23,6 @@ const getUrl = (processId, companyId, path) => {
 
 const getRocketCahtUrl = () => {
   return 'chat.mixapp.io';
-  return 'api.mixapp.io/chat';
 }
 
 const getToken = () => {
@@ -205,7 +203,7 @@ export const fetchDialogs = async () => {
     let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', {
       headers: getRocketChatHeaders()
     });
-    return getDialogsNmsgs(result.data.groups);
+    return result.data.groups;
 
   } catch (err) {
     throw err;

@@ -12,7 +12,7 @@ import {
   FETCH_DIALOG_REQUEST, FETCH_DIALOG_SUCCESS, //FETCH_DIALOG_ERROR
   SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS, //SEND_MESSAGE_ERROR
   LOADER_TURN_OFF,
-  FETCH_ROLE_REQUEST, FETCH_ROLE_SUCCESS, //FETCH_ROLE_ERROR
+  FETCH_ROLE_SUCCESS, //FETCH_ROLE_REQUEST, FETCH_ROLE_ERROR
   FETCH_HISTORY_REQUEST, FETCH_HISTORY_SUCCESS, //FETCH_HISTORY_ERROR
   FETCH_CONFIG_SUCCESS,
   LOGOUT,
@@ -21,21 +21,12 @@ import {
   SET_CURRENT_COMPANY_SUCCESS
 } from '../constants';
 import * as Api from '../api';
-import * as lsApi from '../lsApi';
-import * as _ from 'underscore';
 
 function* sendMessageSaga() {
   yield takeLatest(SEND_MESSAGE_REQUEST, function* (action) {
     try {
       let { room, text } = action.data;
       let result = yield Api.sendMessageSaga(room, text);
-
-      let lsDialogs = lsApi.getDialogs();
-      let lsDialog = _.findIndex(lsDialogs, { _id: action.data.roomId });
-      lsDialogs[lsDialog].nmsgs = 0;
-      lsDialogs[lsDialog].msgs = lsDialogs[lsDialog].msgs + 1;
-      lsApi.updateDialogs(lsDialogs);
-
       if (result.status === 200) {
         yield put({ type: SEND_MESSAGE_SUCCESS });
       }
@@ -50,13 +41,6 @@ function* fetchDialogSaga() {
     try {
       const currentCompany = yield select((state) => state.app.currentCompany);
       let { room, fetchNew } = action.data;
-      lsApi.updateDialogs(lsApi.readDialog(room));
-
-      /* Update new message count */
-      let dialogs = yield Api.fetchDialogs();
-      lsApi.setDialogs(dialogs);
-      yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
-
       let groupInfo = yield Api.fetchGroupInfo({ roomId: room._id });
       if (groupInfo.data.group.customFields.newRequest) {
         let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
@@ -107,9 +91,6 @@ function* fetchDialogsSaga() {
 
       yield put({ type: LOADER_ON });
       let dialogs = yield Api.fetchDialogs();
-
-      lsApi.setDialogs(dialogs);
-
       yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       yield put({ type: LOADER_OFF });
 
@@ -118,9 +99,7 @@ function* fetchDialogsSaga() {
       while (true) {
         const action = yield take(socket);
         yield put(action);
-        //TODO
-        let dialogs = yield Api.fetchDialogs();
-        lsApi.setDialogs(dialogs);
+        const dialogs = yield select((state) => state.app.dialogs);
         yield put({ type: FETCH_DIALOGS_SUCCESS, dialogs });
       }
     } catch (err) {
