@@ -235,16 +235,16 @@ function* loginSaga() {
       //Get RocketChat Token
       const uri = localStorage.getItem('redirect') || '/';
       localStorage.removeItem('redirect');
-      if (companies.data.length > 1) {
-        yield put(push('/companies?redirect=' + uri));
-      } else {
+      if (companies.data.length < 2) {
         yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id })
-        yield put(push(uri));
+
       }
 
       const currentCompany = yield select((state) => state.app.currentCompany);
       let result = yield Api.getXauthToken(currentCompany);
       localStorage.setItem('XUSER', JSON.stringify(result));
+
+      companies.data.length > 1 ? yield put(push('/companies?redirect=' + uri)) : yield put(push(uri));
 
     } catch (err) {
       throw err;

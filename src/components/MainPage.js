@@ -1,6 +1,11 @@
 import React from 'react';
+import { history } from '../store';
 
 export default class MainPageView extends React.Component {
+  componentDidMount() {
+    history.push("/dialogs");
+  }
+
   render() {
     return (
       <div>
