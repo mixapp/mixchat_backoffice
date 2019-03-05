@@ -211,15 +211,30 @@ export const fetchDialogs = async () => {
   }
 }
 
-/* Получение диалога */
-export const fetchDialog = async (data) => {
+export const fetchDialog = async (roomId, unreads, count) => {
   try {
 
     let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.history', {
-      params: data,
+      params: {
+        roomId: roomId,
+        unreads: unreads,
+        count: count
+      },
       headers: getRocketChatHeaders()
     });
     return result.data.messages;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const memoizedFetchDialog = memoizee(fetchDialog, { promise: true });
+
+export const deleteMemoizedFetchDialog = async (roomId, unreads, count) => {
+  try {
+
+    memoizedFetchDialog.delete(roomId, unreads, count);
 
   } catch (err) {
     throw err;
@@ -247,7 +262,17 @@ export const fetchGroupInfo = async (roomId) => {
   }
 }
 
-export const memoizedFetchGroupInfo = memoizee(fetchGroupInfo, { promise: true, maxAge: 600000 });
+export const memoizedFetchGroupInfo = memoizee(fetchGroupInfo, { promise: true });
+
+export const deleteMemoizedFetchGroupInfo = async (roomId) => {
+  try {
+
+    memoizedFetchGroupInfo.delete(roomId);
+
+  } catch (err) {
+    throw err;
+  }
+}
 
 export const fetchGroupMembers = async (roomId) => {
   try {
@@ -260,7 +285,17 @@ export const fetchGroupMembers = async (roomId) => {
   }
 }
 
-export const memoizedFetchGroupMembers = memoizee(fetchGroupMembers, { promise: true, maxAge: 600000 });
+export const memoizedFetchGroupMembers = memoizee(fetchGroupMembers, { promise: true });
+
+export const deleteMemoizedFetchGroupMembers = async (roomId) => {
+  try {
+
+    memoizedFetchGroupMembers.delete(roomId);
+
+  } catch (err) {
+    throw err;
+  }
+}
 
 export const fetchRole = async (companyId) => {
   try {

@@ -21,6 +21,7 @@ import {
   SET_CURRENT_COMPANY_SUCCESS
 } from '../constants';
 import * as Api from '../api';
+import * as _ from 'underscore';
 
 function* sendMessageSaga() {
   yield takeLatest(SEND_MESSAGE_REQUEST, function* (action) {
@@ -39,10 +40,12 @@ function* sendMessageSaga() {
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
-      const currentCompany = yield select((state) => state.app.currentCompany);
       let { room, fetchNew } = action.data;
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      const dialogs = yield select((state) => state.app.dialogs);
+      let dialog = _.find(dialogs, function (dialog) { return dialog._id === room._id; });
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
-      if (groupInfo.data.group.customFields.notify) {
+      if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
         let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
         yield Api.takeRequest({
           roomId: room._id,
@@ -50,7 +53,7 @@ function* fetchDialogSaga() {
         }, currentCompany);
       }
       let groupMembers = yield Api.memoizedFetchGroupMembers(room._id);
-      let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: action.data.count });
+      let messages = yield Api.memoizedFetchDialog(room._id, true, action.data.count);
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
           groupMembers: groupMembers,
@@ -72,7 +75,7 @@ function* fetchHistorySaga() {
     try {
 
       let { room, count } = action.data;
-      let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: count });
+      let messages = yield Api.fetchDialog(room._id, true, count);
       yield put({
         type: FETCH_HISTORY_SUCCESS, data: {
           messages: messages

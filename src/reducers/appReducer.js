@@ -1,4 +1,5 @@
 import * as _ from 'underscore';
+import * as Api from '../api';
 import {
   SET_AUTHORIZE,
   FETCH_SETTINGS_SUCCESS,
@@ -77,23 +78,37 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
 
     case SOCKET_ROOMS_CHANGED_EVENT:
-      let { lastMessage } = action.data.fields.args[1];
+      let { lastMessage, name, _id } = action.data.fields.args[1];
+
+      /* Filter GENERAL CHANNEL */
+      if (name === 'GENERAL' || name === 'general' || _id === 'GENERAL')
+        return { ...state };
+
+      //console.log(action.data.fields.args[1]);
+      let dialog = _.find(state.dialogs, function (dialog) { return dialog._id === _id; });
+
+      // new group or group update
+      if (dialog) {
+        state.dialogs = state.dialogs.map((dialog) => {
+          if (dialog._id === _id) {
+            Api.deleteMemoizedFetchGroupInfo(_id);
+            Api.deleteMemoizedFetchGroupMembers(_id);
+            return action.data.fields.args[1];
+          }
+          return dialog;
+        });
+      } else {
+        state.dialogs.push(action.data.fields.args[1]);
+      }
 
       if (lastMessage) {
-        if (state.currentRoom && state.currentRoom._id === lastMessage.rid) {
+        Api.deleteMemoizedFetchDialog(lastMessage.rid, true, 15);
+        if (state.currentRoom && state.message &&
+          state.currentRoom._id === lastMessage.rid &&
+          state.message._id !== lastMessage._id) {
           state.messages = [...state.messages, lastMessage];
         }
         state.message = lastMessage;
-
-        /* Update dialogs */
-        for (let i = 0; i < state.dialogs.length; i++) {
-          if (state.dialogs[i]._id === lastMessage.rid) {
-            state.dialogs[i].lastMessage = lastMessage;
-            state.dialogs[i]._updatedAt = new Date(lastMessage._updatedAt.$date).toISOString();
-            state.dialogs[i].msgs += 1;
-          }
-        }
-
       } else {
         state.message = null;
       }
