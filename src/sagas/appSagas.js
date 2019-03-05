@@ -42,14 +42,14 @@ function* fetchDialogSaga() {
       const currentCompany = yield select((state) => state.app.currentCompany);
       let { room, fetchNew } = action.data;
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
-      if (groupInfo.data.group.customFields.newRequest) {
+      if (groupInfo.data.group.customFields.notify) {
         let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
         yield Api.takeRequest({
           roomId: room._id,
           userId: userId
         }, currentCompany);
       }
-      let groupMembers = yield Api.fetchGroupMembers(room._id);
+      let groupMembers = yield Api.memoizedFetchGroupMembers(room._id);
       let messages = yield Api.fetchDialog({ roomId: room._id, unreads: true, count: action.data.count });
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {

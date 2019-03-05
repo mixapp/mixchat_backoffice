@@ -1,5 +1,4 @@
 import * as _ from 'underscore';
-import * as lsApi from '../lsApi';
 import {
   SET_AUTHORIZE,
   FETCH_SETTINGS_SUCCESS,
@@ -67,12 +66,6 @@ export default function reducer(state = initialState, action = {}) {
 
     case FETCH_DIALOG_SUCCESS:
       let { room, messagesCount, groupMembers, fetchNew } = action.data;
-      for (let i = 0; i < state.dialogs.length; i++) {
-        if (state.dialogs[i]._id === room._id) {
-          lsApi.removeDialog(room._id);
-          //state.dialogs[i].customFields.newRequest = false;
-        }
-      }
       if (fetchNew) {
         state.currentRoom = room;
         state.messagesCount = messagesCount;
@@ -98,8 +91,6 @@ export default function reducer(state = initialState, action = {}) {
             state.dialogs[i].lastMessage = lastMessage;
             state.dialogs[i]._updatedAt = new Date(lastMessage._updatedAt.$date).toISOString();
             state.dialogs[i].msgs += 1;
-            lsApi.addDialog(lastMessage.rid);
-            //state.dialogs[i].customFields.newRequest = true;
           }
         }
 
