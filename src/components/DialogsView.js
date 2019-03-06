@@ -39,13 +39,12 @@ export default class DialogsListView extends React.Component {
     } else {
       lastTime = t('No activity');
     }
-
     return (
       <div className='dialog-layout'>
         <div>
           <div className='dialog-layout-header'>
             <div>
-              <span>{currentRoom.name}</span>
+              <span>{t('Client') + ' ' + currentRoom.customFields.clientNumber}</span>
               <span>{t('Last activity')}: {lastTime}</span>
             </div>
           </div>
@@ -71,7 +70,7 @@ export default class DialogsListView extends React.Component {
                 <div className='cerrent-dialog-info'>
                   <div><Avatar size={48} icon="user" /></div>
                   <div className='current-dialog-info-user'>
-                    <span>{currentRoom.name}</span>
+                    <span>{t('Client') + ' ' + currentRoom.customFields.clientNumber}</span>
                     <span>{t('Last activity')}: {lastTime}</span>
                   </div>
                 </div>

@@ -49,7 +49,7 @@ class DialogsListMenu extends React.Component {
           let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
             <div className={'dialogs-item-container ' + newDialog}>
               <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
-              <span>{item.name.substring(0, item.name.length - 1)}</span>
+              <span>{t('Client') + ' ' + item.customFields.clientNumber}</span>
               {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
             </div>
           </Menu.Item>;

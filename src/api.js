@@ -297,6 +297,29 @@ export const deleteMemoizedFetchGroupMembers = async (roomId) => {
   }
 }
 
+export const fetchUserInfo = async (userId) => {
+  try {
+    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/users.info', {
+      params: { userId: userId },
+      headers: getRocketChatHeaders()
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const memoizedFetchUserInfo = memoizee(fetchUserInfo, { promise: true });
+
+export const deleteMemoizedFetchUserInfo = async (userId) => {
+  try {
+
+    memoizedFetchUserInfo.delete(userId);
+
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const fetchRole = async (companyId) => {
   try {
 
