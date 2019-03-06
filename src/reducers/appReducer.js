@@ -108,7 +108,7 @@ export default function reducer(state = initialState, action = {}) {
           let { _id: currentRoomId, lastMessage: currentRoomLastMessage } = state.currentRoom;
           if (currentRoomLastMessage) {
             let { _id: currentRoomLastMessageId } = currentRoomLastMessage;
-            if (currentRoomId === lastMessage.rid &&
+            if (currentRoomId === lastMessage.rid && state.message &&
               currentRoomLastMessageId !== lastMessage._id &&
               state.message._id !== lastMessage._id) {
               state.messages = [...state.messages, lastMessage];
