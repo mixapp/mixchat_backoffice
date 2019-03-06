@@ -82,6 +82,7 @@ textarea:focus {
 .chat-conteiner {
   overflow: auto;
   border-bottom: 2px solid #f0f2f5;
+  word-break: break-all;
 }
 
 /*
