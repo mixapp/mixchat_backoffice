@@ -30,7 +30,7 @@ function* sendMessageSaga() {
       let { room, text } = action.data;
       let result = yield Api.sendMessageSaga(room, text);
       if (result.status === 200) {
-        yield put({ type: SEND_MESSAGE_SUCCESS });
+        yield put({ type: SEND_MESSAGE_SUCCESS, result });
       }
     } catch (err) {
       throw err;

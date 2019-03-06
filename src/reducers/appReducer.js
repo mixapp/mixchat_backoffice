@@ -17,7 +17,8 @@ import {
   FETCH_HISTORY_REQUEST,
   SET_COMPANIES,
   SET_CURRENT_COMPANY_SUCCESS,
-  SET_XUSER_SUCCESS
+  SET_XUSER_SUCCESS,
+  SEND_MESSAGE_SUCCESS
 } from '../constants';
 const initialState = {
   xuser: null,
@@ -39,6 +40,9 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case SET_AUTHORIZE:
       return { ...state, user: action.data };
+
+    case SEND_MESSAGE_SUCCESS:
+      return { ...state };
 
     case FETCH_SETTINGS_SUCCESS:
       return { ...state, widgetSettings: action.widgetSettings };
@@ -77,6 +81,7 @@ export default function reducer(state = initialState, action = {}) {
       state.loader = false;
       state.dialogLoader = false;
       state.groupMembers = groupMembers.data;
+      state.message = room.lastMessage;
       return { ...state };
 
     case SOCKET_ROOMS_CHANGED_EVENT:
@@ -104,19 +109,13 @@ export default function reducer(state = initialState, action = {}) {
 
       if (lastMessage) {
         Api.deleteMemoizedFetchDialog(lastMessage.rid, true, 15);
-        if (state.currentRoom) {
-          let { _id: currentRoomId, lastMessage: currentRoomLastMessage } = state.currentRoom;
-          if (currentRoomLastMessage) {
-            let { _id: currentRoomLastMessageId } = currentRoomLastMessage;
-            if (currentRoomId === lastMessage.rid && state.message &&
-              currentRoomLastMessageId !== lastMessage._id &&
-              state.message._id !== lastMessage._id) {
-              state.messages = [...state.messages, lastMessage];
-            }
-          } else {
-            state.currentRoom = action.data.fields.args[1];
-            state.messages = [lastMessage];
+        if (state.messages && state.messages.length > 0) {
+          if (state.messages[state.messages.length - 1]._id !== lastMessage._id &&
+            state.currentRoom._id === lastMessage.rid) {
+            state.messages = [...state.messages, lastMessage];
           }
+        } else {
+          state.messages = [lastMessage];
         }
         state.message = lastMessage;
       } else {
