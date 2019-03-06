@@ -26,35 +26,38 @@ class DialogsListMenu extends React.Component {
 
   render() {
     let { t } = this.props;
+    let xuser = JSON.parse(localStorage.getItem('XUSER')).data.userId;
     let dialogs = _.sortBy(this.props.app.dialogs, '_updatedAt').reverse();
     let unreaded = [];
     let readed = [];
     if (!dialogs) dialogs = [];
     dialogs.forEach(item => {
-      let result = item.name.split('_');
-      let companyid = result[result.length - 1];
-      item.name = item.name.replace(companyid, '');
-      async function fetchDialog() {
-        try {
-          await this.fetchDialog(item);
-        } catch (err) {
-          throw err;
+      if (!item.customFields.manager || item.customFields.manager === xuser) {
+        let result = item.name.split('_');
+        let companyid = result[result.length - 1];
+        item.name = item.name.replace(companyid, '');
+        async function fetchDialog() {
+          try {
+            await this.fetchDialog(item);
+          } catch (err) {
+            throw err;
+          }
         }
-      }
 
-      if (item.name.search(this.state.searchDialogText) !== -1) {
-        let newDialog = item.customFields.notify ? ' new-dialog' : '';
-        let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
-          <div className={'dialogs-item-container ' + newDialog}>
-            <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
-            <span>{item.name.substring(0, item.name.length - 1)}</span>
-            {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
-          </div>
-        </Menu.Item>;
-        if (item.nmsgs > 0 || item.customFields.notify) {
-          unreaded.push(dialog);
-        } else {
-          readed.push(dialog);
+        if (item.name.search(this.state.searchDialogText) !== -1) {
+          let newDialog = item.customFields.notify ? ' new-dialog' : '';
+          let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
+            <div className={'dialogs-item-container ' + newDialog}>
+              <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
+              <span>{item.name.substring(0, item.name.length - 1)}</span>
+              {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
+            </div>
+          </Menu.Item>;
+          if (item.nmsgs > 0 || item.customFields.notify) {
+            unreaded.push(dialog);
+          } else {
+            readed.push(dialog);
+          }
         }
       }
     })

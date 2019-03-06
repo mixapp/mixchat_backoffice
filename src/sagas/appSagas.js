@@ -18,7 +18,8 @@ import {
   LOGOUT,
   SET_COMPANIES,
   SET_CURRENT_COMPANY_REQUEST,
-  SET_CURRENT_COMPANY_SUCCESS
+  SET_CURRENT_COMPANY_SUCCESS,
+  SET_XUSER_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -224,7 +225,7 @@ function* loginSaga() {
 
       const currentCompany = yield select((state) => state.app.currentCompany);
       let result = yield Api.getXauthToken(currentCompany);
-      localStorage.setItem('XUSER', JSON.stringify(result));
+      yield put({ type: SET_XUSER_SUCCESS, result });
 
       companies.data.length > 1 ? yield put(push('/companies?redirect=' + uri)) : yield put(push(uri));
 

@@ -16,9 +16,11 @@ import {
   FETCH_HISTORY_SUCCESS,
   FETCH_HISTORY_REQUEST,
   SET_COMPANIES,
-  SET_CURRENT_COMPANY_SUCCESS
+  SET_CURRENT_COMPANY_SUCCESS,
+  SET_XUSER_SUCCESS
 } from '../constants';
 const initialState = {
+  xuser: null,
   user: null,
   messages: [],
   message: null,
@@ -84,7 +86,6 @@ export default function reducer(state = initialState, action = {}) {
       if (name === 'GENERAL' || name === 'general' || _id === 'GENERAL')
         return { ...state };
 
-      //console.log(action.data.fields.args[1]);
       let dialog = _.find(state.dialogs, function (dialog) { return dialog._id === _id; });
 
       // new group or group update
@@ -146,6 +147,10 @@ export default function reducer(state = initialState, action = {}) {
       state.currentCompany = action.currentCompany;
       return { ...state };
 
+    case SET_XUSER_SUCCESS:
+      state.xuser = action.result;
+      localStorage.setItem('XUSER', JSON.stringify(action.result));
+      return { ...state };
     default:
       return state;
   }
