@@ -297,12 +297,14 @@ export const deleteMemoizedFetchGroupMembers = async (roomId) => {
   }
 }
 
-export const fetchUserInfo = async (userId) => {
+export const fetchUserInfo = async (companyId, userId) => {
   try {
-    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/users.info', {
-      params: { userId: userId },
-      headers: getRocketChatHeaders()
+
+    const uri = getUrl(config.backApiProcessId, companyId, 'get-user-info?userId=' + userId);
+    return await axios.get(uri, {
+      headers: getHeadera()
     });
+
   } catch (err) {
     throw err;
   }

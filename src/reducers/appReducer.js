@@ -18,7 +18,8 @@ import {
   SET_COMPANIES,
   SET_CURRENT_COMPANY_SUCCESS,
   SET_XUSER_SUCCESS,
-  SEND_MESSAGE_SUCCESS
+  SEND_MESSAGE_SUCCESS,
+  FETCH_USER_INFO_SUCCESS
 } from '../constants';
 const initialState = {
   xuser: null,
@@ -33,7 +34,8 @@ const initialState = {
   messagesCount: null,
   currentRoom: null,
   currentPage: 1,
-  role: null
+  role: null,
+  userInfo: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -158,6 +160,10 @@ export default function reducer(state = initialState, action = {}) {
     case SET_XUSER_SUCCESS:
       state.xuser = action.result;
       localStorage.setItem('XUSER', JSON.stringify(action.result));
+      return { ...state };
+
+    case FETCH_USER_INFO_SUCCESS:
+      state.userInfo = action.userInfo;
       return { ...state };
     default:
       return state;

@@ -19,7 +19,9 @@ import {
   SET_COMPANIES,
   SET_CURRENT_COMPANY_REQUEST,
   SET_CURRENT_COMPANY_SUCCESS,
-  SET_XUSER_SUCCESS
+  SET_XUSER_SUCCESS,
+  FETCH_USER_INFO_REQUEST,
+  FETCH_USER_INFO_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -41,13 +43,13 @@ function* sendMessageSaga() {
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
-      let { room, fetchNew } = action.data;
       const currentCompany = yield select((state) => state.app.currentCompany);
       const dialogs = yield select((state) => state.app.dialogs);
+      let { room, fetchNew } = action.data;
       let dialog = _.find(dialogs, function (dialog) { return dialog._id === room._id; });
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
+      let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
       if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
-        let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
         yield Api.takeRequest({
           roomId: room._id,
           userId: userId
@@ -55,6 +57,9 @@ function* fetchDialogSaga() {
       }
       let groupMembers = yield Api.memoizedFetchGroupMembers(room._id);
       let messages = yield Api.memoizedFetchDialog(room._id, true, action.data.count);
+      let client = _.find(groupMembers.data.members, function (member) { return member.username === room.name.replace('_', ''); });
+      let userInfo = yield Api.memoizedFetchUserInfo(currentCompany, client._id);
+      yield put({ type: FETCH_USER_INFO_SUCCESS, userInfo });
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
           groupMembers: groupMembers,
@@ -276,6 +281,19 @@ function* setCurrentCompanySaga() {
   });
 }
 
+function* fetchUserInfoSaga() {
+  yield takeLatest(FETCH_USER_INFO_REQUEST, function* (action) {
+    try {
+
+      let userInfo = yield Api.fetchUserInfo(action.data);
+      yield put({ type: FETCH_USER_INFO_SUCCESS, userInfo });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -290,6 +308,6 @@ export default function* ordersSaga() {
     fork(loaderOff),
     fork(logoutSaga),
     fork(fetchHistorySaga),
-    fork(setCurrentCompanySaga)
+    fork(setCurrentCompanySaga),
   ];
 }
