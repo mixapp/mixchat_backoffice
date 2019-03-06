@@ -104,10 +104,19 @@ export default function reducer(state = initialState, action = {}) {
 
       if (lastMessage) {
         Api.deleteMemoizedFetchDialog(lastMessage.rid, true, 15);
-        if (state.currentRoom && state.message &&
-          state.currentRoom._id === lastMessage.rid &&
-          state.message._id !== lastMessage._id) {
-          state.messages = [...state.messages, lastMessage];
+        if (state.currentRoom) {
+          let { _id: currentRoomId, lastMessage: currentRoomLastMessage } = state.currentRoom;
+          if (currentRoomLastMessage) {
+            let { _id: currentRoomLastMessageId } = currentRoomLastMessage;
+            if (currentRoomId === lastMessage.rid &&
+              currentRoomLastMessageId !== lastMessage._id &&
+              state.message._id !== lastMessage._id) {
+              state.messages = [...state.messages, lastMessage];
+            }
+          } else {
+            state.currentRoom = action.data.fields.args[1];
+            state.messages = [lastMessage];
+          }
         }
         state.message = lastMessage;
       } else {
