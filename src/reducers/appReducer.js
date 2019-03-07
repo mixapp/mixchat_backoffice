@@ -19,7 +19,9 @@ import {
   SET_CURRENT_COMPANY_SUCCESS,
   SET_XUSER_SUCCESS,
   SEND_MESSAGE_SUCCESS,
-  FETCH_USER_INFO_SUCCESS
+  FETCH_USER_INFO_SUCCESS,
+  FETCH_WEBSOCKET_SUCCESS,
+  SET_STATUS_SUCCESS
 } from '../constants';
 const initialState = {
   xuser: null,
@@ -35,7 +37,8 @@ const initialState = {
   currentRoom: null,
   currentPage: 1,
   role: null,
-  userInfo: null
+  userInfo: null,
+  socket: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -164,6 +167,11 @@ export default function reducer(state = initialState, action = {}) {
 
     case FETCH_USER_INFO_SUCCESS:
       state.userInfo = action.userInfo;
+      return { ...state };
+    case FETCH_WEBSOCKET_SUCCESS:
+      state.socket = action.socket;
+      return { ...state };
+    case SET_STATUS_SUCCESS:
       return { ...state };
     default:
       return state;

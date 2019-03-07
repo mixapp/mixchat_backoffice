@@ -12,6 +12,8 @@ import {
   FETCH_HISTORY_REQUEST,
   LOGOUT,
   SET_CURRENT_COMPANY_REQUEST,
+  FETCH_WEBSOCKET_REQUEST,
+  SET_STATUS_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -95,6 +97,19 @@ export const fetchHistory = (data) => {
 export const setCurrentCompany = (data) => {
   return {
     type: SET_CURRENT_COMPANY_REQUEST,
+    data
+  }
+}
+
+export const fetchWebsocket = () => {
+  return {
+    type: FETCH_WEBSOCKET_REQUEST
+  }
+}
+
+export const setStatus = (data) => {
+  return {
+    type: SET_STATUS_REQUEST,
     data
   }
 }

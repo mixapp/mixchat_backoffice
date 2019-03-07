@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'antd';
+import { Icon, Switch } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
+import { setStatus } from '../../actions/settings';
 import '../Menu/style.css';
 
 class MenuPanel extends React.Component {
@@ -61,6 +62,11 @@ class MenuPanel extends React.Component {
           </li> : null}
       </ul>
       <ul>
+        <li>
+          <div>
+            <Switch size="small" defaultChecked onChange={this.props.setStatus} />
+          </div>
+        </li>
         <li className={pathname === '/logout' ? 'active' : undefined}>
           <Link to='/logout'>
             <Icon type="upload" />
@@ -78,4 +84,10 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default withNamespaces()(connect(mapStateToProps)(withRouter(props => <MenuPanel {...props} />)));
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    setStatus: (data) => { dispatch(setStatus(data)) }
+  }
+}
+
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(withRouter(props => <MenuPanel {...props} />)));

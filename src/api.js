@@ -378,15 +378,18 @@ export const formatDate = (date, lang) => {
   return ('0' + (day + 1)).slice(-2) + '.' + ('0' + (month + 1)).slice(-2) + '.' + year + ', ' + ("0" + hours).slice(-2) + ':' + minutes;
 }
 
-export const websocketInitRoomsChanged = () => {
+export const fetchWebsocket = () => {
+  // init the connection here
+  const options = {
+    endpoint: 'wss://' + getRocketCahtUrl() + '/websocket',
+    SocketConstructor: WebSocket
+  };
+  return new DDP(options);
+}
+
+export const websocketInitRoomsChanged = (ddp) => {
   var Xuser = getRocketChatHeaders();
   return eventChannel(emitter => {
-    // init the connection here
-    const options = {
-      endpoint: 'wss://' + getRocketCahtUrl() + '/websocket',
-      SocketConstructor: WebSocket
-    };
-    var ddp = new DDP(options);
     ddp.on('connected', () => {
       ddp.method('login', [{ resume: Xuser['X-Auth-Token'] }]);
       ddp.sub('stream-notify-user', [Xuser['X-User-Id'] + '/rooms-changed', false]);
@@ -401,4 +404,9 @@ export const websocketInitRoomsChanged = () => {
       // do whatever to interrupt the socket communication here
     }
   })
+}
+
+export const setStatus = (trigger, ddp) => {
+  let status = trigger ? 'online' : 'offline';
+  ddp.method('UserPresence:setDefaultStatus', [status]);
 }

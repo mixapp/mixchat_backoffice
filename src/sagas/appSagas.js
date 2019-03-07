@@ -21,7 +21,11 @@ import {
   SET_CURRENT_COMPANY_SUCCESS,
   SET_XUSER_SUCCESS,
   FETCH_USER_INFO_REQUEST,
-  FETCH_USER_INFO_SUCCESS
+  FETCH_USER_INFO_SUCCESS,
+  FETCH_WEBSOCKET_REQUEST,
+  FETCH_WEBSOCKET_SUCCESS,
+  SET_STATUS_REQUEST,
+  SET_STATUS_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -104,7 +108,8 @@ function* fetchDialogsSaga() {
       yield put({ type: LOADER_OFF });
 
       /* NEW */
-      let socket = yield call(Api.websocketInitRoomsChanged);
+      const ddp = yield select((state) => state.app.socket);
+      let socket = yield call(Api.websocketInitRoomsChanged, ddp);
       while (true) {
         const action = yield take(socket);
         yield put(action);
@@ -224,8 +229,7 @@ function* loginSaga() {
       const uri = localStorage.getItem('redirect') || '/';
       localStorage.removeItem('redirect');
       if (companies.data.length < 2) {
-        yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id })
-
+        yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id });
       }
 
       const currentCompany = yield select((state) => state.app.currentCompany);
@@ -294,6 +298,33 @@ function* fetchUserInfoSaga() {
   })
 }
 
+function* fetchWebsocketSaga() {
+  yield takeLatest(FETCH_WEBSOCKET_REQUEST, function* (action) {
+    try {
+
+      let socket = yield Api.fetchWebsocket();
+      yield put({ type: FETCH_WEBSOCKET_SUCCESS, socket });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
+function* setStatusSaga() {
+  yield takeLatest(SET_STATUS_REQUEST, function* (action) {
+    try {
+
+      const ddp = yield select((state) => state.app.socket);
+      let result = yield Api.setStatus(action.data, ddp);
+      yield put({ type: SET_STATUS_SUCCESS, result });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -309,5 +340,7 @@ export default function* ordersSaga() {
     fork(logoutSaga),
     fork(fetchHistorySaga),
     fork(setCurrentCompanySaga),
+    fork(fetchWebsocketSaga),
+    fork(setStatusSaga)
   ];
 }

@@ -19,7 +19,8 @@ import {
   saveSettings,
   loaderOff,
   logout,
-  setCurrentCompany
+  setCurrentCompany,
+  fetchWebsocket
 } from './actions/settings';
 
 class Router extends React.Component {
@@ -31,6 +32,7 @@ class Router extends React.Component {
   }
   componentDidMount() {
     this.props.loaderOff();
+    this.props.fetchWebsocket();
     history.listen((location, done) => {
       switch (location.pathname) {
         case '/logout':
@@ -70,7 +72,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     saveSettings: (data) => { dispatch(saveSettings(data)) },
     loaderOff: () => { dispatch(loaderOff()) },
     logout: () => { dispatch(logout()) },
-    setCurrentCompany: (data) => { dispatch(setCurrentCompany(data)) }
+    setCurrentCompany: (data) => { dispatch(setCurrentCompany(data)) },
+    fetchWebsocket: () => { dispatch(fetchWebsocket()) }
   }
 }
 
