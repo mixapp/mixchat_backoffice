@@ -336,7 +336,7 @@ export const fetchRole = async (companyId) => {
   }
 }
 
-export const sendMessageSaga = async (room, text) => {
+export const sendMessage = async (room, text) => {
   try {
     let result = await axios({
       method: 'POST',
@@ -379,22 +379,22 @@ export const formatDate = (date, lang) => {
 }
 
 export const fetchWebsocket = () => {
+  var Xuser = getRocketChatHeaders();
   // init the connection here
   const options = {
     endpoint: 'wss://' + getRocketCahtUrl() + '/websocket',
     SocketConstructor: WebSocket
   };
-  return new DDP(options);
+  let ddp = new DDP(options);
+  ddp.on('connected', () => {
+    ddp.method('login', [{ resume: Xuser['X-Auth-Token'] }]);
+    ddp.sub('stream-notify-user', [Xuser['X-User-Id'] + '/rooms-changed', false]);
+  });
+  return ddp;
 }
 
 export const websocketInitRoomsChanged = (ddp) => {
-  var Xuser = getRocketChatHeaders();
   return eventChannel(emitter => {
-    ddp.on('connected', () => {
-      ddp.method('login', [{ resume: Xuser['X-Auth-Token'] }]);
-      ddp.sub('stream-notify-user', [Xuser['X-User-Id'] + '/rooms-changed', false]);
-    });
-
     ddp.on('changed', (data) => {
       return emitter({ type: 'SOCKET_ROOMS_CHANGED_EVENT', data });
     });

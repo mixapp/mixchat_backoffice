@@ -13,7 +13,9 @@ import {
   LOGOUT,
   SET_CURRENT_COMPANY_REQUEST,
   FETCH_WEBSOCKET_REQUEST,
-  SET_STATUS_REQUEST
+  SET_STATUS_REQUEST,
+  FETCH_CLIENT_INFO_REQUEST,
+  FETCH_MANAGER_INFO_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -111,5 +113,18 @@ export const setStatus = (data) => {
   return {
     type: SET_STATUS_REQUEST,
     data
+  }
+}
+
+export const fetchClientInfo = (data) => {
+  return {
+    type: FETCH_CLIENT_INFO_REQUEST,
+    data
+  }
+}
+
+export const fetchManagerInfo = () => {
+  return {
+    type: FETCH_MANAGER_INFO_REQUEST
   }
 }

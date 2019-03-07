@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Icon, Switch } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import { setStatus } from '../../actions/settings';
+import { setStatus, fetchManagerInfo } from '../../actions/settings';
 import '../Menu/style.css';
 
 class MenuPanel extends React.Component {
@@ -13,6 +13,7 @@ class MenuPanel extends React.Component {
   }
 
   componentDidMount() {
+    this.props.fetchManagerInfo();
     let key;
     let path = this.props.location.pathname;
     switch (path) {
@@ -34,7 +35,7 @@ class MenuPanel extends React.Component {
   }
 
   render() {
-    let { role } = this.props.app;
+    let { role, manager } = this.props.app;
     let { pathname } = this.props.location;
     const t = this.props.t;
     return <div className='main-menu'>
@@ -64,7 +65,7 @@ class MenuPanel extends React.Component {
       <ul>
         <li>
           <div>
-            <Switch size="small" defaultChecked onChange={this.props.setStatus} />
+            <Switch size="small" checked={manager && manager.status === 'online' ? true : false} onChange={this.props.setStatus} />
           </div>
         </li>
         <li className={pathname === '/logout' ? 'active' : undefined}>
@@ -86,7 +87,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setStatus: (data) => { dispatch(setStatus(data)) }
+    setStatus: (data) => { dispatch(setStatus(data)) },
+    fetchManagerInfo: () => { dispatch(fetchManagerInfo()) }
   }
 }
 

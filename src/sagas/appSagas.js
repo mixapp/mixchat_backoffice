@@ -20,12 +20,13 @@ import {
   SET_CURRENT_COMPANY_REQUEST,
   SET_CURRENT_COMPANY_SUCCESS,
   SET_XUSER_SUCCESS,
-  FETCH_USER_INFO_REQUEST,
-  FETCH_USER_INFO_SUCCESS,
+  FETCH_CLIENT_INFO_REQUEST,
+  FETCH_CLIENT_INFO_SUCCESS,
   FETCH_WEBSOCKET_REQUEST,
   FETCH_WEBSOCKET_SUCCESS,
   SET_STATUS_REQUEST,
-  SET_STATUS_SUCCESS
+  FETCH_MANAGER_INFO_REQUEST,
+  FETCH_MANAGER_INFO_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -34,7 +35,7 @@ function* sendMessageSaga() {
   yield takeLatest(SEND_MESSAGE_REQUEST, function* (action) {
     try {
       let { room, text } = action.data;
-      let result = yield Api.sendMessageSaga(room, text);
+      let result = yield Api.sendMessage(room, text);
       if (result.status === 200) {
         yield put({ type: SEND_MESSAGE_SUCCESS, result });
       }
@@ -63,7 +64,7 @@ function* fetchDialogSaga() {
       let messages = yield Api.memoizedFetchDialog(room._id, true, action.data.count);
       let client = _.find(groupMembers.data.members, function (member) { return member.username === room.name.replace('_', ''); });
       let userInfo = yield Api.memoizedFetchUserInfo(currentCompany, client._id);
-      yield put({ type: FETCH_USER_INFO_SUCCESS, userInfo });
+      yield put({ type: FETCH_CLIENT_INFO_SUCCESS, userInfo });
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
           groupMembers: groupMembers,
@@ -285,12 +286,13 @@ function* setCurrentCompanySaga() {
   });
 }
 
-function* fetchUserInfoSaga() {
-  yield takeLatest(FETCH_USER_INFO_REQUEST, function* (action) {
+function* fetchClientInfoSaga() {
+  yield takeLatest(FETCH_CLIENT_INFO_REQUEST, function* (action) {
     try {
 
-      let userInfo = yield Api.fetchUserInfo(action.data);
-      yield put({ type: FETCH_USER_INFO_SUCCESS, userInfo });
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let userInfo = yield Api.memoizedFetchUserInfo(currentCompany, action.data);
+      yield put({ type: FETCH_CLIENT_INFO_SUCCESS, userInfo });
 
     } catch (err) {
       throw err;
@@ -315,9 +317,27 @@ function* setStatusSaga() {
   yield takeLatest(SET_STATUS_REQUEST, function* (action) {
     try {
 
+      let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+      const currentCompany = yield select((state) => state.app.currentCompany);
       const ddp = yield select((state) => state.app.socket);
-      let result = yield Api.setStatus(action.data, ddp);
-      yield put({ type: SET_STATUS_SUCCESS, result });
+      yield Api.setStatus(action.data, ddp);
+      let managerInfo = yield Api.fetchUserInfo(currentCompany, userId);
+      yield put({ type: FETCH_MANAGER_INFO_SUCCESS, managerInfo });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
+function* fetchManagerInfoSaga() {
+  yield takeLatest(FETCH_MANAGER_INFO_REQUEST, function* () {
+    try {
+
+      let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let managerInfo = yield Api.fetchUserInfo(currentCompany, userId);
+      yield put({ type: FETCH_MANAGER_INFO_SUCCESS, managerInfo });
 
     } catch (err) {
       throw err;
@@ -341,6 +361,8 @@ export default function* ordersSaga() {
     fork(fetchHistorySaga),
     fork(setCurrentCompanySaga),
     fork(fetchWebsocketSaga),
-    fork(setStatusSaga)
+    fork(setStatusSaga),
+    fork(fetchClientInfoSaga),
+    fork(fetchManagerInfoSaga)
   ];
 }
