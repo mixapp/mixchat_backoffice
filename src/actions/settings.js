@@ -15,7 +15,8 @@ import {
   FETCH_WEBSOCKET_REQUEST,
   SET_STATUS_REQUEST,
   FETCH_CLIENT_INFO_REQUEST,
-  FETCH_MANAGER_INFO_REQUEST
+  FETCH_MANAGER_INFO_REQUEST,
+  FETCH_XUSER_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -126,5 +127,11 @@ export const fetchClientInfo = (data) => {
 export const fetchManagerInfo = () => {
   return {
     type: FETCH_MANAGER_INFO_REQUEST
+  }
+}
+
+export const fethcXUSER = () => {
+  return {
+    type: FETCH_XUSER_REQUEST
   }
 }

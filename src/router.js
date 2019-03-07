@@ -32,7 +32,6 @@ class Router extends React.Component {
   }
   componentDidMount() {
     this.props.loaderOff();
-    this.props.fetchWebsocket();
     history.listen((location, done) => {
       switch (location.pathname) {
         case '/logout':

@@ -21,7 +21,8 @@ import {
   SEND_MESSAGE_SUCCESS,
   FETCH_CLIENT_INFO_SUCCESS,
   FETCH_WEBSOCKET_SUCCESS,
-  FETCH_MANAGER_INFO_SUCCESS
+  FETCH_MANAGER_INFO_SUCCESS,
+  FETCH_XUSER_SUCCESS
 } from '../constants';
 const initialState = {
   xuser: null,
@@ -116,8 +117,11 @@ export default function reducer(state = initialState, action = {}) {
       if (lastMessage) {
         Api.deleteMemoizedFetchDialog(lastMessage.rid, true, 15);
         if (state.messages && state.messages.length > 0) {
-          if (state.messages[state.messages.length - 1]._id !== lastMessage._id &&
-            state.currentRoom._id === lastMessage.rid) {
+          if (
+            state.currentRoom &&
+            state.messages[state.messages.length - 1]._id !== lastMessage._id &&
+            state.currentRoom._id === lastMessage.rid
+          ) {
             state.messages = [...state.messages, lastMessage];
           }
         } else {
@@ -162,7 +166,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
 
     case SET_XUSER_SUCCESS:
-      state.xuser = action.result;
+      state.xuser = action.result.data;
       localStorage.setItem('XUSER', JSON.stringify(action.result));
       return { ...state };
 
@@ -175,6 +179,9 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
     case FETCH_MANAGER_INFO_SUCCESS:
       state.manager = action.managerInfo.data.user;
+      return { ...state };
+    case FETCH_XUSER_SUCCESS:
+      state.xuser = action.xuser;
       return { ...state };
     default:
       return state;

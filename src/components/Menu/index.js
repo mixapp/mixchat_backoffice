@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Icon, Switch } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import { setStatus, fetchManagerInfo } from '../../actions/settings';
+import { setStatus, fetchManagerInfo, fetchWebsocket } from '../../actions/settings';
 import '../Menu/style.css';
 
 class MenuPanel extends React.Component {
@@ -13,6 +13,7 @@ class MenuPanel extends React.Component {
   }
 
   componentDidMount() {
+    this.props.fetchWebsocket();
     this.props.fetchManagerInfo();
     let key;
     let path = this.props.location.pathname;
@@ -88,7 +89,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setStatus: (data) => { dispatch(setStatus(data)) },
-    fetchManagerInfo: () => { dispatch(fetchManagerInfo()) }
+    fetchManagerInfo: () => { dispatch(fetchManagerInfo()) },
+    fetchWebsocket: () => { dispatch(fetchWebsocket()) }
   }
 }
 

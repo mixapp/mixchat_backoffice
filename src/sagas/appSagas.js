@@ -26,7 +26,9 @@ import {
   FETCH_WEBSOCKET_SUCCESS,
   SET_STATUS_REQUEST,
   FETCH_MANAGER_INFO_REQUEST,
-  FETCH_MANAGER_INFO_SUCCESS
+  FETCH_MANAGER_INFO_SUCCESS,
+  FETCH_XUSER_REQUEST,
+  FETCH_XUSER_SUCCESS
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -62,7 +64,9 @@ function* fetchDialogSaga() {
       }
       let groupMembers = yield Api.memoizedFetchGroupMembers(room._id);
       let messages = yield Api.memoizedFetchDialog(room._id, true, action.data.count);
-      let client = _.find(groupMembers.data.members, function (member) { return member.username === room.name.replace('_', ''); });
+      let client = _.find(groupMembers.data.members, function (member) {
+        return member.username === room.name.substring(0, room.name.length - 1);
+      });
       let userInfo = yield Api.memoizedFetchUserInfo(currentCompany, client._id);
       yield put({ type: FETCH_CLIENT_INFO_SUCCESS, userInfo });
       yield put({
@@ -345,6 +349,20 @@ function* fetchManagerInfoSaga() {
   })
 }
 
+function* fetchXUSERSaga() {
+  yield takeLatest(FETCH_XUSER_REQUEST, function* () {
+    try {
+
+      let XUSER = JSON.parse(localStorage.getItem('XUSER'));
+      if (XUSER)
+        yield put({ type: FETCH_XUSER_SUCCESS, xuser: XUSER.data });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -363,6 +381,7 @@ export default function* ordersSaga() {
     fork(fetchWebsocketSaga),
     fork(setStatusSaga),
     fork(fetchClientInfoSaga),
-    fork(fetchManagerInfoSaga)
+    fork(fetchManagerInfoSaga),
+    fork(fetchXUSERSaga)
   ];
 }
