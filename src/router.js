@@ -17,7 +17,8 @@ import { connect } from 'react-redux';
 import {
   loaderOff,
   logout,
-  setCurrentCompany
+  setCurrentCompany,
+  fethcXUSER
 } from './actions/settings';
 
 class Router extends React.Component {
@@ -29,6 +30,7 @@ class Router extends React.Component {
   }
   componentDidMount() {
     this.props.loaderOff();
+    this.props.fethcXUSER();
     history.listen((location, done) => {
       switch (location.pathname) {
         case '/logout':
@@ -44,7 +46,7 @@ class Router extends React.Component {
     return <ConnectedRouter history={history}>
       <div>
         <Route path="/authorize" exact component={Authorize} />
-        <Wrapper loader={this.props.app.loader}>
+        <Wrapper loader={this.props.app.loader} xuser={this.props.app.xuser}>
           <PrivateRoute path='/' exact component={MainPage} />
           <PrivateRoute path='/companies' exact component={Companies} />
           <PrivateRoute path='/settings' exact component={Settings} />
@@ -66,7 +68,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loaderOff: () => { dispatch(loaderOff()) },
     logout: () => { dispatch(logout()) },
-    setCurrentCompany: (data) => { dispatch(setCurrentCompany(data)) }
+    setCurrentCompany: (data) => { dispatch(setCurrentCompany(data)) },
+    fethcXUSER: () => { dispatch(fethcXUSER()) }
   }
 }
 

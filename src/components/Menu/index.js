@@ -64,11 +64,12 @@ class MenuPanel extends React.Component {
           </li> : null}
       </ul>
       <ul>
-        <li>
-          <div>
-            <Switch size="small" checked={manager && manager.status === 'online' ? true : false} onChange={this.props.setStatus} />
-          </div>
-        </li>
+        {manager ?
+          <li>
+            <div>
+              <Switch size="small" checked={manager && manager.status === 'online' ? true : false} onChange={this.props.setStatus} />
+            </div>
+          </li> : null}
         <li className={pathname === '/logout' ? 'active' : undefined}>
           <Link to='/logout'>
             <Icon type="upload" />

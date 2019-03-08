@@ -1,14 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import MenuPanel from '../Menu';
 import './styles.css';
 import DialogsList from '../../containers/DialogsList';
 import { Spin } from 'antd';
 import { withNamespaces } from 'react-i18next';
-import { fethcXUSER } from '../../actions/settings';
-
 
 const { Content } = Layout;
 
@@ -16,10 +13,6 @@ class Wrapper extends React.Component {
   state = {
     collapsed: true
   };
-
-  componentWillMount() {
-    this.props.fethcXUSER();
-  }
 
   changeLanguage = async (lng) => {
     this.props.i18n.changeLanguage(lng);
@@ -32,8 +25,7 @@ class Wrapper extends React.Component {
   }
 
   render() {
-    let { location } = this.props;
-    let { xuser } = this.props.app;
+    let { location, xuser } = this.props;
     let dialogsListShow = location.pathname === '/dialogs' ? '' : 'none';
     let contentClass = 'content ' + location.pathname.replace('/', '');
     return (
@@ -57,16 +49,4 @@ class Wrapper extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    app: state.app
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    fethcXUSER: () => { dispatch(fethcXUSER()) }
-  }
-}
-
-export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(withRouter(props => <Wrapper {...props} />)));
+export default withNamespaces()(withRouter(props => <Wrapper {...props} />));
