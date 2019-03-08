@@ -15,12 +15,9 @@ import Managers from './containers/Managers';
 import Companies from './containers/Companies';
 import { connect } from 'react-redux';
 import {
-  fetchSettings,
-  saveSettings,
   loaderOff,
   logout,
-  setCurrentCompany,
-  fetchWebsocket
+  setCurrentCompany
 } from './actions/settings';
 
 class Router extends React.Component {
@@ -67,12 +64,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchSettings: () => { dispatch(fetchSettings()) },
-    saveSettings: (data) => { dispatch(saveSettings(data)) },
     loaderOff: () => { dispatch(loaderOff()) },
     logout: () => { dispatch(logout()) },
-    setCurrentCompany: (data) => { dispatch(setCurrentCompany(data)) },
-    fetchWebsocket: () => { dispatch(fetchWebsocket()) }
+    setCurrentCompany: (data) => { dispatch(setCurrentCompany(data)) }
   }
 }
 
