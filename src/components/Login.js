@@ -2,8 +2,10 @@ import React from 'react';
 import {
   Form,
   Input,
+  Icon,
   Row,
   Col,
+  Checkbox,
   Button,
   Alert
 } from 'antd';
@@ -141,6 +143,31 @@ class RegistrationForm extends React.Component {
                   initialValue: 'SashaMailRu'
                 })(
                   <Input />
+                )}
+              </Form.Item>
+              <Form.Item
+                label={t('Captcha')}
+              >
+                <Row gutter={8}>
+                  <Col span={12}>
+                    {getFieldDecorator('captcha', {
+                      rules: [{ required: true, message: t('Please input the captcha you got!') }],
+                      initialValue: 'qwerty123456'
+                    })(
+                      <Input />
+                    )}
+                  </Col>
+                  <Col span={12}>
+                    <Button><Icon type="retweet" /></Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <Form.Item {...tailFormItemLayout}>
+                {getFieldDecorator('agreement', {
+                  valuePropName: 'checked',
+                  initialValue: true
+                })(
+                  <Checkbox>{t('I have read the')} <a href="">{t('agreement')}</a></Checkbox>
                 )}
               </Form.Item>
               <Form.Item {...tailFormItemLayout}>

@@ -17,7 +17,8 @@ import {
   FETCH_CLIENT_INFO_REQUEST,
   FETCH_MANAGER_INFO_REQUEST,
   FETCH_XUSER_REQUEST,
-  SEND_REGISTRATION_FORM_REQUEST
+  SEND_REGISTRATION_FORM_REQUEST,
+  SEND_LOGIN_FORM_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -140,6 +141,13 @@ export const fethcXUSER = () => {
 export const registration = (data) => {
   return {
     type: SEND_REGISTRATION_FORM_REQUEST,
+    data
+  }
+}
+
+export const login = (data) => {
+  return {
+    type: SEND_LOGIN_FORM_REQUEST,
     data
   }
 }

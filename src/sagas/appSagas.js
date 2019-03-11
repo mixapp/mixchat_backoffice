@@ -1,6 +1,5 @@
 import { put, fork, takeLatest, call, take, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
-import { history } from '../store';
 import {
   SET_AUTHORIZE,
   FETCH_SETTINGS_REQUEST, FETCH_SETTINGS_SUCCESS, //FETCH_SETTINGS_ERROR,
