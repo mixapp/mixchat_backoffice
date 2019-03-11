@@ -54,5 +54,20 @@
     "Client": "Клиент",
     "Members": "Участники",
     "No activity": "Нет активности",
-    "Last activity": "Посл. активность"
+    "Last activity": "Посл. активность",
+    "Registration form": "Форма регистрации",
+    "Confirm Password": "Подтвердите Пароль",
+    "Error": "Ошибка",
+    "You have been successfully registered. Check your mail": "Вы были успешно зарегистрированы. Проверьте Вашу почту.",
+    "Register": "Регистрация",
+    "I have read the": "Я прочитал",
+    "agreement": "соглашение",
+    "Captcha": "Капча",
+    "Please input your E-mail!": "Пожалуйста, введите свой адрес электронной почты!",
+    "The input is not valid E-mail!": "Введен неверный E-mail!",
+    "Please input your password!": "Пожалуйста, введите ваш пароль!",
+    "Please confirm your password!": "Пожалуйста, подтвердите ваш пароль!",
+    "Please input your nickname!": "Пожалуйста, введите свой никнейм!",
+    "Please input the captcha you got!": "Пожалуйста, введите капчу, которую вы получили!",
+    "Two passwords that you enter is inconsistent!": "Пароли не совпадают"
 }

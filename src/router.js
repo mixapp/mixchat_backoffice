@@ -8,6 +8,7 @@ import PrivateRoute from './containers/PrivateRouter';
 import MainPage from './containers/MainPage';
 import Wrapper from './components/Wrapper';
 
+import Registration from './containers/Registration';
 import Authorize from './containers/Authorize';
 import Settings from './containers/Settings';
 import Dialogs from './containers/Dialogs';
@@ -45,14 +46,16 @@ class Router extends React.Component {
   render() {
     return <ConnectedRouter history={history}>
       <div>
+        <Route path="/registration" exact component={Registration} />
         <Route path="/authorize" exact component={Authorize} />
-        <Wrapper loader={this.props.app.loader} xuser={this.props.app.xuser}>
-          <PrivateRoute path='/' exact component={MainPage} />
-          <PrivateRoute path='/companies' exact component={Companies} />
-          <PrivateRoute path='/settings' exact component={Settings} />
-          <PrivateRoute path='/dialogs' exact component={Dialogs} />
-          <PrivateRoute path='/managers' exact component={Managers} />
-        </Wrapper>
+        {history.location.pathname !== '/registration' ?
+          <Wrapper loader={this.props.app.loader} xuser={this.props.app.xuser}>
+            <PrivateRoute path='/' exact component={MainPage} />
+            <PrivateRoute path='/companies' exact component={Companies} />
+            <PrivateRoute path='/settings' exact component={Settings} />
+            <PrivateRoute path='/dialogs' exact component={Dialogs} />
+            <PrivateRoute path='/managers' exact component={Managers} />
+          </Wrapper> : null}
       </div>
     </ConnectedRouter >;
   }

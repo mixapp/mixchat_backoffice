@@ -22,9 +22,12 @@ import {
   FETCH_CLIENT_INFO_SUCCESS,
   FETCH_WEBSOCKET_SUCCESS,
   FETCH_MANAGER_INFO_SUCCESS,
-  FETCH_XUSER_SUCCESS
+  FETCH_XUSER_SUCCESS,
+  SEND_REGISTRATION_FORM_SUCCESS,
+  SEND_REGISTRATION_FORM_ERROR
 } from '../constants';
 const initialState = {
+  error_message: '',
   xuser: null,
   user: null,
   messages: [],
@@ -40,7 +43,10 @@ const initialState = {
   role: null,
   clientInfo: null,
   socket: null,
-  manager: null
+  manager: null,
+  /* Registration form */
+  registrationFormSuccess: false,
+  registrationFormError: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -182,6 +188,16 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
     case FETCH_XUSER_SUCCESS:
       state.xuser = action.xuser;
+      return { ...state };
+    case SEND_REGISTRATION_FORM_SUCCESS:
+      state.registrationFormSuccess = true;
+      state.registrationFormError = false;
+      state.error_message = action.data;
+      return { ...state };
+    case SEND_REGISTRATION_FORM_ERROR:
+      state.registrationFormSuccess = false;
+      state.registrationFormError = true;
+      state.error_message = action.result.data.error_message;
       return { ...state };
     default:
       return state;

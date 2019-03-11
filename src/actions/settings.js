@@ -16,7 +16,8 @@ import {
   SET_STATUS_REQUEST,
   FETCH_CLIENT_INFO_REQUEST,
   FETCH_MANAGER_INFO_REQUEST,
-  FETCH_XUSER_REQUEST
+  FETCH_XUSER_REQUEST,
+  SEND_REGISTRATION_FORM_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -133,5 +134,12 @@ export const fetchManagerInfo = () => {
 export const fethcXUSER = () => {
   return {
     type: FETCH_XUSER_REQUEST
+  }
+}
+
+export const registration = (data) => {
+  return {
+    type: SEND_REGISTRATION_FORM_REQUEST,
+    data
   }
 }

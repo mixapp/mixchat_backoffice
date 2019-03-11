@@ -1,5 +1,6 @@
 import { put, fork, takeLatest, call, take, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
+import { history } from '../store';
 import {
   SET_AUTHORIZE,
   FETCH_SETTINGS_REQUEST, FETCH_SETTINGS_SUCCESS, //FETCH_SETTINGS_ERROR,
@@ -28,7 +29,10 @@ import {
   FETCH_MANAGER_INFO_REQUEST,
   FETCH_MANAGER_INFO_SUCCESS,
   FETCH_XUSER_REQUEST,
-  FETCH_XUSER_SUCCESS
+  FETCH_XUSER_SUCCESS,
+  SEND_REGISTRATION_FORM_REQUEST,
+  SEND_REGISTRATION_FORM_SUCCESS,
+  SEND_REGISTRATION_FORM_ERROR
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -104,7 +108,7 @@ function* fetchHistorySaga() {
 }
 
 function* fetchDialogsSaga() {
-  yield takeLatest(FETCH_DIALOGS_REQUEST, function* (action) {
+  yield takeLatest(FETCH_DIALOGS_REQUEST, function* () {
     try {
 
       yield put({ type: LOADER_ON });
@@ -206,7 +210,7 @@ function* saveSettingsSaga() {
 }
 
 function* fetchSettingsSaga() {
-  yield takeLatest(FETCH_SETTINGS_REQUEST, function* (action) {
+  yield takeLatest(FETCH_SETTINGS_REQUEST, function* () {
     try {
 
       yield put({ type: LOADER_ON });
@@ -305,7 +309,7 @@ function* fetchClientInfoSaga() {
 }
 
 function* fetchWebsocketSaga() {
-  yield takeLatest(FETCH_WEBSOCKET_REQUEST, function* (action) {
+  yield takeLatest(FETCH_WEBSOCKET_REQUEST, function* () {
     try {
 
       let socket = yield Api.fetchWebsocket();
@@ -363,6 +367,23 @@ function* fetchXUSERSaga() {
   })
 }
 
+function* registrationSaga() {
+  yield takeLatest(SEND_REGISTRATION_FORM_REQUEST, function* (action) {
+    try {
+
+      let result = yield Api.registration(action.data);
+      if (!result.data.error) {
+        yield put({ type: SEND_REGISTRATION_FORM_SUCCESS, result });
+      } else {
+        yield put({ type: SEND_REGISTRATION_FORM_ERROR, result });
+      }
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
 export default function* ordersSaga() {
   yield [
     fork(loginSaga),
@@ -382,6 +403,7 @@ export default function* ordersSaga() {
     fork(setStatusSaga),
     fork(fetchClientInfoSaga),
     fork(fetchManagerInfoSaga),
-    fork(fetchXUSERSaga)
+    fork(fetchXUSERSaga),
+    fork(registrationSaga)
   ];
 }
