@@ -183,6 +183,18 @@ export const registration = async (data) => {
   }
 }
 
+export const recovery = async (data) => {
+  try {
+    let result = await axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery',
+      data, {
+        headers: getHeadera(),
+      });
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const removeManager = async (data, companyId) => {
   try {
     const uri = getUrl(config.backApiProcessId, companyId, 'removemanagers');

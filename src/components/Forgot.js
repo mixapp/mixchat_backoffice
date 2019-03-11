@@ -9,13 +9,14 @@ import {
   Button
 } from 'antd';
 
-class LoginForm extends React.Component {
+class ForgotForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.props.recovery(values);
       }
     });
   }
@@ -27,35 +28,26 @@ class LoginForm extends React.Component {
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
         <Col span={10} style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
-          <h2>{t('Login form')}</h2>
+          <h2>{t('Forgot form')}</h2>
           <div>
             <Form onSubmit={this.handleSubmit} className="login-form">
-              <Form.Item>
-                {getFieldDecorator('userName', {
-                  rules: [{ required: true, message: t('Please input your username!') }],
+              <Form.Item
+                label={t('Email')}
+              >
+                {getFieldDecorator('email', {
+                  rules: [{
+                    type: 'email', message: t('The input is not valid E-mail!'),
+                  }, {
+                    required: true, message: t('Please input your E-mail!'),
+                  }],
+                  initialValue: 'threelo@ya.ru'
                 })(
-                  <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder={t('Username')} />
+                  <Input />
                 )}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator('password', {
-                  rules: [{ required: true, message: t('Please input your password!') }],
-                })(
-                  <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder={t('Password')} />
-                )}
-              </Form.Item>
-              <Form.Item>
-                {getFieldDecorator('remember', {
-                  valuePropName: 'checked',
-                  initialValue: true,
-                })(
-                  <Checkbox>{t('Remember me')}</Checkbox>
-                )}
-                <a className="login-form-forgot" href="">{t('Forgot password')}</a>
-                <Button type="primary" htmlType="submit" className="login-form-button">
-                  {t('Log in')}
-                </Button>
-                {t('Or')} <a href="">{t('register now!')}</a>
+                <Button type="primary" htmlType="submit" className="login-form-button">{t('Send to Email')}</Button>
+                {t('Or')} <a href="/login">{t('Log in')}</a>
               </Form.Item>
             </Form>
           </div>
@@ -65,6 +57,6 @@ class LoginForm extends React.Component {
   }
 }
 
-const WrappedLoginForm = Form.create({ name: 'login' })(LoginForm);
+const WrappedForgotForm = Form.create({ name: 'forgot' })(ForgotForm);
 
-export default Form.create()(WrappedLoginForm);
+export default Form.create()(WrappedForgotForm);

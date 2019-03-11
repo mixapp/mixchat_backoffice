@@ -15,6 +15,7 @@ import Dialogs from './containers/Dialogs';
 import Managers from './containers/Managers';
 import Companies from './containers/Companies';
 import Login from './containers/Login';
+import Forgot from './containers/Forgot';
 import { connect } from 'react-redux';
 import {
   loaderOff,
@@ -50,6 +51,7 @@ class Router extends React.Component {
         <Route path="/registration" exact component={Registration} />
         <Route path="/authorize" exact component={Authorize} />
         <Route path="/login" exact component={Login} />
+        <Route path="/forgot" exact component={Forgot} />
         {history.location.pathname !== '/registration' ?
           <Wrapper loader={this.props.app.loader} xuser={this.props.app.xuser}>
             <PrivateRoute path='/' exact component={MainPage} />

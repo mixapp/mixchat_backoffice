@@ -24,7 +24,7 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.registration({ user: values });
+        this.props.registrationForm({ user: values });
       }
     });
   }
@@ -66,18 +66,6 @@ class RegistrationForm extends React.Component {
       wrappercol: {
         xs: { span: 24 },
         sm: { span: 16 },
-      },
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
       },
     };
 
@@ -143,8 +131,9 @@ class RegistrationForm extends React.Component {
                   <Input />
                 )}
               </Form.Item>
-              <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit">{t('Register')}</Button>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="login-form-button">{t('Register')}</Button>
+                {t('Or')} <a href="/login">{t('Log in')}</a>
               </Form.Item>
               {registrationFormError && <Alert
                 message={t('Error')}

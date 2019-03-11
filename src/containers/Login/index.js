@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import LoginView from '../../components/LoginView';
 import { withNamespaces } from 'react-i18next';
-import { login } from '../../actions/settings';
+import { loginForm } from '../../actions/settings';
 
 const Login = (props) => {
   return <LoginView {...props} />;
@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    login: (data) => { dispatch(login(data)) }
+    loginForm: (data) => { dispatch(loginForm(data)) }
   }
 }
 

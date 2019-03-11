@@ -7,9 +7,7 @@ import {
   Col,
   Checkbox,
   Button,
-  Alert
 } from 'antd';
-import * as Api from '../api';
 
 class LoginForm extends React.Component {
 
@@ -53,11 +51,11 @@ class LoginForm extends React.Component {
                 })(
                   <Checkbox>{t('Remember me')}</Checkbox>
                 )}
-                <a className="login-form-forgot" href="">{t('Forgot password')}</a>
+                <a className="login-form-forgot" href="/forgot">{t('Forgot password')}</a>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   {t('Log in')}
                 </Button>
-                {t('Or')} <a href="">{t('register now!')}</a>
+                {t('Or')} <a href="/registration">{t('register now!')}</a>
               </Form.Item>
             </Form>
           </div>

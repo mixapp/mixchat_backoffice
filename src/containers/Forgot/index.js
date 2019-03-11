@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ForgotView from '../../components/ForgotView';
 import { withNamespaces } from 'react-i18next';
-import { forgot } from '../../actions/settings';
+import { recovery } from '../../actions/settings';
 
 const Forgot = (props) => {
   return <ForgotView {...props} />;
@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    forgot: (data) => { dispatch(forgot(data)) }
+    recovery: (data) => { dispatch(recovery(data)) }
   }
 }
 
