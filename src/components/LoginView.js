@@ -1,9 +1,9 @@
 import React from 'react';
-import Registration from './Registration';
+import Login from './Login';
 
-export default class RegistrationView extends React.Component {
+export default class LoginView extends React.Component {
   render() {
-    return <Registration
+    return <Login
       {... this.props}
     />
   }

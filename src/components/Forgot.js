@@ -6,10 +6,8 @@ import {
   Row,
   Col,
   Checkbox,
-  Button,
-  Alert
+  Button
 } from 'antd';
-import * as Api from '../api';
 
 class LoginForm extends React.Component {
 

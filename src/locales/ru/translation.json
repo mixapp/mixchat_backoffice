@@ -63,11 +63,19 @@
     "I have read the": "Я прочитал",
     "agreement": "соглашение",
     "Captcha": "Капча",
-    "Please input your E-mail!": "Пожалуйста, введите свой адрес электронной почты!",
+    "Please input your E-mail!": "Пожалуйста, введите адрес электронной почты!",
     "The input is not valid E-mail!": "Введен неверный E-mail!",
-    "Please input your password!": "Пожалуйста, введите ваш пароль!",
     "Please confirm your password!": "Пожалуйста, подтвердите ваш пароль!",
     "Please input your nickname!": "Пожалуйста, введите свой никнейм!",
     "Please input the captcha you got!": "Пожалуйста, введите капчу, которую вы получили!",
-    "Two passwords that you enter is inconsistent!": "Пароли не совпадают"
+    "Two passwords that you enter is inconsistent!": "Пароли не совпадают",
+    "Login form": "Форма входа",
+    "Please input your username!": "Пожалуйста, введите имя пользователя!",
+    "Username": "Имя пользователя",
+    "Please input your password!": "Пожалуйста, введите пароль!",
+    "Remember me": "Запомни меня",
+    "Forgot password": "Забыли пароль",
+    "Log in": "Войти",
+    "Or": "Или",
+    "register now!": "зарегистрироваться!"
 }
