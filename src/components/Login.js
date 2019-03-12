@@ -27,9 +27,9 @@ class LoginForm extends React.Component {
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
         <Col>
-          <h2 className='form-title'>{t('Login form')}</h2>
+          <h2 className='form-title'>{t('Authorization')}</h2>
           <div className='tech-forms'>
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onSubmit={this.handleSubmit}>
               <Form.Item>
                 {getFieldDecorator('userName', {
                   rules: [{ required: true, message: t('Please input your username!') }],
@@ -45,17 +45,11 @@ class LoginForm extends React.Component {
                 )}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator('remember', {
-                  valuePropName: 'checked',
-                  initialValue: true,
-                })(
-                  <Checkbox>{t('Remember me')}</Checkbox>
-                )}
+                <a href="/registration">{t('Register now')}</a>
                 <a className="login-form-forgot" href="/forgot">{t('Forgot password')}</a>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   {t('Log in')}
                 </Button>
-                {t('Or')} <a href="/registration">{t('register now!')}</a>
               </Form.Item>
             </Form>
           </div>

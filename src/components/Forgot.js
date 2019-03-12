@@ -55,16 +55,16 @@ class ForgotForm extends React.Component {
 
   render() {
     let { t } = this.props;
-    let { recoveryFormSuccess } = this.props.app;
+    let { recoveryFormSuccess, recoveryFormError, recoveryByTokenError, recoveryByTokenSuccess, error_message } = this.props.app;
     const { getFieldDecorator } = this.props.form;
     let { recovery_token } = this.state;
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
         <Col>
-          <h2 className='form-title'>{t('Recovery form')}</h2>
+          <h2 className='form-title'>{t('Recovery password')}</h2>
           {!recovery_token && <div className='tech-forms'>
-            {!recoveryFormSuccess && <Form onSubmit={this.handleSubmit} className="login-form">
+            {!recoveryFormSuccess && <Form onSubmit={this.handleSubmit}>
               <Form.Item
                 label={t('Email')}
               >
@@ -80,9 +80,15 @@ class ForgotForm extends React.Component {
                 )}
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">{t('Send to Email')}</Button>
-                {t('Or')} <a href="/login">{t('Log in')}</a>
+                <Button type="primary" htmlType="submit" className="login-form-button">{t('Recovery')}</Button>
+                <div className='login-link'><a href="/login">{t('Log in')}</a></div>
               </Form.Item>
+              {recoveryFormError && <Alert
+                message={t('Error')}
+                description={t(error_message)}
+                type="error"
+                showIcon
+              />}
             </Form>}
             {recoveryFormSuccess && <Alert style={{ marginBottom: '15px' }}
               message={t('Operation successful')}
@@ -92,7 +98,7 @@ class ForgotForm extends React.Component {
             />}
           </div>}
           {recovery_token && <div className='tech-forms'>
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            {!recoveryByTokenSuccess && <Form onSubmit={this.handleSubmit}>
               <Form.Item
                 label={t('New password')}
               >
@@ -125,7 +131,22 @@ class ForgotForm extends React.Component {
                 <Button type="primary" htmlType="submit" className="login-form-button">{t('Change password')}</Button>
                 {t('Or')} <a href="/login">{t('Log in')}</a>
               </Form.Item>
-            </Form>
+              {recoveryByTokenError && <Alert
+                message={t('Error')}
+                description={t(error_message)}
+                type="error"
+                showIcon
+              />}
+            </Form>}
+            {recoveryByTokenSuccess && <div>
+              <Alert style={{ marginBottom: '15px' }}
+                message={t('Operation successful')}
+                description={t('Your password has been changed to a new one')}
+                type="success"
+                showIcon
+              />
+              <a href="/login">{t('Log in')}</a>
+            </div>}
           </div>}
         </Col>
       </Row>

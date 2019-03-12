@@ -25,7 +25,10 @@ import {
   FETCH_XUSER_SUCCESS,
   SEND_REGISTRATION_FORM_SUCCESS,
   SEND_REGISTRATION_FORM_ERROR,
-  SEND_RECOVERY_PWD_SUCCESS
+  SEND_RECOVERY_PWD_SUCCESS,
+  SEND_RECOVERY_PWD_TOKEN_SUCCESS,
+  SEND_RECOVERY_PWD_TOKEN_ERROR,
+  SEND_RECOVERY_PWD_ERROR
 } from '../constants';
 const initialState = {
   error_message: '',
@@ -49,7 +52,11 @@ const initialState = {
   registrationFormSuccess: false,
   registrationFormError: false,
   /* Recovery form */
-  recoveryFormSuccess: false
+  recoveryFormSuccess: false,
+  recoveryFormError: false,
+  /* Recovery process by token */
+  recoveryByTokenSuccess: false,
+  recoveryByTokenError: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -204,6 +211,21 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
     case SEND_RECOVERY_PWD_SUCCESS:
       state.recoveryFormSuccess = true;
+      state.recoveryFormError = false;
+      return { ...state };
+    case SEND_RECOVERY_PWD_ERROR:
+      state.recoveryFormSuccess = false;
+      state.recoveryFormError = true;
+      state.error_message = action;
+      return { ...state };
+    case SEND_RECOVERY_PWD_TOKEN_SUCCESS:
+      state.recoveryByTokenSuccess = true;
+      state.recoveryByTokenError = false;
+      return { ...state };
+    case SEND_RECOVERY_PWD_TOKEN_ERROR:
+      state.recoveryByTokenError = true;
+      state.recoveryByTokenSuccess = false;
+      state.error_message = action.result.data.error_message;
       return { ...state };
     default:
       return state;

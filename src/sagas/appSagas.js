@@ -35,7 +35,9 @@ import {
   SEND_RECOVERY_PWD_REQUEST,
   SEND_RECOVERY_PWD_TOKEN_REQUEST,
   SEND_RECOVERY_PWD_SUCCESS,
-  SEND_RECOVERY_PWD_ERROR
+  SEND_RECOVERY_PWD_ERROR,
+  SEND_RECOVERY_PWD_TOKEN_SUCCESS,
+  SEND_RECOVERY_PWD_TOKEN_ERROR
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -408,7 +410,11 @@ function* recoveryTokenSaga() {
     try {
 
       let result = yield Api.recoveryToken(action.data);
-      console.log(result);
+      if (result.data.error) {
+        yield put({ type: SEND_RECOVERY_PWD_TOKEN_ERROR, result });
+      } else {
+        yield put({ type: SEND_RECOVERY_PWD_TOKEN_SUCCESS });
+      }
 
     } catch (err) {
       throw err;

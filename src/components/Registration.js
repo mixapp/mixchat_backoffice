@@ -55,9 +55,9 @@ class RegistrationForm extends React.Component {
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
         <Col>
-          <h2 className='form-title'>{t('Registration form')}</h2>
+          <h2 className='form-title'>{t('Registration')}</h2>
           <div className='tech-forms'>
-            {!registrationFormSuccess && <Form onSubmit={this.handleSubmit} className='login-form'>
+            {!registrationFormSuccess && <Form onSubmit={this.handleSubmit}>
               <Form.Item
                 label={t('Email')}
               >
@@ -116,7 +116,7 @@ class RegistrationForm extends React.Component {
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">{t('Register')}</Button>
-                {t('Or')} <a href="/login">{t('Log in')}</a>
+                <div className='login-link'><a href="/login">{t('Log in')}</a></div>
               </Form.Item>
               {registrationFormError && <Alert
                 message={t('Error')}
@@ -125,7 +125,7 @@ class RegistrationForm extends React.Component {
                 showIcon
               />}
             </Form>}
-            {registrationFormSuccess && <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {registrationFormSuccess && <div>
               <Alert style={{ marginBottom: '15px' }}
                 message={t('Successful registration')}
                 description={t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}
