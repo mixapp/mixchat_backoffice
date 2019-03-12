@@ -62,91 +62,90 @@ class ForgotForm extends React.Component {
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
         <Col>
-          <h2 className='form-title'>{t('Recovery password')}</h2>
-          {!recovery_token && <div className='tech-forms'>
-            {!recoveryFormSuccess && <Form onSubmit={this.handleSubmit}>
-              <Form.Item
-                label={t('Email')}
-              >
-                {getFieldDecorator('email', {
-                  rules: [{
-                    type: 'email', message: t('The input is not valid E-mail!'),
-                  }, {
-                    required: true, message: t('Please input your E-mail!'),
-                  }],
-                  initialValue: 'threelo@ya.ru'
-                })(
-                  <Input />
-                )}
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">{t('Recovery')}</Button>
-                <div className='login-link'><a href="/login">{t('Log in')}</a></div>
-              </Form.Item>
-              {recoveryFormError && <Alert
-                message={t('Error')}
-                description={t(error_message)}
-                type="error"
-                showIcon
-              />}
-            </Form>}
-            {recoveryFormSuccess && <Alert style={{ marginBottom: '15px' }}
-              message={t('Operation successful')}
-              description={t('To continue the password reset operation, you need to follow the link sent to your account registration mail')}
-              type="success"
-              showIcon
-            />}
-          </div>}
-          {recovery_token && <div className='tech-forms'>
-            {!recoveryByTokenSuccess && <Form onSubmit={this.handleSubmit}>
-              <Form.Item
-                label={t('New password')}
-              >
-                {getFieldDecorator('password', {
-                  rules: [{
-                    required: true, message: t('Please input your password!'),
-                  }, {
-                    validator: this.validateToNextPassword,
-                  }],
-                  initialValue: 'qwerty123456'
-                })(
-                  <Input type="password" />
-                )}
-              </Form.Item>
-              <Form.Item
-                label={t('Confirm new password')}
-              >
-                {getFieldDecorator('confirm', {
-                  rules: [{
-                    required: true, message: t('Please confirm your password!'),
-                  }, {
-                    validator: this.compareToFirstPassword.bind(t),
-                  }],
-                  initialValue: 'qwerty123456'
-                })(
-                  <Input type="password" onBlur={this.handleConfirmBlur} />
-                )}
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">{t('Change password')}</Button>
-                {t('Or')} <a href="/login">{t('Log in')}</a>
-              </Form.Item>
-              {recoveryByTokenError && <Alert
-                message={t('Error')}
-                description={t(error_message)}
-                type="error"
-                showIcon
-              />}
-            </Form>}
-            {recoveryByTokenSuccess && <div>
-              <Alert style={{ marginBottom: '15px' }}
-                message={t('Operation successful')}
-                description={t('Your password has been changed to a new one')}
-                type="success"
-                showIcon
-              />
-              <a href="/login">{t('Log in')}</a>
+          {!recovery_token && <div>
+            {!recoveryFormSuccess && <div>
+              <h2 className='form-title'>{t('Recovery password')}</h2>
+              <div className='tech-forms'>
+                <Form onSubmit={this.handleSubmit}>
+                  <Form.Item
+                    label={t('Email')}
+                  >
+                    {getFieldDecorator('email', {
+                      rules: [{
+                        type: 'email', message: t('The input is not valid E-mail!'),
+                      }, {
+                        required: true, message: t('Please input your E-mail!'),
+                      }]
+                    })(
+                      <Input />
+                    )}
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit" className="login-form-button">{t('Recovery')}</Button>
+                    <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+                  </Form.Item>
+                  {recoveryFormError && <Alert
+                    message={t('Error')}
+                    description={t(error_message)}
+                    type="error"
+                    showIcon
+                  />}
+                </Form>
+              </div>
             </div>}
+            {recoveryFormSuccess && <div>
+              <h2 className='form-title'>{t('Operation successful')}</h2>
+              <p>{t('To continue the password reset operation, you need to follow the link sent to your account registration mail')}</p>
+              <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+            </div>}
+          </div>}
+          {recovery_token && <div>
+            {!recoveryByTokenSuccess && <div className='tech-forms'>
+              <h2 className='form-title'>{t('New password')}</h2>
+              <Form onSubmit={this.handleSubmit}>
+                <Form.Item
+                  label={t('New password')}
+                >
+                  {getFieldDecorator('password', {
+                    rules: [{
+                      required: true, message: t('Please input your password!'),
+                    }, {
+                      validator: this.validateToNextPassword,
+                    }]
+                  })(
+                    <Input type="password" />
+                  )}
+                </Form.Item>
+                <Form.Item
+                  label={t('Confirm new password')}
+                >
+                  {getFieldDecorator('confirm', {
+                    rules: [{
+                      required: true, message: t('Please confirm your password!'),
+                    }, {
+                      validator: this.compareToFirstPassword.bind(t),
+                    }]
+                  })(
+                    <Input type="password" onBlur={this.handleConfirmBlur} />
+                  )}
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" className="login-form-button">{t('Apply')}</Button>
+                  <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+                </Form.Item>
+                {recoveryByTokenError && <Alert
+                  message={t('Error')}
+                  description={t(error_message)}
+                  type="error"
+                  showIcon
+                />}
+              </Form>
+            </div>}
+          </div>}
+          {recoveryByTokenSuccess && <div>
+            <h2 className='form-title'>{t('Operation successful')}</h2>
+            <p>{t('Your password has been changed to a new one')}</p>
+            <div className='login-link'><a href="/login">{t('Log in')}</a></div>
           </div>}
         </Col>
       </Row>

@@ -23,6 +23,12 @@ class RegistrationForm extends React.Component {
     });
   }
 
+  handleInputChange = (value) => {
+    this.props.form.setFieldsValue({
+      nickname: value.split('@')[0]
+    });
+  }
+
   handleConfirmBlur = (e) => {
     const value = e.target.value;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
@@ -54,87 +60,87 @@ class RegistrationForm extends React.Component {
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col>
-          <h2 className='form-title'>{t('Registration')}</h2>
-          <div className='tech-forms'>
-            {!registrationFormSuccess && <Form onSubmit={this.handleSubmit}>
-              <Form.Item
-                label={t('Email')}
-              >
-                {getFieldDecorator('email', {
-                  rules: [{
-                    type: 'email', message: t('The input is not valid E-mail!'),
-                  }, {
-                    required: true, message: t('Please input your E-mail!'),
-                  }],
-                  initialValue: 'threelo@ya.ru'
-                })(
-                  <Input />
-                )}
-              </Form.Item>
-              <Form.Item
-                label={t('Password')}
-              >
-                {getFieldDecorator('password', {
-                  rules: [{
-                    required: true, message: t('Please input your password!'),
-                  }, {
-                    validator: this.validateToNextPassword,
-                  }],
-                  initialValue: 'qwerty123456'
-                })(
-                  <Input type="password" />
-                )}
-              </Form.Item>
-              <Form.Item
-                label={t('Confirm Password')}
-              >
-                {getFieldDecorator('confirm', {
-                  rules: [{
-                    required: true, message: t('Please confirm your password!'),
-                  }, {
-                    validator: this.compareToFirstPassword.bind(t),
-                  }],
-                  initialValue: 'qwerty123456'
-                })(
-                  <Input type="password" onBlur={this.handleConfirmBlur} />
-                )}
-              </Form.Item>
-              <Form.Item
-                label={(
-                  <span>
-                    {t('Nickname')}
-                  </span>
-                )}
-              >
-                {getFieldDecorator('nickname', {
-                  rules: [{ required: true, message: t('Please input your nickname!'), whitespace: true }],
-                  initialValue: 'SashaMailRu'
-                })(
-                  <Input />
-                )}
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">{t('Register')}</Button>
-                <div className='login-link'><a href="/login">{t('Log in')}</a></div>
-              </Form.Item>
-              {registrationFormError && <Alert
-                message={t('Error')}
-                description={t(error_message)}
-                type="error"
-                showIcon
-              />}
-            </Form>}
-            {registrationFormSuccess && <div>
-              <Alert style={{ marginBottom: '15px' }}
-                message={t('Successful registration')}
-                description={t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}
-                type="success"
-                showIcon
-              />
-              <a href="/login">{t('Log in')}</a>
-            </div>}
-          </div>
+        <Col span={10}>
+          {!registrationFormSuccess && <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2 className='form-title'>{t('Registration')}</h2>
+            <div className='tech-forms'>
+              <Form onSubmit={this.handleSubmit}>
+                <Form.Item
+                  label={t('Email')}
+                >
+                  {getFieldDecorator('email', {
+                    rules: [{
+                      type: 'email', message: t('The input is not valid E-mail!'),
+                    }, {
+                      required: true, message: t('Please input your E-mail!'),
+                    }]
+                  })(
+                    <Input onChange={e => this.handleInputChange(e.target.value)} />
+                  )}
+                </Form.Item>
+                <Form.Item
+                  label={t('Password')}
+                >
+                  {getFieldDecorator('password', {
+                    rules: [{
+                      required: true, message: t('Please input your password!'),
+                    }, {
+                      validator: this.validateToNextPassword,
+                    }]
+                  })(
+                    <Input type="password" />
+                  )}
+                </Form.Item>
+                <Form.Item
+                  label={t('Confirm Password')}
+                >
+                  {getFieldDecorator('confirm', {
+                    rules: [{
+                      required: true, message: t('Please confirm your password!'),
+                    }, {
+                      validator: this.compareToFirstPassword.bind(t),
+                    }]
+                  })(
+                    <Input type="password" onBlur={this.handleConfirmBlur} />
+                  )}
+                </Form.Item>
+                <Form.Item
+                  label={(
+                    <span>
+                      {t('Nickname')}
+                    </span>
+                  )}
+                >
+                  {getFieldDecorator('nickname', {
+                    rules: [{
+                      required: true,
+                      min: 8,
+                      max: 30,
+                      message: t('Please input your nickname!') + ' ' + t('min 8 symb'),
+                      whitespace: true
+                    }]
+                  })(
+                    <Input />
+                  )}
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" className="login-form-button">{t('Register')}</Button>
+                  <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+                </Form.Item>
+                {registrationFormError && <Alert
+                  message={t('Error')}
+                  description={t(error_message)}
+                  type="error"
+                  showIcon
+                />}
+              </Form>
+            </div>
+          </div>}
+          {registrationFormSuccess && <div>
+            <h2 className='form-title'>{t('Successful registration')}</h2>
+            <p>{t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}</p>
+            <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+          </div>}
         </Col>
       </Row>
     );

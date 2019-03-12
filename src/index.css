@@ -262,6 +262,7 @@ textarea:focus {
 }
 
 .tech-forms {
+  align-self: center;
   background-color: #f8f8f8;
   padding: 25px 40px 10px 40px;
   border-radius: 15px;
