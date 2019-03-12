@@ -7,18 +7,12 @@ import {
   Button,
   Alert
 } from 'antd';
-import * as Api from '../api';
 
 class RegistrationForm extends React.Component {
 
   state = {
     confirmDirty: false
   };
-
-  componentDidUpdate() {
-    if (this.props.app.registrationFormSuccess)
-      Api.getAuthUrl();
-  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -54,7 +48,7 @@ class RegistrationForm extends React.Component {
 
   render() {
     let { t } = this.props;
-    let { registrationFormError, error_message } = this.props.app;
+    let { registrationFormError, registrationFormSuccess, error_message } = this.props.app;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -71,10 +65,10 @@ class RegistrationForm extends React.Component {
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col span={10} style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
-          <h2>{t('Registration form')}</h2>
-          <div>
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Col span={10}>
+          <h2 className='form-title'>{t('Registration form')}</h2>
+          <div style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
+            {!registrationFormSuccess && <Form {...formItemLayout} onSubmit={this.handleSubmit}>
               <Form.Item
                 label={t('Email')}
               >
@@ -141,7 +135,16 @@ class RegistrationForm extends React.Component {
                 type="error"
                 showIcon
               />}
-            </Form>
+            </Form>}
+            {registrationFormSuccess && <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Alert style={{ marginBottom: '15px' }}
+                message={t('Successful registration')}
+                description={t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}
+                type="success"
+                showIcon
+              />
+              <a href="/login">{t('Log in')}</a>
+            </div>}
           </div>
         </Col>
       </Row>

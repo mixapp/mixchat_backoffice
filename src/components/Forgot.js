@@ -61,9 +61,9 @@ class ForgotForm extends React.Component {
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col span={10} style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
-          <h2>{t('Recovery form')}</h2>
-          {!recovery_token && <div>
+        <Col span={10}>
+          <h2 className='form-title'>{t('Recovery form')}</h2>
+          {!recovery_token && !recoveryFormSuccess && <div style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item
                 label={t('Email')}

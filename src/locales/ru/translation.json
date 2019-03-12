@@ -82,5 +82,7 @@
     "Recovery form": "Форма восстановления",
     "New password": "Новый пароль",
     "Confirm new password": "Подтверждение нового пароля",
-    "Change password": "Изменить пароль"
+    "Change password": "Изменить пароль",
+    "Successful registration": "Успешная регистрация",
+    "To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail": "Для продолжения работы в системе необходимо подтвердить вашу учётную запись, пройдя по ссылке в письме, которе мы Вам отправили на почту"
 }

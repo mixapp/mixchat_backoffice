@@ -46,7 +46,6 @@ class Router extends React.Component {
   }
 
   render() {
-    console.log(['/registration', '/login', '/forgot'].indexOf(history.location.pathname));
     return <ConnectedRouter history={history}>
       <div>
         <Route path="/registration" exact component={Registration} />
