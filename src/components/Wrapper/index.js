@@ -31,7 +31,7 @@ class Wrapper extends React.Component {
     return (
       <div className='wrapper'>
         <div>
-          {xuser && ['/companies', '/authorize', '/login'].indexOf(location.pathname) === -1 ? <MenuPanel /> : null}
+          {xuser && ['/companies', '/authorize', '/login', '/forgot'].indexOf(location.pathname) === -1 ? <MenuPanel /> : null}
         </div>
         <div>
           <DialogsList dialogsListShow={dialogsListShow} />

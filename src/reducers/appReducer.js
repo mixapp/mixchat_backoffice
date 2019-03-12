@@ -24,7 +24,8 @@ import {
   FETCH_MANAGER_INFO_SUCCESS,
   FETCH_XUSER_SUCCESS,
   SEND_REGISTRATION_FORM_SUCCESS,
-  SEND_REGISTRATION_FORM_ERROR
+  SEND_REGISTRATION_FORM_ERROR,
+  SEND_RECOVERY_PWD_SUCCESS
 } from '../constants';
 const initialState = {
   error_message: '',
@@ -46,7 +47,9 @@ const initialState = {
   manager: null,
   /* Registration form */
   registrationFormSuccess: false,
-  registrationFormError: false
+  registrationFormError: false,
+  /* Recovery form */
+  recoveryFormSuccess: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -198,6 +201,9 @@ export default function reducer(state = initialState, action = {}) {
       state.registrationFormSuccess = false;
       state.registrationFormError = true;
       state.error_message = action.result.data.error_message;
+      return { ...state };
+    case SEND_RECOVERY_PWD_SUCCESS:
+      state.recoveryFormSuccess = true;
       return { ...state };
     default:
       return state;

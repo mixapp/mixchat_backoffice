@@ -19,7 +19,8 @@ import {
   FETCH_XUSER_REQUEST,
   SEND_REGISTRATION_FORM_REQUEST,
   SEND_LOGIN_FORM_REQUEST,
-  SEND_RECOVERY_PWD_REQUEST
+  SEND_RECOVERY_PWD_REQUEST,
+  SEND_RECOVERY_PWD_TOKEN_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -156,6 +157,13 @@ export const loginForm = (data) => {
 export const recovery = (data) => {
   return {
     type: SEND_RECOVERY_PWD_REQUEST,
+    data
+  }
+}
+
+export const recoveryToken = (data) => {
+  return {
+    type: SEND_RECOVERY_PWD_TOKEN_REQUEST,
     data
   }
 }

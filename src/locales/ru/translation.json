@@ -78,5 +78,9 @@
     "Log in": "Войти",
     "Or": "Или",
     "register now!": "зарегистрироваться!",
-    "Send to Email": "Отправить на почту"
+    "Send to Email": "Отправить на почту",
+    "Recovery form": "Форма восстановления",
+    "New password": "Новый пароль",
+    "Confirm new password": "Подтверждение нового пароля",
+    "Change password": "Изменить пароль"
 }

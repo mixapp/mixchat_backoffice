@@ -46,20 +46,21 @@ class Router extends React.Component {
   }
 
   render() {
+    console.log(['/registration', '/login', '/forgot'].indexOf(history.location.pathname));
     return <ConnectedRouter history={history}>
       <div>
         <Route path="/registration" exact component={Registration} />
         <Route path="/authorize" exact component={Authorize} />
         <Route path="/login" exact component={Login} />
         <Route path="/forgot" exact component={Forgot} />
-        {history.location.pathname !== '/registration' ?
+        {['/registration', '/login', '/forgot'].indexOf(history.location.pathname) === -1 &&
           <Wrapper loader={this.props.app.loader} xuser={this.props.app.xuser}>
             <PrivateRoute path='/' exact component={MainPage} />
             <PrivateRoute path='/companies' exact component={Companies} />
             <PrivateRoute path='/settings' exact component={Settings} />
             <PrivateRoute path='/dialogs' exact component={Dialogs} />
             <PrivateRoute path='/managers' exact component={Managers} />
-          </Wrapper> : null}
+          </Wrapper>}
       </div>
     </ConnectedRouter >;
   }

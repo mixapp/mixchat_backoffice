@@ -195,6 +195,18 @@ export const recovery = async (data) => {
   }
 }
 
+export const recoveryToken = async (data) => {
+  try {
+    let result = await axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery/' + data.token,
+      data, {
+        headers: getHeadera(),
+      });
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const removeManager = async (data, companyId) => {
   try {
     const uri = getUrl(config.backApiProcessId, companyId, 'removemanagers');

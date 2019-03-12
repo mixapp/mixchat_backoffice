@@ -32,7 +32,10 @@ import {
   SEND_REGISTRATION_FORM_REQUEST,
   SEND_REGISTRATION_FORM_SUCCESS,
   SEND_REGISTRATION_FORM_ERROR,
-  SEND_RECOVERY_PWD_REQUEST
+  SEND_RECOVERY_PWD_REQUEST,
+  SEND_RECOVERY_PWD_TOKEN_REQUEST,
+  SEND_RECOVERY_PWD_SUCCESS,
+  SEND_RECOVERY_PWD_ERROR
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -389,6 +392,22 @@ function* recoveryFormSaga() {
     try {
 
       let result = yield Api.recovery(action.data);
+      if (result.data.result)
+        yield put({ type: SEND_RECOVERY_PWD_SUCCESS });
+      else
+        yield put({ type: SEND_RECOVERY_PWD_ERROR, data: result.data });
+
+    } catch (err) {
+      throw err;
+    }
+  })
+}
+
+function* recoveryTokenSaga() {
+  yield takeLatest(SEND_RECOVERY_PWD_TOKEN_REQUEST, function* (action) {
+    try {
+
+      let result = yield Api.recoveryToken(action.data);
       console.log(result);
 
     } catch (err) {
@@ -418,6 +437,7 @@ export default function* ordersSaga() {
     fork(fetchManagerInfoSaga),
     fork(fetchXUSERSaga),
     fork(registrationFormSaga),
-    fork(recoveryFormSaga)
+    fork(recoveryFormSaga),
+    fork(recoveryTokenSaga)
   ];
 }
