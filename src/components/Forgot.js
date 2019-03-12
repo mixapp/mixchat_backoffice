@@ -5,7 +5,8 @@ import {
   Input,
   Row,
   Col,
-  Button
+  Button,
+  Alert
 } from 'antd';
 
 class ForgotForm extends React.Component {
@@ -57,14 +58,13 @@ class ForgotForm extends React.Component {
     let { recoveryFormSuccess } = this.props.app;
     const { getFieldDecorator } = this.props.form;
     let { recovery_token } = this.state;
-    console.log(recoveryFormSuccess);
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col span={10}>
+        <Col>
           <h2 className='form-title'>{t('Recovery form')}</h2>
-          {!recovery_token && !recoveryFormSuccess && <div style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
-            <Form onSubmit={this.handleSubmit} className="login-form">
+          {!recovery_token && <div className='tech-forms'>
+            {!recoveryFormSuccess && <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item
                 label={t('Email')}
               >
@@ -83,9 +83,15 @@ class ForgotForm extends React.Component {
                 <Button type="primary" htmlType="submit" className="login-form-button">{t('Send to Email')}</Button>
                 {t('Or')} <a href="/login">{t('Log in')}</a>
               </Form.Item>
-            </Form>
+            </Form>}
+            {recoveryFormSuccess && <Alert style={{ marginBottom: '15px' }}
+              message={t('Operation successful')}
+              description={t('To continue the password reset operation, you need to follow the link sent to your account registration mail')}
+              type="success"
+              showIcon
+            />}
           </div>}
-          {recovery_token && <div>
+          {recovery_token && <div className='tech-forms'>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item
                 label={t('New password')}

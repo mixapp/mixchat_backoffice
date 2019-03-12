@@ -84,5 +84,7 @@
     "Confirm new password": "Подтверждение нового пароля",
     "Change password": "Изменить пароль",
     "Successful registration": "Успешная регистрация",
-    "To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail": "Для продолжения работы в системе необходимо подтвердить вашу учётную запись, пройдя по ссылке в письме, которе мы Вам отправили на почту"
+    "To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail": "Для продолжения работы в системе необходимо подтвердить Вашу учётную запись, пройдя по ссылке в письме, которе мы Вам отправили на почту",
+    "Operation successful": "Операция выполнена успешно",
+    "To continue the password reset operation, you need to follow the link sent to your account registration mail": "Для продолжения операции сброса пароля Вам необходимо пройти по ссылке, высланной вам на почту регистрации учётной записи"
 }

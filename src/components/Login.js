@@ -26,9 +26,9 @@ class LoginForm extends React.Component {
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col span={10} style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
-          <h2>{t('Login form')}</h2>
-          <div>
+        <Col>
+          <h2 className='form-title'>{t('Login form')}</h2>
+          <div className='tech-forms'>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item>
                 {getFieldDecorator('userName', {

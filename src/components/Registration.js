@@ -52,23 +52,12 @@ class RegistrationForm extends React.Component {
 
     const { getFieldDecorator } = this.props.form;
 
-    const formItemLayout = {
-      labelcol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrappercol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col span={10}>
+        <Col>
           <h2 className='form-title'>{t('Registration form')}</h2>
-          <div style={{ backgroundColor: '#f8f8f8', padding: '25px 40px 10px 40px', borderRadius: '15px' }}>
-            {!registrationFormSuccess && <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+          <div className='tech-forms'>
+            {!registrationFormSuccess && <Form onSubmit={this.handleSubmit} className='login-form'>
               <Form.Item
                 label={t('Email')}
               >
