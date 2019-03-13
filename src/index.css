@@ -300,6 +300,7 @@ textarea:focus {
 }
 
 .settings-copy-button {
+  cursor: pointer;
   position: absolute;
   right: 25px;
   margin-top: 5px;
