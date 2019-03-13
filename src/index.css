@@ -277,3 +277,32 @@ textarea:focus {
 .form-msg {
   text-align: center;
 }
+
+.settings-alert {
+  display: flex;
+  padding: 10px 0;
+}
+
+.settings-alert>div {
+  border-radius: 0;
+  width: 100%;
+  border: none;
+  padding: 20px 10px !important;
+}
+
+.settings-alert>button {
+  border-radius: 0;
+  height: auto
+}
+
+.settings-header-bold {
+  font-weight: 500;
+}
+
+.settings-copy-button {
+  position: absolute;
+  right: 25px;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 600;
+}

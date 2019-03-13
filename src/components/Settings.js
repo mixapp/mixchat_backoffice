@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Radio, Collapse, Alert, message } from 'antd';
+import { Form, Input, Button, Radio, Collapse, Alert, message, Icon } from 'antd';
 import { CirclePicker } from 'react-color';
 
 const FormItem = Form.Item;
@@ -51,15 +51,30 @@ class RegistrationForm extends React.Component {
     let { t } = this.props;
     const { getFieldDecorator } = this.props.form;
     const companyId = this.props.app.config ? this.props.app.config.companyId : ' pending... ';
+    this.widgetCDN = '<script src="https://cdn.jsdelivr.net/gh/mixapp/mixchat_widget@8d1cb879d6565ea7cfb4182fbf2a32aaa6265cbd/build/widget.js?v=1"></script>';
+    this.meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
     this.widgetCode = "<script> window.onload = () => { Omni.Widget({ companyId: '" + companyId + "' }); } </script>";
 
     return (
       <div>
-        <h2>{t('mainMenu.settings')}</h2>
-        <label><b>{t('Copy this code into body of your HTML')}</b></label>
-        <div style={{ display: 'flex' }}>
-          <Alert message={this.widgetCode} type="info" style={{ borderRadius: 0 }} />
-          <Button type="primary" icon="copy" size="large" style={{ borderRadius: 0, height: 'auto' }} onClick={this.fallbackCopyTextToClipboard.bind(this)} />
+        <h2><b>{t('mainMenu.settings')}</b></h2>
+        <label className='settings-header-bold'>{t('Copy this code into HTML header')}</label>
+        <div className='settings-alert'>
+          <Alert message={this.meta} type="info" />
+          <span className='settings-copy-button'><Icon type='copy' /> Click to copy</span>
+        </div>
+
+        <label className='settings-header-bold'>{t('Copy this code into body of your HTML, before code below')}</label>
+        <div className='settings-alert'>
+          <Alert message={this.widgetCDN} type="info" />
+          <span className='settings-copy-button'><Icon type='copy' /> Click to copy</span>
+        </div>
+
+        <label className='settings-header-bold'>{t('Copy this code into body of your HTML')}</label>
+        <div className='settings-alert'>
+          <Alert message={this.widgetCode} type="info" />
+          <span className='settings-copy-button'><Icon type='copy' /> Click to copy</span>
+          {/* this.fallbackCopyTextToClipboard.bind(this) */}
         </div>
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
