@@ -90,5 +90,6 @@
     "Recovery password": "Восстановление пароля",
     "Apply": "Применить",
     "min 8 symb": "от 8 букв",
-    "This email is already been taken": "Этот Email уже занят"
+    "This email is already been taken": "Этот Email уже занят",
+    "Copy this code into HTML header": "Скопируйте код нижу в заголовки вашей HTML страницы"
 }
