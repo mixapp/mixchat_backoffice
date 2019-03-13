@@ -50,6 +50,8 @@ export default class ManagersList extends React.Component {
 
   render() {
     let { t } = this.props;
+    let { managers } = this.props.app;
+    
     let columns = [
       { title: '№', dataIndex: 'number', key: 'number' },
       { title: t('Email'), dataIndex: 'email', key: 'email' },
@@ -73,7 +75,7 @@ export default class ManagersList extends React.Component {
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: "20px" }}>
           {t('buttons.addOperator')}
         </Button>
-        <Table {...this.state} columns={columns} dataSource={this.props.app.managers} />
+        <Table {...this.state} columns={columns} pagination={{ hideOnSinglePage: true }} dataSource={managers} />
         <AddManagerForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.visible}
