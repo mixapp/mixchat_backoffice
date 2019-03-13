@@ -51,9 +51,9 @@ class RegistrationForm extends React.Component {
     let { t } = this.props;
     const { getFieldDecorator } = this.props.form;
     const companyId = this.props.app.config ? this.props.app.config.companyId : ' pending... ';
-    this.widgetCDN = '<script src="https://cdn.jsdelivr.net/gh/mixapp/mixchat_widget@8d1cb879d6565ea7cfb4182fbf2a32aaa6265cbd/build/widget.js?v=1"></script>';
     this.meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-    this.widgetCode = "<script> window.onload = () => { Omni.Widget({ companyId: '" + companyId + "' }); } </script>";
+    this.widgetCode = "<script src='https://cdn.jsdelivr.net/gh/mixapp/mixchat_widget@8d1cb879d6565ea7cfb4182fbf2a32aaa6265cbd/build/widget.js?v=1'></script>" +
+      "<script>window.onload=()=>{ Omni.Widget({ companyId: '" + companyId + "' }); }</script>";
 
     return (
       <div>
@@ -61,12 +61,6 @@ class RegistrationForm extends React.Component {
         <label className='settings-header-bold'>{t('Copy this code into HTML header')}</label>
         <div className='settings-alert'>
           <Alert message={this.meta} type="info" />
-          <span className='settings-copy-button'><Icon type='copy' /> Click to copy</span>
-        </div>
-
-        <label className='settings-header-bold'>{t('Copy this code into body of your HTML, before code below')}</label>
-        <div className='settings-alert'>
-          <Alert message={this.widgetCDN} type="info" />
           <span className='settings-copy-button'><Icon type='copy' /> Click to copy</span>
         </div>
 
