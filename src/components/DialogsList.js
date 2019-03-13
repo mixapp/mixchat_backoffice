@@ -26,13 +26,13 @@ class DialogsListMenu extends React.Component {
 
   render() {
     let { t } = this.props;
-    let { xuser } = this.props.app;
+    let { xuser, role } = this.props.app;
     let dialogs = _.sortBy(this.props.app.dialogs, '_updatedAt').reverse();
     let unreaded = [];
     let readed = [];
     if (!dialogs) dialogs = [];
     dialogs.forEach(item => {
-      if (!item.customFields.manager || item.customFields.manager === xuser.userId) {
+      if (!item.customFields.manager || item.customFields.manager === xuser.userId || role === 'admin') {
         let result = item.name.split('_');
         let companyid = result[result.length - 1];
         item.name = item.name.replace(companyid, '');
