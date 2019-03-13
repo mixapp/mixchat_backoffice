@@ -89,5 +89,6 @@
     "Registration": "Регистрация",
     "Recovery password": "Восстановление пароля",
     "Apply": "Применить",
-    "min 8 symb": "от 8 букв"
+    "min 8 symb": "от 8 букв",
+    "This email is already been taken": "Этот Email уже занят"
 }

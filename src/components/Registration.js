@@ -4,27 +4,47 @@ import {
   Input,
   Row,
   Col,
-  Button,
-  Alert
+  Button
 } from 'antd';
 
 class RegistrationForm extends React.Component {
 
   state = {
-    confirmDirty: false
+    confirmDirty: false,
+    emailDirty: false
   };
+
+  takenEmails = [];
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.registrationForm({ user: values });
+        this.setState({
+          emailDirty: false
+        })
       }
     });
   }
 
+  handleNameValidator = (rule, value, callback) => {
+    let { t } = this.props;
+    let { registrationFormError } = this.props.app;
+    if (registrationFormError) {
+      if (this.takenEmails.indexOf(value) > -1) {
+        callback(t('This email is already been taken'));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  }
+
   handleInputChange = (value) => {
-    this.props.form.setFieldsValue({
+    let { setFieldsValue } = this.props.form;
+    setFieldsValue({
       nickname: value.split('@')[0]
     });
   }
@@ -45,18 +65,32 @@ class RegistrationForm extends React.Component {
   }
 
   validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form;
+    const { validateFields } = this.props.form;
     if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
+      validateFields(['confirm'], { force: true });
     }
     callback();
+  }
+
+  componentWillReceiveProps() {
+    let { registrationFormError } = this.props.app;
+    const { validateFields, getFieldValue } = this.props.form;
+    if (registrationFormError) {
+      if (!this.state.emailDirty) {
+        this.setState({
+          emailDirty: true
+        });
+        this.takenEmails = [...this.takenEmails, getFieldValue('email')];
+        validateFields(['email'], { force: true }, (e, v) => { });
+      }
+    }
   }
 
   render() {
     let { t } = this.props;
     let { registrationFormError, registrationFormSuccess, error_message } = this.props.app;
 
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, validateFields } = this.props.form;
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
@@ -69,11 +103,15 @@ class RegistrationForm extends React.Component {
                   label={t('Email')}
                 >
                   {getFieldDecorator('email', {
+                    //validateTrigger: 'onBlur',
                     rules: [{
                       type: 'email', message: t('The input is not valid E-mail!'),
                     }, {
                       required: true, message: t('Please input your E-mail!'),
-                    }]
+                    }, {
+                      validator: this.handleNameValidator.bind(this)
+                    }],
+                    initialValue: 'threelo@ya.ru'
                   })(
                     <Input onChange={e => this.handleInputChange(e.target.value)} />
                   )}
@@ -86,7 +124,8 @@ class RegistrationForm extends React.Component {
                       required: true, message: t('Please input your password!'),
                     }, {
                       validator: this.validateToNextPassword,
-                    }]
+                    }],
+                    initialValue: 'qwerty123456'
                   })(
                     <Input type="password" />
                   )}
@@ -99,7 +138,8 @@ class RegistrationForm extends React.Component {
                       required: true, message: t('Please confirm your password!'),
                     }, {
                       validator: this.compareToFirstPassword.bind(t),
-                    }]
+                    }],
+                    initialValue: 'qwerty123456'
                   })(
                     <Input type="password" onBlur={this.handleConfirmBlur} />
                   )}
@@ -118,7 +158,8 @@ class RegistrationForm extends React.Component {
                       max: 30,
                       message: t('Please input your nickname!') + ' ' + t('min 8 symb'),
                       whitespace: true
-                    }]
+                    }],
+                    initialValue: 'ThreeloRu'
                   })(
                     <Input />
                   )}
@@ -127,18 +168,12 @@ class RegistrationForm extends React.Component {
                   <Button type="primary" htmlType="submit" className="login-form-button">{t('Register')}</Button>
                   <div className='login-link'><a href="/login">{t('Log in')}</a></div>
                 </Form.Item>
-                {registrationFormError && <Alert
-                  message={t('Error')}
-                  description={t(error_message)}
-                  type="error"
-                  showIcon
-                />}
               </Form>
             </div>
           </div>}
           {registrationFormSuccess && <div>
             <h2 className='form-title'>{t('Successful registration')}</h2>
-            <p>{t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}</p>
+            <p className='form-msg'>{t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}</p>
             <div className='login-link'><a href="/login">{t('Log in')}</a></div>
           </div>}
         </Col>
