@@ -377,7 +377,7 @@ function* registrationFormSaga() {
     try {
 
       let result = yield Api.registration(action.data);
-      if (!result.data.error) {
+      if (result.data && !result.data.error) {
         yield put({ type: SEND_REGISTRATION_FORM_SUCCESS, result });
       } else {
         yield put({ type: SEND_REGISTRATION_FORM_ERROR, result });

@@ -12,6 +12,7 @@ import {
 class ForgotForm extends React.Component {
 
   state = {
+    loading: false,
     recovery_token: null
   }
 
@@ -23,7 +24,8 @@ class ForgotForm extends React.Component {
       let a = search[i].split('=');
       if (a[0] === 'recovery_token') {
         this.setState({
-          recovery_token: a[1]
+          recovery_token: a[1],
+          loading: false
         })
       }
     }
@@ -33,6 +35,9 @@ class ForgotForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          loading: true
+        });
         console.log('Received values of form: ', values);
         if (this.state.recovery_token) {
           values.token = this.state.recovery_token;
@@ -57,7 +62,7 @@ class ForgotForm extends React.Component {
     let { t } = this.props;
     let { recoveryFormSuccess, recoveryFormError, recoveryByTokenError, recoveryByTokenSuccess, error_message } = this.props.app;
     const { getFieldDecorator } = this.props.form;
-    let { recovery_token } = this.state;
+    let { recovery_token, loading } = this.state;
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
@@ -81,7 +86,7 @@ class ForgotForm extends React.Component {
                     )}
                   </Form.Item>
                   <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">{t('Recovery')}</Button>
+                    <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>{t('Recovery')}</Button>
                     <div className='login-link'><a href="/login">{t('Log in')}</a></div>
                   </Form.Item>
                   {recoveryFormError && <Alert
@@ -131,7 +136,7 @@ class ForgotForm extends React.Component {
                     )}
                   </Form.Item>
                   <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">{t('Apply')}</Button>
+                    <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>{t('Apply')}</Button>
                     <div className='login-link'><a href="/login">{t('Log in')}</a></div>
                   </Form.Item>
                   {recoveryByTokenError && <Alert

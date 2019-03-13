@@ -10,6 +10,7 @@ import {
 class RegistrationForm extends React.Component {
 
   state = {
+    loading: false,
     confirmDirty: false,
     emailDirty: false
   };
@@ -22,7 +23,8 @@ class RegistrationForm extends React.Component {
       if (!err) {
         this.props.registrationForm({ user: values });
         this.setState({
-          emailDirty: false
+          emailDirty: false,
+          loading: true
         })
       }
     });
@@ -78,7 +80,8 @@ class RegistrationForm extends React.Component {
     if (registrationFormError) {
       if (!this.state.emailDirty) {
         this.setState({
-          emailDirty: true
+          emailDirty: true,
+          loading: false
         });
         this.takenEmails = [...this.takenEmails, getFieldValue('email')];
         validateFields(['email'], { force: true }, (e, v) => { });
@@ -87,10 +90,10 @@ class RegistrationForm extends React.Component {
   }
 
   render() {
-    let { t } = this.props;
-    let { registrationFormError, registrationFormSuccess, error_message } = this.props.app;
-
+    const { t } = this.props;
+    const { registrationFormError, registrationFormSuccess, error_message } = this.props.app;
     const { getFieldDecorator, validateFields } = this.props.form;
+    const { loading } = this.state;
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
@@ -165,7 +168,7 @@ class RegistrationForm extends React.Component {
                   )}
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit" className="login-form-button">{t('Register')}</Button>
+                  <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>{t('Register')}</Button>
                   <div className='login-link'><a href="/login">{t('Log in')}</a></div>
                 </Form.Item>
               </Form>
