@@ -443,6 +443,6 @@ export const websocketInitRoomsChanged = (ddp) => {
 }
 
 export const setStatus = (trigger, ddp) => {
-  let status = trigger ? 'online' : 'offline';
-  ddp.method('UserPresence:setDefaultStatus', [status]);
+  let status = trigger ? 'online' : 'away';
+  ddp.method('UserPresence:' + status, []);
 }

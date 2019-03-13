@@ -86,6 +86,12 @@ export default class DialogsListView extends React.Component {
                         case "online":
                           status = <Badge status="success" />;
                           break;
+                        case "away":
+                          status = <Badge status="warning" />;
+                          break;
+                        case "busy":
+                          status = <Badge status="error" />;
+                          break;
                         default:
                           status = <Badge status="default" />;
                           break;
