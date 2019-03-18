@@ -6,7 +6,7 @@ import * as Api from '../../api';
 export default class CommentList extends React.Component {
 
   componentWillMount() {
-    this.client = JSON.parse(localStorage.getItem('XUSER')).data.userId;
+    this.client = JSON.parse(localStorage.getItem('XUSER'));
   }
 
   render() {

@@ -5,7 +5,7 @@ import { List } from 'antd';
 export default class CommentList extends React.Component {
 
   componentDidMount() {
-    this.client = JSON.parse(localStorage.getItem('XUSER')).data.userId;
+    this.client = JSON.parse(localStorage.getItem('XUSER')).userId;
   }
 
   render() {

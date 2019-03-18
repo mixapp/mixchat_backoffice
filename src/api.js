@@ -23,6 +23,7 @@ const getUrl = (processId, companyId, path) => {
 }
 
 const getRocketCahtUrl = () => {
+  //return 'appjs.site';
   return 'chat.mixapp.io';
 }
 
@@ -41,7 +42,7 @@ const getToken = () => {
 }
 
 const getRocketChatHeaders = (json) => {
-  let { authToken, userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+  let { authToken, userId } = JSON.parse(localStorage.getItem('XUSER'));
   return {
     'Content-Type': json ? 'application/json' : '',
     'X-Auth-Token': authToken,
@@ -58,8 +59,7 @@ const getHeadera = () => {
 }
 
 export const config = {
-  backApiProcessId: '5bc49dd0574e7403e22ec1a0',
-  frontApiProcessId: '5bc49dd735b38203254872a5',
+  backApiProcessId: '5c890db9574e7435772c4773',
   commentsPerPage: 15
 };
 
@@ -78,10 +78,9 @@ export const getCompany = async () => {
   }
 }
 
-export const getXauthToken = async (companyId) => {
+export const getXauthToken = async () => {
   try {
-    const uri = getUrl(config.backApiProcessId, companyId, 'get-token');
-    let result = await axios.get(uri, {
+    let result = await axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-token', {
       headers: getHeadera()
     });
     return result.data;

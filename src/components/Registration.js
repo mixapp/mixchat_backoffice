@@ -106,7 +106,6 @@ class RegistrationForm extends React.Component {
                   label={t('Email')}
                 >
                   {getFieldDecorator('email', {
-                    //validateTrigger: 'onBlur',
                     rules: [{
                       type: 'email', message: t('The input is not valid E-mail!'),
                     }, {
@@ -114,7 +113,7 @@ class RegistrationForm extends React.Component {
                     }, {
                       validator: this.handleNameValidator.bind(this)
                     }],
-                    initialValue: 'threelo@ya.ru'
+                    initialValue: '3dspaun@mail.ru'
                   })(
                     <Input onChange={e => this.handleInputChange(e.target.value)} />
                   )}
@@ -162,7 +161,7 @@ class RegistrationForm extends React.Component {
                       message: t('Please input your nickname!') + ' ' + t('min 8 symb'),
                       whitespace: true
                     }],
-                    initialValue: 'ThreeloRu'
+                    initialValue: 'SashaMailRu'
                   })(
                     <Input />
                   )}

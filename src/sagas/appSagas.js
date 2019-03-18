@@ -64,7 +64,7 @@ function* fetchDialogSaga() {
       let { room, fetchNew } = action.data;
       let dialog = _.find(dialogs, function (dialog) { return dialog._id === room._id; });
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
-      let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+      let { userId } = JSON.parse(localStorage.getItem('XUSER'));
       if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
         yield Api.takeRequest({
           roomId: room._id,
@@ -330,7 +330,7 @@ function* setStatusSaga() {
   yield takeLatest(SET_STATUS_REQUEST, function* (action) {
     try {
 
-      let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+      let { userId } = JSON.parse(localStorage.getItem('XUSER'));
       const currentCompany = yield select((state) => state.app.currentCompany);
       const ddp = yield select((state) => state.app.socket);
       yield Api.setStatus(action.data, ddp);
@@ -347,7 +347,7 @@ function* fetchManagerInfoSaga() {
   yield takeLatest(FETCH_MANAGER_INFO_REQUEST, function* () {
     try {
 
-      let { userId } = JSON.parse(localStorage.getItem('XUSER')).data;
+      let { userId } = JSON.parse(localStorage.getItem('XUSER'));
       const currentCompany = yield select((state) => state.app.currentCompany);
       let managerInfo = yield Api.fetchUserInfo(currentCompany, userId);
       yield put({ type: FETCH_MANAGER_INFO_SUCCESS, managerInfo });
@@ -364,7 +364,7 @@ function* fetchXUSERSaga() {
 
       let XUSER = JSON.parse(localStorage.getItem('XUSER'));
       if (XUSER)
-        yield put({ type: FETCH_XUSER_SUCCESS, xuser: XUSER.data });
+        yield put({ type: FETCH_XUSER_SUCCESS, xuser: XUSER });
 
     } catch (err) {
       throw err;

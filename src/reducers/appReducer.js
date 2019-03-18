@@ -182,7 +182,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
 
     case SET_XUSER_SUCCESS:
-      state.xuser = action.result.data;
+      state.xuser = action.result;
       localStorage.setItem('XUSER', JSON.stringify(action.result));
       return { ...state };
 
