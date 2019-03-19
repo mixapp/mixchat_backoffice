@@ -23,19 +23,21 @@ const getUrl = (processId, companyId, path) => {
 }
 
 const getRocketCahtUrl = () => {
-  //return 'appjs.site';
+  //return 'chat.appjs.site';
   return 'chat.mixapp.io';
 }
 
 const getToken = () => {
   let token = localStorage.getItem('user');
   try {
+
     token = JSON.parse(token);
     if (!token) {
       //getAuthUrl();
     } else {
       return token.token;
     }
+
   } catch (err) {
     throw err;
   }
@@ -52,10 +54,12 @@ const getRocketChatHeaders = (json) => {
 
 const getHeadera = () => {
   return {
-    'Authorization': 'Bearer ' + getToken(),
-    'Content-Type': 'application/json;charset=UTF-8',
-    'accept': '*/*'
-  }
+    headers: {
+      'Authorization': 'Bearer ' + getToken(),
+      'Content-Type': 'application/json;charset=UTF-8',
+      'accept': '*/*'
+    }
+  };
 }
 
 export const config = {
@@ -69,10 +73,9 @@ export const fetchConfig = () => {
 
 export const getCompany = async () => {
   try {
-    let result = await axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-company', {
-      headers: getHeadera()
-    });
-    return result;
+
+    return axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-company', getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -80,10 +83,9 @@ export const getCompany = async () => {
 
 export const getXauthToken = async () => {
   try {
-    let result = await axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-token', {
-      headers: getHeadera()
-    });
-    return result.data;
+
+    return axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-token', getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -91,15 +93,9 @@ export const getXauthToken = async () => {
 
 export const fetchSettings = async (companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, companyId, 'widget-oidc');
-    let result = await axios.get(uri, {
-      headers: getHeadera()
-    });
-    return {
-      companyName: result.data.companyName,
-      ...result.data.widget,
-      ...result.data.settings
-    }
+
+    return axios.get(getUrl(config.backApiProcessId, companyId, 'widget-oidc'), getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -108,8 +104,7 @@ export const fetchSettings = async (companyId) => {
 export const saveSettings = async (settings, companyId) => {
   try {
 
-    const uri = getUrl(config.backApiProcessId, companyId, 'settings');
-    let result = await axios.post(uri, {
+    return axios.post(getUrl(config.backApiProcessId, companyId, 'settings'), {
       "companyName": settings.companyName,
       "widget": {
         "isActive": settings.isActive,
@@ -131,10 +126,7 @@ export const saveSettings = async (settings, companyId) => {
         "fbm_secret": settings.fbm_secret,
         "fbm_page": settings.fbm_page
       }
-    }, {
-        headers: getHeadera()
-      });
-    return result;
+    }, getHeadera());
 
   } catch (err) {
     throw err;
@@ -143,12 +135,10 @@ export const saveSettings = async (settings, companyId) => {
 
 export const fetchManagers = async (companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, companyId, 'listmanagers');
-    let result = await axios.get(uri, {
-      headers: getHeadera()
-    });
 
+    let result = await axios.get(getUrl(config.backApiProcessId, companyId, 'listmanagers'), getHeadera());
     return result.data;
+
   } catch (err) {
     throw err;
   }
@@ -156,15 +146,14 @@ export const fetchManagers = async (companyId) => {
 
 export const addManager = async (data, companyId) => {
   try {
+
     const uri = getUrl(config.backApiProcessId, companyId, 'addmanagers');
-    let result = await axios.post(uri, {
+    return axios.post(uri, {
       "email": data.email,
       "nickname": data.nickname,
       "password": data.password
-    }, {
-        headers: getHeadera(),
-      });
-    return result;
+    }, getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -172,11 +161,9 @@ export const addManager = async (data, companyId) => {
 
 export const registration = async (data) => {
   try {
-    let result = await axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/registration',
-      data, {
-        headers: getHeadera(),
-      });
-    return result;
+
+    return axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/registration', data, getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -184,11 +171,9 @@ export const registration = async (data) => {
 
 export const recovery = async (data) => {
   try {
-    let result = await axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery',
-      data, {
-        headers: getHeadera(),
-      });
-    return result;
+
+    return axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery', data, getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -196,11 +181,9 @@ export const recovery = async (data) => {
 
 export const recoveryToken = async (data) => {
   try {
-    let result = await axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery/' + data.token,
-      data, {
-        headers: getHeadera(),
-      });
-    return result;
+
+    return axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery/' + data.token, data, getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -208,14 +191,12 @@ export const recoveryToken = async (data) => {
 
 export const removeManager = async (data, companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, companyId, 'removemanagers');
-    let result = await axios.post(uri, {
+
+    return axios.post(getUrl(config.backApiProcessId, companyId, 'removemanagers'), {
       id: data._id,
       username: data.nickname
-    }, {
-        headers: getHeadera(),
-      });
-    return result;
+    }, getHeadera());
+
   } catch (err) {
     throw err;
   }
@@ -223,10 +204,8 @@ export const removeManager = async (data, companyId) => {
 
 export const takeRequest = async (data, companyId) => {
   try {
-    const uri = getUrl(config.backApiProcessId, companyId, 'take-request');
-    let result = await axios.post(uri, data, {
-      headers: getHeadera()
-    });
+
+    let result = await axios.post(getUrl(config.backApiProcessId, companyId, 'take-request'), data, getHeadera());
     return result;
   } catch (err) {
     throw err;
@@ -236,9 +215,7 @@ export const takeRequest = async (data, companyId) => {
 export const fetchDialogs = async () => {
   try {
 
-    let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', {
-      headers: getRocketChatHeaders()
-    });
+    let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', { headers: getRocketChatHeaders() });
     return result.data.groups;
 
   } catch (err) {
@@ -278,9 +255,9 @@ export const deleteMemoizedFetchDialog = async (roomId, unreads, count) => {
 
 export const fetchGroupList = async () => {
   try {
-    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', {
-      headers: getRocketChatHeaders()
-    });
+
+    return axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', getRocketChatHeaders());
+
   } catch (err) {
     throw err;
   }
@@ -288,10 +265,12 @@ export const fetchGroupList = async () => {
 
 export const fetchGroupInfo = async (roomId) => {
   try {
-    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.info', {
+
+    return axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.info', {
       params: { roomId: roomId },
       headers: getRocketChatHeaders()
     });
+
   } catch (err) {
     throw err;
   }
@@ -311,10 +290,12 @@ export const deleteMemoizedFetchGroupInfo = async (roomId) => {
 
 export const fetchGroupMembers = async (roomId) => {
   try {
-    return await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.members', {
+
+    return axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.members', {
       params: { roomId: roomId },
       headers: getRocketChatHeaders()
     });
+
   } catch (err) {
     throw err;
   }
@@ -335,10 +316,7 @@ export const deleteMemoizedFetchGroupMembers = async (roomId) => {
 export const fetchUserInfo = async (companyId, userId) => {
   try {
 
-    const uri = getUrl(config.backApiProcessId, companyId, 'get-user-info?userId=' + userId);
-    return await axios.get(uri, {
-      headers: getHeadera()
-    });
+    return await axios.get(getUrl(config.backApiProcessId, companyId, 'get-user-info?userId=' + userId), getHeadera());
 
   } catch (err) {
     throw err;
@@ -360,10 +338,7 @@ export const deleteMemoizedFetchUserInfo = async (userId) => {
 export const fetchRole = async (companyId) => {
   try {
 
-    const uri = getUrl(config.backApiProcessId, companyId, 'fetch-role');
-    let result = await axios.get(uri, {
-      headers: getHeadera()
-    });
+    let result = await axios.get(getUrl(config.backApiProcessId, companyId, 'fetch-role'), getHeadera());
     return result.data;
 
   } catch (err) {
@@ -373,7 +348,8 @@ export const fetchRole = async (companyId) => {
 
 export const sendMessage = async (room, text) => {
   try {
-    let result = await axios({
+
+    return axios({
       method: 'POST',
       url: 'https://' + getRocketCahtUrl() + '/api/v1/chat.postMessage',
       data: {
@@ -382,7 +358,7 @@ export const sendMessage = async (room, text) => {
       },
       headers: getRocketChatHeaders(true)
     });
-    return result;
+
   } catch (err) {
     throw err;
   }
@@ -443,5 +419,18 @@ export const websocketInitRoomsChanged = (ddp) => {
 
 export const setStatus = (trigger, ddp) => {
   let status = trigger ? 'online' : 'away';
-  ddp.method('UserPresence:' + status, []);
+  return ddp.method('UserPresence:' + status, []);
+}
+
+export const sendMessageSocket = async ({ room, text, ddp }) => {
+  try {
+
+    return ddp.method('sendMessage', {
+      rid: room._id,
+      msg: text
+    });
+
+  } catch (err) {
+    throw err;
+  }
 }

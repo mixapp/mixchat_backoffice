@@ -218,13 +218,18 @@ function* fetchSettingsSaga() {
   yield takeLatest(FETCH_SETTINGS_REQUEST, function* () {
     try {
 
-      yield put({ type: LOADER_ON });
       const currentCompany = yield select((state) => state.app.currentCompany);
-      yield put({ type: FETCH_SETTINGS_SUCCESS, widgetSettings: yield Api.fetchSettings(currentCompany) });
+      let widgetSettings = yield Api.fetchSettings(currentCompany);
+      yield put({
+        type: FETCH_SETTINGS_SUCCESS, widgetSettings: {
+          companyName: widgetSettings.data.companyName,
+          ...widgetSettings.data.widget,
+          ...widgetSettings.data.settings
+        }
+      });
       let config = yield Api.fetchConfig();
       config.companyId = currentCompany;
       yield put({ type: FETCH_CONFIG_SUCCESS, config: config });
-      yield put({ type: LOADER_OFF });
 
     } catch (err) {
       throw err;
@@ -248,7 +253,7 @@ function* loginSaga() {
 
       const currentCompany = yield select((state) => state.app.currentCompany);
       let result = yield Api.getXauthToken(currentCompany);
-      yield put({ type: SET_XUSER_SUCCESS, result });
+      yield put({ type: SET_XUSER_SUCCESS, data: result.data });
 
       companies.data.length > 1 ? yield put(push('/companies?redirect=' + uri)) : yield put(push(uri));
 

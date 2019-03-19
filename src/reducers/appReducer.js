@@ -28,7 +28,8 @@ import {
   SEND_RECOVERY_PWD_SUCCESS,
   SEND_RECOVERY_PWD_TOKEN_SUCCESS,
   SEND_RECOVERY_PWD_TOKEN_ERROR,
-  SEND_RECOVERY_PWD_ERROR
+  SEND_RECOVERY_PWD_ERROR,
+  FETCH_SETTINGS_REQUEST
 } from '../constants';
 const initialState = {
   error_message: '',
@@ -66,7 +67,8 @@ export default function reducer(state = initialState, action = {}) {
 
     case SEND_MESSAGE_SUCCESS:
       return { ...state };
-
+    case FETCH_SETTINGS_REQUEST:
+      return { ...state, loader: true };
     case FETCH_SETTINGS_SUCCESS:
       return { ...state, widgetSettings: action.widgetSettings };
 
@@ -155,7 +157,7 @@ export default function reducer(state = initialState, action = {}) {
 
     case FETCH_CONFIG_SUCCESS:
       state.config = action.config;
-      return { ...state };
+      return { ...state, loader: false };
 
     case FETCH_HISTORY_REQUEST:
       state.dialogLoader = true;
@@ -182,8 +184,8 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state };
 
     case SET_XUSER_SUCCESS:
-      state.xuser = action.result;
-      localStorage.setItem('XUSER', JSON.stringify(action.result));
+      state.xuser = action.data;
+      localStorage.setItem('XUSER', JSON.stringify(state.xuser));
       return { ...state };
 
     case FETCH_CLIENT_INFO_SUCCESS:
