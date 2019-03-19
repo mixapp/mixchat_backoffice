@@ -65,10 +65,9 @@ export default function reducer(state = initialState, action = {}) {
     case SET_AUTHORIZE:
       return { ...state, user: action.data };
 
-    case SEND_MESSAGE_SUCCESS:
-      return { ...state };
     case FETCH_SETTINGS_REQUEST:
       return { ...state, loader: true };
+
     case FETCH_SETTINGS_SUCCESS:
       return { ...state, widgetSettings: action.widgetSettings };
 

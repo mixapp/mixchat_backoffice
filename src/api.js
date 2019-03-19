@@ -422,13 +422,13 @@ export const setStatus = (trigger, ddp) => {
   return ddp.method('UserPresence:' + status, []);
 }
 
-export const sendMessageSocket = async ({ room, text, ddp }) => {
+export const sendMessageSocket = async (room, text, ddp) => {
   try {
 
-    return ddp.method('sendMessage', {
+    return ddp.method('sendMessage', [{
       rid: room._id,
       msg: text
-    });
+    }]);
 
   } catch (err) {
     throw err;
