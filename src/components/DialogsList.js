@@ -24,6 +24,10 @@ class DialogsListMenu extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.props.fetchWidget();
+  }
+
   render() {
     let { t } = this.props;
     let { xuser, role } = this.props.app;

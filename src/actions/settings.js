@@ -20,7 +20,8 @@ import {
   SEND_REGISTRATION_FORM_REQUEST,
   SEND_LOGIN_FORM_REQUEST,
   SEND_RECOVERY_PWD_REQUEST,
-  SEND_RECOVERY_PWD_TOKEN_REQUEST
+  SEND_RECOVERY_PWD_TOKEN_REQUEST,
+  FETCH_WIDGET_REQUEST
 } from '../constants'
 
 export const sendMessage = (data) => {
@@ -165,5 +166,11 @@ export const recoveryToken = (data) => {
   return {
     type: SEND_RECOVERY_PWD_TOKEN_REQUEST,
     data
+  }
+}
+
+export const fetchWidget = () => {
+  return {
+    type: FETCH_WIDGET_REQUEST
   }
 }

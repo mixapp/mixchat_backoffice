@@ -18,7 +18,6 @@ import {
   SET_COMPANIES,
   SET_CURRENT_COMPANY_SUCCESS,
   SET_XUSER_SUCCESS,
-  SEND_MESSAGE_SUCCESS,
   FETCH_CLIENT_INFO_SUCCESS,
   FETCH_WEBSOCKET_SUCCESS,
   FETCH_MANAGER_INFO_SUCCESS,
@@ -29,7 +28,8 @@ import {
   SEND_RECOVERY_PWD_TOKEN_SUCCESS,
   SEND_RECOVERY_PWD_TOKEN_ERROR,
   SEND_RECOVERY_PWD_ERROR,
-  FETCH_SETTINGS_REQUEST
+  FETCH_SETTINGS_REQUEST,
+  FETCH_WIDGET_SUCCESS
 } from '../constants';
 const initialState = {
   error_message: '',
@@ -57,7 +57,8 @@ const initialState = {
   recoveryFormError: false,
   /* Recovery process by token */
   recoveryByTokenSuccess: false,
-  recoveryByTokenError: false
+  recoveryByTokenError: false,
+  widgetSettings: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -227,6 +228,9 @@ export default function reducer(state = initialState, action = {}) {
       state.recoveryByTokenError = true;
       state.recoveryByTokenSuccess = false;
       state.error_message = action.result.data.error_message;
+      return { ...state };
+    case FETCH_WIDGET_SUCCESS:
+      state.widgetSettings = action.data.result;
       return { ...state };
     default:
       return state;

@@ -101,6 +101,16 @@ export const fetchSettings = async (companyId) => {
   }
 };
 
+export const fetchWidget = async (companyId) => {
+  try {
+
+    return axios.get(getUrl(config.backApiProcessId, companyId, 'widget'), getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const saveSettings = async (settings, companyId) => {
   try {
 
@@ -433,4 +443,20 @@ export const sendMessageSocket = async (room, text, ddp) => {
   } catch (err) {
     throw err;
   }
+}
+
+export const callWebhook = (event_type, url, params) => {
+
+  return axios({
+    method: 'POST',
+    url: url,
+    data: {
+      event_type: event_type,
+      ...params
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
 }

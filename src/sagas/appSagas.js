@@ -46,7 +46,10 @@ import {
   SEND_RECOVERY_PWD_SUCCESS,
   SEND_RECOVERY_PWD_ERROR,
   SEND_RECOVERY_PWD_TOKEN_SUCCESS,
-  SEND_RECOVERY_PWD_TOKEN_ERROR
+  SEND_RECOVERY_PWD_TOKEN_ERROR,
+  FETCH_WIDGET_REQUEST,
+  FETCH_WIDGET_SUCCESS,
+  FETCH_WIDGET_ERROR
 } from '../constants';
 import * as Api from '../api';
 import * as _ from 'underscore';
@@ -71,24 +74,28 @@ function* sendMessageSaga() {
 function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
-      const currentCompany = yield select((state) => state.app.currentCompany);
+      const app = yield select((state) => state.app);
       const dialogs = yield select((state) => state.app.dialogs);
       let { room, fetchNew } = action.data;
       let dialog = _.find(dialogs, function (dialog) { return dialog._id === room._id; });
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
       let { userId } = JSON.parse(localStorage.getItem('XUSER'));
       if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
+        Api.callWebhook('jivo_onAccept', app.widgetSettings.eventWebhook, {
+          companyId: app.currentCompany,
+          manager: app.manager
+        });
         yield Api.takeRequest({
           roomId: room._id,
           userId: userId
-        }, currentCompany);
+        }, app.currentCompany);
       }
       let groupMembers = yield Api.memoizedFetchGroupMembers(room._id);
       let messages = yield Api.memoizedFetchDialog(room._id, true, action.data.count);
       let client = _.find(groupMembers.data.members, function (member) {
         return member.username === room.name.substring(0, room.name.length - 1);
       });
-      let userInfo = yield Api.memoizedFetchUserInfo(currentCompany, client._id);
+      let userInfo = yield Api.memoizedFetchUserInfo(app.currentCompany, client._id);
       yield put({ type: FETCH_CLIENT_INFO_SUCCESS, userInfo });
       yield put({
         type: FETCH_DIALOG_SUCCESS, data: {
@@ -247,6 +254,24 @@ function* fetchSettingsSaga() {
       throw err;
     }
   });
+}
+
+function* fetchWidgetSaga() {
+  yield takeLatest(FETCH_WIDGET_REQUEST, function* () {
+    try {
+
+      const currentCompany = yield select((state) => state.app.currentCompany);
+      let widgetSettings = yield Api.fetchWidget(currentCompany);
+      if (!widgetSettings.error) {
+        yield put({ type: FETCH_WIDGET_SUCCESS, data: widgetSettings.data });
+      } else {
+        yield put({ type: FETCH_WIDGET_ERROR, error: widgetSettings });
+      }
+
+    } catch (err) {
+      throw err;
+    }
+  })
 }
 
 function* loginSaga() {
@@ -461,6 +486,7 @@ export default function* ordersSaga() {
     fork(fetchXUSERSaga),
     fork(registrationFormSaga),
     fork(recoveryFormSaga),
-    fork(recoveryTokenSaga)
+    fork(recoveryTokenSaga),
+    fork(fetchWidgetSaga)
   ];
 }

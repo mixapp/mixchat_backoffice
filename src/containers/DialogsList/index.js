@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchDialog } from '../../actions/settings';
+import { fetchDialog, fetchWidget } from '../../actions/settings';
 import DialogsListMenu from '../../components/DialogsList';
 import { withNamespaces } from 'react-i18next';
 
@@ -19,7 +19,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchDialog: (data) => { dispatch(fetchDialog(data)) }
+    fetchDialog: (data) => { dispatch(fetchDialog(data)) },
+    fetchWidget: () => { dispatch(fetchWidget()) }
   }
 }
 
