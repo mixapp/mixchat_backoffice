@@ -75,9 +75,9 @@ function* fetchDialogSaga() {
   yield takeLatest(FETCH_DIALOG_REQUEST, function* (action) {
     try {
       const app = yield select((state) => state.app);
-      const dialogs = yield select((state) => state.app.dialogs);
       let { room, fetchNew } = action.data;
-      let dialog = _.find(dialogs, function (dialog) { return dialog._id === room._id; });
+      let roomName = room.name.substring(0, room.name.length - 1);
+      let dialog = _.find(app.dialogs, function (dialog) { return dialog._id === room._id; });
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
       let { userId } = JSON.parse(localStorage.getItem('XUSER'));
       if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
@@ -94,7 +94,7 @@ function* fetchDialogSaga() {
           },
           user: {
             clientNumber: room.customFields.clientNumber,
-            name: room.name.substring(0, room.name.length - 1),
+            name: roomName,
             id: userId
           }
         });
@@ -106,7 +106,7 @@ function* fetchDialogSaga() {
       let groupMembers = yield Api.memoizedFetchGroupMembers(room._id);
       let messages = yield Api.memoizedFetchDialog(room._id, true, action.data.count);
       let client = _.find(groupMembers.data.members, function (member) {
-        return member.username === room.name.substring(0, room.name.length - 1);
+        return member.username === roomName;
       });
       let userInfo = yield Api.memoizedFetchUserInfo(app.currentCompany, client._id);
       yield put({ type: FETCH_CLIENT_INFO_SUCCESS, userInfo });
