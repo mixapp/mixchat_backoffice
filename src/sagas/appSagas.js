@@ -83,7 +83,20 @@ function* fetchDialogSaga() {
       if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
         Api.callWebhook('jivo_onAccept', app.widgetSettings.eventWebhook, {
           companyId: app.currentCompany,
-          manager: app.manager
+          manager: {
+            name: app.manager.name,
+            id: app.manager._id
+          },
+          room: {
+            lastMessgae: room.lastMessgae,
+            name: room.fname,
+            id: room._id
+          },
+          user: {
+            clientNumber: room.customFields.clientNumber,
+            name: room.name.substring(0, room.name.length - 1),
+            id: userId
+          }
         });
         yield Api.takeRequest({
           roomId: room._id,
