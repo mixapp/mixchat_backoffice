@@ -166,7 +166,7 @@ export default function reducer(state = initialState, action = {}) {
       let { messages } = action.data;
       let messages_ = [];
       for (let i = 0; i < messages.length; i++) {
-        if (messages[i].parseUrls) {
+        if (messages[i].t === undefined) {
           messages_.push(messages[i]);
         }
       }
