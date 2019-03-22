@@ -58,7 +58,8 @@ const initialState = {
   /* Recovery process by token */
   recoveryByTokenSuccess: false,
   recoveryByTokenError: false,
-  widgetSettings: null
+  widgetSettings: null,
+  widget: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -230,7 +231,7 @@ export default function reducer(state = initialState, action = {}) {
       state.error_message = action.result.data.error_message;
       return { ...state };
     case FETCH_WIDGET_SUCCESS:
-      state.widgetSettings = action.data.result;
+      state.widget = action.data.result;
       return { ...state };
     default:
       return state;

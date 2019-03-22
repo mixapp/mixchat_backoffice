@@ -54,6 +54,10 @@ textarea:focus {
   overflow: auto;
 }
 
+.dialogs-item-sider>li{
+  height: 45px !important;
+}
+
 .dialogs-item-sider::-webkit-scrollbar {
   width: 0;
   -webkit-appearance: none;

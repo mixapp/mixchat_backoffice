@@ -81,7 +81,7 @@ function* fetchDialogSaga() {
       let groupInfo = yield Api.memoizedFetchGroupInfo(room._id);
       let { userId } = JSON.parse(localStorage.getItem('XUSER'));
       if (dialog.customFields.notify && groupInfo.data.group.customFields.notify) {
-        Api.callWebhook('jivo_onAccept', app.widgetSettings.eventWebhook, {
+        Api.callWebhook('jivo_onAccept', app.widget.eventWebhook, {
           companyId: app.currentCompany,
           manager: {
             name: app.manager.name,
@@ -274,11 +274,11 @@ function* fetchWidgetSaga() {
     try {
 
       const currentCompany = yield select((state) => state.app.currentCompany);
-      let widgetSettings = yield Api.fetchWidget(currentCompany);
-      if (!widgetSettings.error) {
-        yield put({ type: FETCH_WIDGET_SUCCESS, data: widgetSettings.data });
+      let widget = yield Api.fetchWidget(currentCompany);
+      if (!widget.error) {
+        yield put({ type: FETCH_WIDGET_SUCCESS, data: widget.data });
       } else {
-        yield put({ type: FETCH_WIDGET_ERROR, error: widgetSettings });
+        yield put({ type: FETCH_WIDGET_ERROR, error: widget });
       }
 
     } catch (err) {
