@@ -45,6 +45,10 @@ textarea:focus {
   border-radius: 100%;
 }
 
+.dialogs-item {
+  line-height: 20px !important;
+}
+
 .dialogs-item-sider {
   background-color: #2d3248;
   overflow: auto;
@@ -60,23 +64,32 @@ textarea:focus {
   justify-content: flex-start;
   flex-direction: row;
   align-items: center;
+  height: 100%;
 }
 
-.dialogs-item-container>span {
-  display: inline-block;
-}
-
-.dialogs-item-container>span:nth-child(2) {
-  display: inline-block;
-  width: 75%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.dialogs-item-caption {
+  display: flex;
+  flex-direction: column;
   margin-left: 10px;
 }
 
-.dialogs-item-container>div {
-  display: inline-block;
-  margin-left: auto;
+.dialogs-item-caption-text {
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 5px;
+}
+
+.dialogs-item-caption>div:last-child {
+  font-size: 9px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  opacity: .45;
+}
+
+.dialogs-item-caption>div>i {
+  margin-right: 5px !important;
 }
 
 .chat-conteiner {
@@ -119,7 +132,7 @@ textarea:focus {
 .dialogs-list-container {
   height: 100vh;
   overflow: hidden;
-  min-width: 200px;
+  min-width: 260px;
 }
 
 .dialogs-list-container>div:first-child>span>input {

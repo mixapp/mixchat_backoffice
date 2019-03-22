@@ -1,6 +1,11 @@
 import React from 'react';
-import { Menu, Input, Tag, Avatar } from 'antd';
+import { Menu, Input, Avatar } from 'antd';
 import * as _ from 'underscore';
+import MessageIcon from '../components/svg/message_icon';
+import VKIcon from './svg/vk_icon';
+import TelegramIcon from '../components/svg/telegram_icon';
+import ViberIcon from '../components/svg/viber_icon';
+import FBMIcon from '../components/svg/fbm_icon';
 
 const Search = Input.Search;
 
@@ -28,6 +33,22 @@ class DialogsListMenu extends React.Component {
     this.props.fetchWidget();
   }
 
+  getMessengerIcon(messenger) {
+    switch (messenger) {
+      case 'viber':
+        return <ViberIcon />;
+      case 'fbm':
+        return <FBMIcon />;
+      case 'vk':
+        return <VKIcon />;
+      case 'telegram':
+        return <TelegramIcon />;
+      case 'web':
+      default:
+        return <MessageIcon />;
+    }
+  }
+
   render() {
     let { t } = this.props;
     let { xuser, role } = this.props.app;
@@ -36,9 +57,11 @@ class DialogsListMenu extends React.Component {
     let readed = [];
     if (!dialogs) dialogs = [];
     dialogs.forEach(item => {
-      if (!item.customFields.manager || item.customFields.manager === xuser.userId || role === 'admin') {
+      let { manager, notify, clientNumber, messenger } = item.customFields;
+      if (!manager || manager === xuser.userId || role === 'admin') {
         let result = item.name.split('_');
         let companyid = result[result.length - 1];
+        let messengerIcon = this.getMessengerIcon(messenger);
         item.name = item.name.replace(companyid, '');
         async function fetchDialog() {
           try {
@@ -49,15 +72,17 @@ class DialogsListMenu extends React.Component {
         }
 
         if (item.name.search(this.state.searchDialogText) !== -1) {
-          let newDialog = item.customFields.notify ? ' new-dialog' : '';
-          let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)}>
+          let newDialog = notify ? ' new-dialog' : '';
+          let dialog = <Menu.Item key={item._id} onClick={fetchDialog.bind(this)} className='dialogs-item'>
             <div className={'dialogs-item-container ' + newDialog}>
               <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
-              <span>{t('Client') + ' ' + item.customFields.clientNumber}</span>
-              {item.nmsgs > 0 && item.msgs > 1 && <Tag color="#f50">{item.nmsgs}</Tag>}
+              <div className='dialogs-item-caption'>
+                <div>{t('Client') + ' ' + clientNumber}</div>
+                {item.lastMessage && <div>{messengerIcon}<div className='dialogs-item-caption-text'>{item.lastMessage.msg}</div></div>}
+              </div>
             </div>
           </Menu.Item>;
-          if (item.nmsgs > 0 || item.customFields.notify) {
+          if (notify) {
             unreaded.push(dialog);
           } else {
             readed.push(dialog);
