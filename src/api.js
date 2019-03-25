@@ -24,7 +24,7 @@ const getUrl = (processId, companyId, path) => {
 
 const getRocketCahtUrl = () => {
   //return 'chat.appjs.site';
-  return 'chat.mixapp.io';
+  return 'rocketchat1.mixapp.io';
 }
 
 const getToken = () => {

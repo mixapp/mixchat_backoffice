@@ -1,14 +1,24 @@
-# stage: 1
-FROM node:10.10.0 as react-build
-WORKDIR /omni_backoffice
+# Stage 1
+FROM node:10.10.0 as backoffice
+RUN mkdir backoffice
+WORKDIR /backoffice
 COPY . ./
 RUN yarn
 RUN yarn build
 
-# stage: 2 — the production environment
+# Stage 2
+FROM node:10.10.0 as widget
+# Clone the conf files into the docker container
+RUN git clone https://github.com/mixapp/mixchat_widget.git
+WORKDIR /mixchat_widget
+COPY . ./
+RUN yarn
+RUN yarn build
+
+# Stage 3 - the production environment
 FROM nginx:alpine
-WORKDIR /home/sasha/node_project/omni_backoffice/build
-COPY . /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 8000
-CMD /usr/sbin/nginx -g "daemon off;"
+COPY --from=widget /mixchat_widget/build /usr/share/nginx/html
+COPY --from=backoffice /backoffice/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
