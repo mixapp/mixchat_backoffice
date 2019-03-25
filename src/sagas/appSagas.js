@@ -299,13 +299,18 @@ function* loginSaga() {
       localStorage.removeItem('redirect');
       if (companies.data.length < 2) {
         yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id });
+        let widget = yield Api.fetchWidget(companies.data[0]._id);
+        localStorage.setItem('rocketChatHost',widget.data.result.rocketChatHost);
       }
 
       const currentCompany = yield select((state) => state.app.currentCompany);
       let result = yield Api.getXauthToken(currentCompany);
       yield put({ type: SET_XUSER_SUCCESS, data: result.data });
-
-      companies.data.length > 1 ? yield put(push('/companies?redirect=' + uri)) : yield put(push(uri));
+      if (companies.data.length > 1) {
+        yield put(push('/companies?redirect=' + uri));
+      } else {
+        yield put(push(uri));
+      }
 
     } catch (err) {
       throw err;

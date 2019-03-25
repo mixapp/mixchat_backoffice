@@ -4,6 +4,8 @@ RUN mkdir backoffice
 WORKDIR /backoffice
 COPY . ./
 RUN yarn
+ARG REACT_APP_ROCKET_CHAT_URI
+ENV REACT_APP_ROCKET_CHAT_URI ${REACT_APP_ROCKET_CHAT_URI}
 RUN yarn build
 
 # Stage 2

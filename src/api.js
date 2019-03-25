@@ -23,8 +23,7 @@ const getUrl = (processId, companyId, path) => {
 }
 
 const getRocketCahtUrl = () => {
-  //return 'chat.appjs.site';
-  return 'rocketchat1.mixapp.io';
+  return localStorage.getItem('rocketChatHost');
 }
 
 const getToken = () => {
