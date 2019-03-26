@@ -5,6 +5,7 @@ import { store } from './store';
 import Router from './router';
 import * as serviceWorker from './serviceWorker';
 import './index.css'
+console.log('START');
 ReactDOM.render(
     <Provider store={store}>
         <Router />
