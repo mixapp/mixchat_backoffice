@@ -5,6 +5,7 @@ import { withNamespaces } from 'react-i18next';
 import { history } from '../../store';
 import { setCurrentCompany } from '../../actions/settings';
 import './styles.css';
+import * as Api from '../../api';
 
 
 const Companies = (props) => {
@@ -23,6 +24,8 @@ const Companies = (props) => {
 
   async function clickHandler() {
     props.setCurrentCompany(this._id);
+    let widget = await Api.fetchWidget(this._id);
+    localStorage.setItem('rocketChatHost', widget.data.result.rocketChatHost);
     history.push(redirectPath);
   }
 

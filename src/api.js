@@ -119,7 +119,8 @@ export const saveSettings = async (settings, companyId) => {
         "isActive": settings.isActive,
         "color": settings.color,
         "openChat": settings.openChat,
-        "eventWebhook": settings.eventWebhook
+        "eventWebhook": settings.eventWebhook,
+        "rocketChatHost": settings.rocketChatHost
       },
       "settings": {
         "telegram_token": settings.telegram_token,

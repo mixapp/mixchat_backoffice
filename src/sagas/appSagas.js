@@ -300,7 +300,7 @@ function* loginSaga() {
       if (companies.data.length < 2) {
         yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id });
         let widget = yield Api.fetchWidget(companies.data[0]._id);
-        localStorage.setItem('rocketChatHost',widget.data.result.rocketChatHost);
+        localStorage.setItem('rocketChatHost', widget.data.result.rocketChatHost);
       }
 
       const currentCompany = yield select((state) => state.app.currentCompany);

@@ -52,7 +52,6 @@ class RegistrationForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const companyId = this.props.app.config ? this.props.app.config.companyId : ' pending... ';
     let { widgetSettings } = this.props.app;
-    console.log(widgetSettings)
     this.meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
     this.widgetCode = "<script src='https://cdn.jsdelivr.net/gh/mixapp/mixchat_widget@8d1cb879d6565ea7cfb4182fbf2a32aaa6265cbd/build/widget.js?v=1'></script>" +
       "<script>window.onload=()=>{ Omni.Widget({ companyId: '" + companyId + "' }); }</script>";
@@ -116,6 +115,13 @@ class RegistrationForm extends React.Component {
               initialValue: widgetSettings ? widgetSettings.color : '',
               rules: [],
             })(<Input placeholder='Color picker soon ...' />)}
+          </FormItem>
+
+          <FormItem label={t('rocketChatHost')}>
+            {getFieldDecorator('rocketChatHost', {
+              initialValue: widgetSettings ? widgetSettings.rocketChatHost : '',
+              rules: [],
+            })(<Input disabled={true} />)}
           </FormItem>
 
           <FormItem label={t('eventWebhook')}>
