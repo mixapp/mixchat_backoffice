@@ -8,7 +8,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => {
     if (!rest.app.user) {
       localStorage.setItem('redirect', rest.path);
-      Api.getAuthUrl();
+      let uri = Api.getAuthUrl();
+      window.location.href = uri;
       return null;
     }
     return rest.app.user ? <Component {...props} /> : null;

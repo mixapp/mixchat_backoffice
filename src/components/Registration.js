@@ -6,6 +6,7 @@ import {
   Col,
   Button
 } from 'antd';
+import * as Api from '../api';
 
 class RegistrationForm extends React.Component {
 
@@ -168,7 +169,7 @@ class RegistrationForm extends React.Component {
                 </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>{t('Register')}</Button>
-                  <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+                  <div className='login-link'><a href={Api.getAuthUrl()}>{t('Log in')}</a></div>
                 </Form.Item>
               </Form>
             </div>
@@ -176,7 +177,7 @@ class RegistrationForm extends React.Component {
           {registrationFormSuccess && <div>
             <h2 className='form-title'>{t('Successful registration')}</h2>
             <p className='form-msg'>{t('To continue working in the system, you need to confirm your account by clicking on the link in the letter that we sent you by mail')}</p>
-            <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+            <div className='login-link'><a href={Api.getAuthUrl()}>{t('Log in')}</a></div>
           </div>}
         </Col>
       </Row>

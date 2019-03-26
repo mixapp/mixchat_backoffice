@@ -286,8 +286,7 @@ function* fetchWidgetSaga() {
 function* loginSaga() {
   yield takeLatest(SET_AUTHORIZE, function* (action) {
     try {
-      let apiURL = yield Api.getApiURLFromJSON();
-      localStorage.setItem('apiURL', apiURL);
+      yield Api.getApiURLFromJSON();
       localStorage.setItem('user', JSON.stringify(action.data))
       let companies = yield Api.getCompany();
       localStorage.setItem('companies', JSON.stringify(companies));

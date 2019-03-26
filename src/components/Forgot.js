@@ -8,6 +8,7 @@ import {
   Button,
   Alert
 } from 'antd';
+import * as Api from '../api';
 
 class ForgotForm extends React.Component {
 
@@ -87,7 +88,7 @@ class ForgotForm extends React.Component {
                   </Form.Item>
                   <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>{t('Recovery')}</Button>
-                    <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+                    <div className='login-link'><a href={Api.getAuthUrl()}>{t('Log in')}</a></div>
                   </Form.Item>
                   {recoveryFormError && <Alert
                     message={t('Error')}
@@ -101,7 +102,7 @@ class ForgotForm extends React.Component {
             {recoveryFormSuccess && <div>
               <h2 className='form-title'>{t('Operation successful')}</h2>
               <p className='form-msg'>{t('To continue the password reset operation, you need to follow the link sent to your account registration mail')}</p>
-              <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+              <div className='login-link'><a href={Api.getAuthUrl()}>{t('Log in')}</a></div>
             </div>}
           </div>}
           {recovery_token && <div>
@@ -137,7 +138,7 @@ class ForgotForm extends React.Component {
                   </Form.Item>
                   <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>{t('Apply')}</Button>
-                    <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+                    <div className='login-link'><a href={Api.getAuthUrl()}>{t('Log in')}</a></div>
                   </Form.Item>
                   {recoveryByTokenError && <Alert
                     type="error"
@@ -150,7 +151,7 @@ class ForgotForm extends React.Component {
           {recoveryByTokenSuccess && <div>
             <h2 className='form-title'>{t('Operation successful')}</h2>
             <p className='form-msg'>{t('Your password has been changed to a new one')}</p>
-            <div className='login-link'><a href="/login">{t('Log in')}</a></div>
+            <div className='login-link'><a href={Api.getAuthUrl()}>{t('Log in')}</a></div>
           </div>}
         </Col>
       </Row>

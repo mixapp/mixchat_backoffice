@@ -13,27 +13,21 @@ export const getCurrentURL = () => {
 
 }
 
-export const config = {
-  backApiProcessId: '5c890db9574e7435772c4773',
-  commentsPerPage: 15
-};
-
 export const getAuthUrl = () => {
-  let uri = 'https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=' + getCurrentURL() + '/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup';
-  window.location.href = uri;
+  return 'https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=' + getCurrentURL() + '/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup';
 }
 
 export const getApiURLFromJSON = async () => {
   let file = await axios.get('./config.json');
-  return file.data.API_URL;
+  localStorage.setItem('apiURL', file.data.API_URL)
+  return;
 }
 
-const getRocketCahtUrl = () => {
+export const getRocketCahtUrl = () => {
   return localStorage.getItem('rocketChatHost');
 }
 
 const getApiURL = () => {
-  return `api.mixapp.io/webhooks/mixapp/` + config.backApiProcessId;
   return localStorage.getItem('apiURL');
 }
 
@@ -47,7 +41,8 @@ const getToken = () => {
 
     token = JSON.parse(token);
     if (!token) {
-      //getAuthUrl();
+      //let uri = getAuthUrl();
+      //window.location.href = uri;
     } else {
       return token.token;
     }

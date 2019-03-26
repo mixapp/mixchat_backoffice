@@ -1,6 +1,7 @@
 import React from 'react';
 import Comment from './Comment';
 import { List } from 'antd';
+import * as Api from '../../api';
 
 export default class CommentList extends React.Component {
 
@@ -9,6 +10,7 @@ export default class CommentList extends React.Component {
   }
 
   render() {
+    let rocketChatURL = Api.getRocketCahtUrl();
     return <List
       size="small"
       dataSource={this.props.messages}
@@ -18,10 +20,10 @@ export default class CommentList extends React.Component {
         if (item.file) {
           switch (item.file.type) {
             case 'image/png':
-              item.fileLink = <img height='150px' src={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name} alt={item.file.name} />;
+              item.fileLink = <img height='150px' src={`https://${rocketChatURL}/file-upload/${item.file._id}/${item.file.name}`} alt={item.file.name} />;
               break;
             case 'text/plain':
-              item.fileLink = <a href={'https://chat.mixapp.io/file-upload/' + item.file._id + '/' + item.file.name}>{item.file.name}</a>;
+              item.fileLink = <a href={`https://${rocketChatURL}/file-upload/${item.file._id}/${item.file.name}`}>{item.file.name}</a>;
               break;
             default:
               item.fileLink = null;
