@@ -303,6 +303,7 @@ function* loginSaga() {
       const currentCompany = yield select((state) => state.app.currentCompany);
       let result = yield Api.getXauthToken(currentCompany);
       yield put({ type: SET_XUSER_SUCCESS, data: result.data });
+      console.log(companies)
       if (companies.data.length > 1) {
         yield put(push('/companies?redirect=' + uri));
       } else {

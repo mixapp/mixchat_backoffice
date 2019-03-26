@@ -2,6 +2,7 @@ import axios from 'axios';
 import DDP from 'ddp.js';
 import { eventChannel } from 'redux-saga';
 import memoizee from 'memoizee';
+const config = require('./config.json');
 
 export const getCurrentURL = () => {
   let { protocol, hostname, port } = window.location;
@@ -17,18 +18,12 @@ export const getAuthUrl = () => {
   return 'https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=' + getCurrentURL() + '/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup';
 }
 
-export const getApiURLFromJSON = async () => {
-  let file = await axios.get('./config.json');
-  localStorage.setItem('apiURL', file.data.API_URL)
-  return;
+export const getApiURL = () => {
+  return config.API_URL;
 }
 
 export const getRocketCahtUrl = () => {
   return localStorage.getItem('rocketChatHost');
-}
-
-const getApiURL = () => {
-  return localStorage.getItem('apiURL');
 }
 
 const getUrl = (companyId, path) => {
@@ -40,10 +35,7 @@ const getToken = () => {
   try {
 
     token = JSON.parse(token);
-    if (!token) {
-      //let uri = getAuthUrl();
-      //window.location.href = uri;
-    } else {
+    if (token) {
       return token.token;
     }
 
@@ -74,6 +66,7 @@ const getHeadera = () => {
 export const getCompany = async () => {
   try {
     console.log(getApiURL());
+    console.log(getHeadera())
     return axios.get(`https://${getApiURL()}/get-company`, getHeadera());
 
   } catch (err) {
