@@ -2,7 +2,7 @@ import axios from 'axios';
 import DDP from 'ddp.js';
 import { eventChannel } from 'redux-saga';
 import memoizee from 'memoizee';
-const config = require('./config.json');
+import config from './config.json';
 
 export const getCurrentURL = () => {
   let { protocol, hostname, port } = window.location;
@@ -19,6 +19,7 @@ export const getAuthUrl = () => {
 }
 
 export const getApiURL = () => {
+  console.log(config);
   return config.API_URL;
 }
 

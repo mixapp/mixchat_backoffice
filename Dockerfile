@@ -1,13 +1,10 @@
-FROM ubuntu as ubuntu
-ARG API_URL
-RUN mkdir api_url
-WORKDIR /api_url
-RUN echo "{'API_URL': '${API_URL}'}" >> config.json
 # Stage 1
 FROM node:10.10.0 as backoffice
 RUN mkdir backoffice
 WORKDIR /backoffice
 COPY . ./
+ARG API_URL
+RUN echo "{\"API_URL\": \"${API_URL}\"}" >> src/config.json
 RUN yarn
 RUN yarn build
 
@@ -22,9 +19,6 @@ RUN yarn build
 # Stage 3 - the production environment
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy cinfig.json
-COPY --from=ubuntu /api_url /usr/share/nginx/html/
 
 # Copy backoffice files
 COPY --from=backoffice /backoffice/build /usr/share/nginx/html
