@@ -6,8 +6,6 @@ import { store } from './store';
 import Router from './router';
 import * as serviceWorker from './serviceWorker';
 import './index.css'
-import * as Api from './api';
-Api.getApiURLFromJSON();
 ReactDOM.render(
     <Provider store={store}>
         <Router />
