@@ -91,8 +91,8 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { t } = this.props;
-    const { registrationFormError, registrationFormSuccess, error_message } = this.props.app;
-    const { getFieldDecorator, validateFields } = this.props.form;
+    const { registrationFormSuccess } = this.props.app;
+    const { getFieldDecorator } = this.props.form;
     const { loading } = this.state;
 
     return (

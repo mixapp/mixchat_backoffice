@@ -12,7 +12,6 @@ import {
   FETCH_DIALOG_SUCCESS,
   SOCKET_ROOMS_CHANGED_EVENT,
   FETCH_ROLE_SUCCESS,
-  FETCH_CONFIG_SUCCESS,
   FETCH_HISTORY_SUCCESS,
   FETCH_HISTORY_REQUEST,
   SET_COMPANIES,
@@ -71,7 +70,7 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, loader: true };
 
     case FETCH_SETTINGS_SUCCESS:
-      return { ...state, widgetSettings: action.widgetSettings };
+      return { ...state, widgetSettings: action.widgetSettings, loader: false };
 
     case FETCH_MANAGERS_SUCCESS:
       return { ...state, managers: action.managers.managers };
@@ -155,10 +154,6 @@ export default function reducer(state = initialState, action = {}) {
     case FETCH_ROLE_SUCCESS:
       state.role = action.role;
       return { ...state };
-
-    case FETCH_CONFIG_SUCCESS:
-      state.config = action.config;
-      return { ...state, loader: false };
 
     case FETCH_HISTORY_REQUEST:
       state.dialogLoader = true;

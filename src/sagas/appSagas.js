@@ -23,7 +23,6 @@ import {
   FETCH_ROLE_SUCCESS,
   FETCH_HISTORY_REQUEST,
   FETCH_HISTORY_SUCCESS,
-  FETCH_CONFIG_SUCCESS,
   LOGOUT,
   SET_COMPANIES,
   SET_CURRENT_COMPANY_REQUEST,
@@ -259,9 +258,6 @@ function* fetchSettingsSaga() {
           ...widgetSettings.data.settings
         }
       });
-      let config = yield Api.fetchConfig();
-      config.companyId = currentCompany;
-      yield put({ type: FETCH_CONFIG_SUCCESS, config: config });
 
     } catch (err) {
       throw err;
@@ -290,6 +286,8 @@ function* fetchWidgetSaga() {
 function* loginSaga() {
   yield takeLatest(SET_AUTHORIZE, function* (action) {
     try {
+      let apiURL = yield Api.getApiURLFromJSON();
+      localStorage.setItem('apiURL', apiURL);
       localStorage.setItem('user', JSON.stringify(action.data))
       let companies = yield Api.getCompany();
       localStorage.setItem('companies', JSON.stringify(companies));

@@ -13,17 +13,32 @@ export const getCurrentURL = () => {
 
 }
 
+export const config = {
+  backApiProcessId: '5c890db9574e7435772c4773',
+  commentsPerPage: 15
+};
+
 export const getAuthUrl = () => {
   let uri = 'https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=' + getCurrentURL() + '/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup';
   window.location.href = uri;
 }
 
-const getUrl = (processId, companyId, path) => {
-  return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
+export const getApiURLFromJSON = async () => {
+  let file = await axios.get('./config.json');
+  return file.data.API_URL;
 }
 
 const getRocketCahtUrl = () => {
   return localStorage.getItem('rocketChatHost');
+}
+
+const getApiURL = () => {
+  return `api.mixapp.io/webhooks/mixapp/` + config.backApiProcessId;
+  return localStorage.getItem('apiURL');
+}
+
+const getUrl = (companyId, path) => {
+  return `https://${getApiURL()}/${companyId}/${path}`
 }
 
 const getToken = () => {
@@ -61,19 +76,10 @@ const getHeadera = () => {
   };
 }
 
-export const config = {
-  backApiProcessId: '5c890db9574e7435772c4773',
-  commentsPerPage: 15
-};
-
-export const fetchConfig = () => {
-  return config;
-}
-
 export const getCompany = async () => {
   try {
-
-    return axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-company', getHeadera());
+    console.log(getApiURL());
+    return axios.get(`https://${getApiURL()}/get-company`, getHeadera());
 
   } catch (err) {
     throw err;
@@ -83,7 +89,7 @@ export const getCompany = async () => {
 export const getXauthToken = async () => {
   try {
 
-    return axios.get('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/get-token', getHeadera());
+    return axios.get(`https://${getApiURL()}/get-token`, getHeadera());
 
   } catch (err) {
     throw err;
@@ -93,7 +99,7 @@ export const getXauthToken = async () => {
 export const fetchSettings = async (companyId) => {
   try {
 
-    return axios.get(getUrl(config.backApiProcessId, companyId, 'widget-oidc'), getHeadera());
+    return axios.get(getUrl(companyId, 'widget-oidc'), getHeadera());
 
   } catch (err) {
     throw err;
@@ -103,7 +109,7 @@ export const fetchSettings = async (companyId) => {
 export const fetchWidget = async (companyId) => {
   try {
 
-    return axios.get(getUrl(config.backApiProcessId, companyId, 'widget'), getHeadera());
+    return axios.get(getUrl(companyId, 'widget'), getHeadera());
 
   } catch (err) {
     throw err;
@@ -113,7 +119,7 @@ export const fetchWidget = async (companyId) => {
 export const saveSettings = async (settings, companyId) => {
   try {
 
-    return axios.post(getUrl(config.backApiProcessId, companyId, 'settings'), {
+    return axios.post(getUrl(companyId, 'settings'), {
       "companyName": settings.companyName,
       "widget": {
         "isActive": settings.isActive,
@@ -146,7 +152,7 @@ export const saveSettings = async (settings, companyId) => {
 export const fetchManagers = async (companyId) => {
   try {
 
-    let result = await axios.get(getUrl(config.backApiProcessId, companyId, 'listmanagers'), getHeadera());
+    let result = await axios.get(getUrl(companyId, 'listmanagers'), getHeadera());
     return result.data;
 
   } catch (err) {
@@ -157,7 +163,7 @@ export const fetchManagers = async (companyId) => {
 export const addManager = async (data, companyId) => {
   try {
 
-    const uri = getUrl(config.backApiProcessId, companyId, 'addmanagers');
+    const uri = getUrl(companyId, 'addmanagers');
     return axios.post(uri, {
       "email": data.email,
       "nickname": data.nickname,
@@ -172,7 +178,7 @@ export const addManager = async (data, companyId) => {
 export const registration = async (data) => {
   try {
 
-    return axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/registration', data, getHeadera());
+    return axios.post(`https://${getApiURL()}/registration`, data, getHeadera());
 
   } catch (err) {
     throw err;
@@ -182,7 +188,7 @@ export const registration = async (data) => {
 export const recovery = async (data) => {
   try {
 
-    return axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery', data, getHeadera());
+    return axios.post(`https://${getApiURL()}/recovery`, data, getHeadera());
 
   } catch (err) {
     throw err;
@@ -192,7 +198,7 @@ export const recovery = async (data) => {
 export const recoveryToken = async (data) => {
   try {
 
-    return axios.post('https://api.mixapp.io/webhooks/mixapp/' + config.backApiProcessId + '/recovery/' + data.token, data, getHeadera());
+    return axios.post(`https://${getApiURL()}/recovery/` + data.token, data, getHeadera());
 
   } catch (err) {
     throw err;
@@ -202,7 +208,7 @@ export const recoveryToken = async (data) => {
 export const removeManager = async (data, companyId) => {
   try {
 
-    return axios.post(getUrl(config.backApiProcessId, companyId, 'removemanagers'), {
+    return axios.post(getUrl(companyId, 'removemanagers'), {
       id: data._id,
       username: data.nickname
     }, getHeadera());
@@ -215,7 +221,7 @@ export const removeManager = async (data, companyId) => {
 export const takeRequest = async (data, companyId) => {
   try {
 
-    let result = await axios.post(getUrl(config.backApiProcessId, companyId, 'take-request'), data, getHeadera());
+    let result = await axios.post(getUrl(companyId, 'take-request'), data, getHeadera());
     return result;
   } catch (err) {
     throw err;
@@ -225,7 +231,7 @@ export const takeRequest = async (data, companyId) => {
 export const fetchDialogs = async () => {
   try {
 
-    let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', { headers: getRocketChatHeaders() });
+    let result = await axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.list`, { headers: getRocketChatHeaders() });
     return result.data.groups;
 
   } catch (err) {
@@ -236,7 +242,7 @@ export const fetchDialogs = async () => {
 export const fetchDialog = async (roomId, unreads, count) => {
   try {
 
-    let result = await axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.history', {
+    let result = await axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.history`, {
       params: {
         roomId: roomId,
         unreads: unreads,
@@ -266,7 +272,7 @@ export const deleteMemoizedFetchDialog = async (roomId, unreads, count) => {
 export const fetchGroupList = async () => {
   try {
 
-    return axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.list', getRocketChatHeaders());
+    return axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.list`, getRocketChatHeaders());
 
   } catch (err) {
     throw err;
@@ -276,7 +282,7 @@ export const fetchGroupList = async () => {
 export const fetchGroupInfo = async (roomId) => {
   try {
 
-    return axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.info', {
+    return axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.info`, {
       params: { roomId: roomId },
       headers: getRocketChatHeaders()
     });
@@ -301,7 +307,7 @@ export const deleteMemoizedFetchGroupInfo = async (roomId) => {
 export const fetchGroupMembers = async (roomId) => {
   try {
 
-    return axios.get('https://' + getRocketCahtUrl() + '/api/v1/groups.members', {
+    return axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.members`, {
       params: { roomId: roomId },
       headers: getRocketChatHeaders()
     });
@@ -326,7 +332,7 @@ export const deleteMemoizedFetchGroupMembers = async (roomId) => {
 export const fetchUserInfo = async (companyId, userId) => {
   try {
 
-    return await axios.get(getUrl(config.backApiProcessId, companyId, 'get-user-info?userId=' + userId), getHeadera());
+    return await axios.get(getUrl(companyId, 'get-user-info?userId=' + userId), getHeadera());
 
   } catch (err) {
     throw err;
@@ -348,7 +354,7 @@ export const deleteMemoizedFetchUserInfo = async (userId) => {
 export const fetchRole = async (companyId) => {
   try {
 
-    let result = await axios.get(getUrl(config.backApiProcessId, companyId, 'fetch-role'), getHeadera());
+    let result = await axios.get(getUrl(companyId, 'fetch-role'), getHeadera());
     return result.data;
 
   } catch (err) {
@@ -361,7 +367,7 @@ export const sendMessage = async (room, text) => {
 
     return axios({
       method: 'POST',
-      url: 'https://' + getRocketCahtUrl() + '/api/v1/chat.postMessage',
+      url: `https://${getRocketCahtUrl()}/api/v1/chat.postMessage`,
       data: {
         roomId: room._id,
         text: text
@@ -403,7 +409,7 @@ export const fetchWebsocket = () => {
   var Xuser = getRocketChatHeaders();
   // init the connection here
   const options = {
-    endpoint: 'wss://' + getRocketCahtUrl() + '/websocket',
+    endpoint: `wss://${getRocketCahtUrl()}/websocket`,
     SocketConstructor: WebSocket
   };
   let ddp = new DDP(options);
