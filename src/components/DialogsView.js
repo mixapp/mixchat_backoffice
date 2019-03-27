@@ -90,7 +90,7 @@ export default class DialogsListView extends React.Component {
                         <List.Item style={{ border: 'none' }}>
                           <List.Item.Meta
                             avatar={<Avatar size='48' icon="user" />}
-                            title={<a href="#" target="_blank" rel="noopener noreferrer">{status}{item.name}</a>}
+                            title={<div>{status}{item.name}</div>}
                           />
                         </List.Item>
                       )
