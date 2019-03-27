@@ -1,13 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import DialogsView from '../../components/DialogsView';
+import {
+    fetchDialogs,
+    fetchDialog,
+    sendMessage,
+    loaderOff,
+    fetchHistory
+} from '../../actions/settings';
+import { withNamespaces } from 'react-i18next';
 
-const Dialogs = () => {
-    return <div>
-        <h1>Диалоги</h1>
-        <div>
-        Search for the keywords to learn more about each warning. To ignore, add // eslint-disable-next-line to the line before.
-        </div>
-    </div>;
+const Dialogs = (props) => {
+    return <DialogsView {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -18,7 +22,12 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        fetchDialogs: () => { dispatch(fetchDialogs()) },
+        fetchDialog: (data) => { dispatch(fetchDialog(data)) },
+        sendMessage: (data) => { dispatch(sendMessage(data)) },
+        loaderOff: () => { dispatch(loaderOff()) },
+        fetchHistory: (data) => { dispatch(fetchHistory(data)) }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dialogs);
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(Dialogs));

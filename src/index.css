@@ -1,1 +1,326 @@
 @import '~antd/dist/antd.css';
+/* Remove outline on the forms and links */
+
+textarea {
+  margin: 0;
+  border: none !important;
+  resize: none;
+  overflow: hidden;
+}
+
+textarea:focus {
+  box-shadow: none !important;
+}
+
+.dialogs {
+  padding: 0px !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.demo-infinite-container {
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  overflow: auto;
+  padding: 8px 24px;
+  height: 300px;
+}
+
+.demo-loading-container {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+}
+
+.messages-count-badge {
+  background-color: #fff;
+  color: #999;
+  box-shadow: 0 0 0 1px #d9d9d9 inset;
+  box-shadow: #FFFFFF 0px 0px 1px 5px;
+  position: absolute;
+  right: 5px;
+  border-radius: 100%;
+}
+
+.dialogs-item {
+  line-height: 20px !important;
+}
+
+.dialogs-item-sider {
+  background-color: #2d3248;
+  overflow: auto;
+}
+
+.dialogs-item-sider>li{
+  height: 45px !important;
+}
+
+.dialogs-item-sider::-webkit-scrollbar {
+  width: 0;
+  -webkit-appearance: none;
+}
+
+.dialogs-item-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+}
+
+.dialogs-item-caption {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.dialogs-item-caption-text {
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 5px;
+}
+
+.dialogs-item-caption>div:last-child {
+  font-size: 9px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  opacity: .45;
+}
+
+.dialogs-item-caption>div>i {
+  margin-right: 5px !important;
+}
+
+.chat-conteiner {
+  overflow: auto;
+  border-bottom: 2px solid #f0f2f5;
+  word-break: break-all;
+}
+
+/*
+.chat-conteiner::-webkit-scrollbar {
+  width: 0;
+  -webkit-appearance: none;
+}
+*/
+
+.send-button {
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .8em;
+  cursor: pointer;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.dialogs-list-container {
+  height: 100vh;
+  overflow: hidden;
+  min-width: 260px;
+}
+
+.dialogs-list-container>div:first-child>span>input {
+  background-color: #2d3248;
+  border: 0;
+  border-radius: 0;
+  color: white;
+  box-shadow: none;
+}
+
+.dialogs-list-container>div:first-child {
+  background-color: #2d3248;
+  padding-left: 2px;
+  padding-top: 10px;
+}
+
+.dialogs-list-container>div:first-child>span>span>i {
+  color: white;
+}
+
+.dialogs-list-container>div:last-child {
+  height: 100vh;
+}
+
+.dialogs-list-container>div:last-child>ul {
+  padding-bottom: 50px;
+  height: 100%;
+}
+
+.dialogs-list-container>div:last-child>ul>li {
+  padding-left: 14px !important;
+}
+
+.content-container {
+  width: 100%;
+  height: 100vh;
+}
+
+.new-dialog {
+  font-weight: 640;
+  color: white;
+}
+
+.dialog-layout {
+  display: flex;
+}
+
+.dialog-layout>div:first-child {
+  flex: auto;
+  min-width: 300px;
+}
+
+.dialog-layout-header {
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  font-weight: 600;
+  align-items: center;
+}
+
+.dialog-layout-header>div {
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-layout-header>div>span:last-child {
+  font-size: 10px;
+  color: #d9d9d9;
+}
+
+.dialog-layout>div:last-child {
+  width: 300px;
+}
+
+.dialog-layout-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-left: 10px;
+}
+
+.dialog-layout-detail>div:first-child {
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.dialog-layout-detail>div:first-child>span {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.content {
+  margin: 0 15px;
+}
+
+.cerrent-dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.cerrent-dialog-info {
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  margin-bottom: 20px;
+}
+
+.current-dialog-info-user {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.current-dialog-info-user>span:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.current-dialog-info-user>span:last-child {
+  font-size: 10px;
+  color: #d9d9d9;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.login-form-button {
+  width: 100%;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.tech-forms {
+  align-self: center;
+  background-color: #f8f8f8;
+  padding: 25px 40px 10px 40px;
+  border-radius: 15px;
+  width: 400px;
+}
+
+.login-link {
+  display: flex;
+  justify-content: center;
+}
+
+.form-msg {
+  text-align: center;
+}
+
+.settings-alert {
+  display: flex;
+  padding: 10px 0;
+}
+
+.settings-alert>div {
+  border-radius: 0;
+  width: 100%;
+  border: none;
+  padding: 20px 10px !important;
+}
+
+.settings-alert>button {
+  border-radius: 0;
+  height: auto
+}
+
+.settings-header-bold {
+  font-weight: 500;
+}
+
+.settings-copy-button {
+  cursor: pointer;
+  position: absolute;
+  right: 25px;
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 600;
+}

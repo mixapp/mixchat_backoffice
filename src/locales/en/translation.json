@@ -1,0 +1,8 @@
+{
+    "mainMenu": {
+        "dialogs": "Dialogs",
+        "managers": "Managers",
+        "settings": "Settings",
+        "logout": "Logout"
+    }
+}

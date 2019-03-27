@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ManagersListView from '../../components/Managers';
+import ManagersView from '../../components/ManagersView';
 import { fetchManagers, addManager, removeManager } from '../../actions/settings';
+import { withNamespaces } from 'react-i18next';
 
 const Managers = (props) => {
-    return <ManagersListView {...props} />;
+    return <ManagersView {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -21,4 +22,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Managers);
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(Managers));

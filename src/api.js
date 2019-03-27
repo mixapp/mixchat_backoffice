@@ -1,129 +1,457 @@
 import axios from 'axios';
-//import querystring from 'querystring';
+import DDP from 'ddp.js';
+import { eventChannel } from 'redux-saga';
+import memoizee from 'memoizee';
+import config from './config.json';
 
-const getUrl = (processId, companyId, path) => {
-    return `https://api.mixapp.io/webhooks/mixapp/${processId}/${companyId}/${path}`
+export const getCurrentURL = () => {
+  let { protocol, hostname, port } = window.location;
+  let port_ = '';
+  if (port !== '80' && port !== '443' && port !== '') {
+    port_ = ':' + port;
+  }
+  return protocol + '//' + hostname + port_;
+
+}
+
+export const getAuthUrl = () => {
+  return 'https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=' + getCurrentURL() + '/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup';
+}
+
+export const getApiURL = () => {
+  console.log(config);
+  return config.API_URL;
+}
+
+export const getRocketCahtUrl = () => {
+  return localStorage.getItem('rocketChatHost');
+}
+
+const getUrl = (companyId, path) => {
+  return `https://${getApiURL()}/${companyId}/${path}`
 }
 
 const getToken = () => {
-    let { token } = JSON.parse(localStorage.getItem('user'));
-    return token;
+  let token = localStorage.getItem('user');
+  try {
+
+    token = JSON.parse(token);
+    if (token) {
+      return token.token;
+    }
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+const getRocketChatHeaders = (json) => {
+  let { authToken, userId } = JSON.parse(localStorage.getItem('XUSER'));
+  return {
+    'Content-Type': json ? 'application/json' : '',
+    'X-Auth-Token': authToken,
+    'X-User-Id': userId
+  }
 }
 
 const getHeadera = () => {
-    return {
-        'Authorization': 'Bearer ' + getToken(),
-        'Content-Type': 'application/json;charset=UTF-8',
-        'accept': '*/*'
+  return {
+    headers: {
+      'Authorization': 'Bearer ' + getToken(),
+      'Content-Type': 'application/json;charset=UTF-8',
+      'accept': '*/*'
     }
+  };
 }
 
-export const config = {
-    companyId: '5bed9d260dec1f9f4f358399',
-    backApiProcessId: '5bc49dd0574e7403e22ec1a0',
-    frontApiProcessId: '5bc49dd735b38203254872a5'
+export const getCompany = async () => {
+  try {
+    console.log(getApiURL());
+    console.log(getHeadera())
+    return axios.get(`https://${getApiURL()}/get-company`, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const getXauthToken = async () => {
+  try {
+
+    return axios.get(`https://${getApiURL()}/get-token`, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Fetch widget settings
-export const fetchSettings = async () => {
-    try {
-        const uri = getUrl(config.backApiProcessId, config.companyId, 'full-widget-settings');
-        let result = await axios.get(uri, {
-            headers: getHeadera()
-        });
-        return result.data;
-    } catch (err) {
-        throw err;
-    }
+export const fetchSettings = async (companyId) => {
+  try {
+
+    return axios.get(getUrl(companyId, 'widget-oidc'), getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
 };
 
-/* save widget settings */
-export const saveSettings = async (settings) => {
-    try {
+export const fetchWidget = async (companyId) => {
+  try {
 
-        const uri = getUrl(config.backApiProcessId, config.companyId, 'settings');
-        let result = await axios.post(uri, {
-            "companyName": settings.companyName,
-            "widget": {
-                "isActive": settings.isActive,
-                "color": settings.color,
-                "openChat": settings.openChat
-            },
-            "settings": {
-                "telegram_token": settings.telegram_token,
-                "telegram_bot_name": settings.telegram_bot_name,
-                "viber_token": settings.viber_token,
-                "viber_bot_name": settings.viber_bot_name,
-                "sms_token": settings.sms_token,
-                "sms_phone": settings.sms_phone,
-                "vk_token": settings.vk_token,
-                "vk_group_name": settings.vk_group_name,
-                "vk_confirmation_code": settings.vk_confirmation_code
-            }
-        }, {
-                headers: getHeadera(),
-            });
-        return result;
+    return axios.get(getUrl(companyId, 'widget'), getHeadera());
 
-    } catch (err) {
-        throw err;
-    }
+  } catch (err) {
+    throw err;
+  }
 }
 
-// Fetch managers
-export const fetchManagers = async () => {
-    try {
-        const uri = getUrl(config.backApiProcessId, config.companyId, 'listmanagers');
-        let result = await axios.get(uri, {
-            headers: getHeadera()
-        });
-        return result.data.managers;
-    } catch (err) {
-        throw err;
-    }
+export const saveSettings = async (settings, companyId) => {
+  try {
+
+    return axios.post(getUrl(companyId, 'settings'), {
+      "companyName": settings.companyName,
+      "widget": {
+        "isActive": settings.isActive,
+        "color": settings.color,
+        "openChat": settings.openChat,
+        "eventWebhook": settings.eventWebhook,
+        "rocketChatHost": settings.rocketChatHost
+      },
+      "settings": {
+        "telegram_token": settings.telegram_token,
+        "telegram_bot_name": settings.telegram_bot_name,
+        "viber_token": settings.viber_token,
+        "viber_bot_name": settings.viber_bot_name,
+        "sms_token": settings.sms_token,
+        "sms_phone": settings.sms_phone,
+        "vk_token": settings.vk_token,
+        "vk_group_name": settings.vk_group_name,
+        "vk_confirmation_code": settings.vk_confirmation_code,
+        "fbm_api_key": settings.fbm_api_key,
+        "fbm_secret": settings.fbm_secret,
+        "fbm_page": settings.fbm_page
+      }
+    }, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchManagers = async (companyId) => {
+  try {
+
+    let result = await axios.get(getUrl(companyId, 'listmanagers'), getHeadera());
+    return result.data;
+
+  } catch (err) {
+    throw err;
+  }
 };
 
-/* add manager */
-export const addManager = async (data) => {
-    try {
-        const uri = getUrl(config.backApiProcessId, config.companyId, 'addmanagers');
-        let result = await axios.post(uri, {
-            "email": data.email,
-            "nickname": data.nickname,
-            "password": data.password
-        }, {
-                headers: getHeadera(),
-            });
-        return result;
-    } catch (err) {
-        throw err;
-    }
+export const addManager = async (data, companyId) => {
+  try {
+
+    const uri = getUrl(companyId, 'addmanagers');
+    return axios.post(uri, {
+      "email": data.email,
+      "nickname": data.nickname,
+      "password": data.password
+    }, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
 }
 
-/* добавить manager */
-export const removeManager = async (data) => {
-    try {
-        const uri = getUrl(config.backApiProcessId, config.companyId, 'removemanagers');
-        let result = await axios.post(uri, {
-            "id": data.id
-        }, {
-                headers: getHeadera(),
-            });
-        return result;
-    } catch (err) {
-        throw err;
-    }
+export const registration = async (data) => {
+  try {
+
+    return axios.post(`https://${getApiURL()}/registration`, data, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
 }
 
-/* получение списка диалогов */
+export const recovery = async (data) => {
+  try {
+
+    return axios.post(`https://${getApiURL()}/recovery`, data, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const recoveryToken = async (data) => {
+  try {
+
+    return axios.post(`https://${getApiURL()}/recovery/` + data.token, data, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const removeManager = async (data, companyId) => {
+  try {
+
+    return axios.post(getUrl(companyId, 'removemanagers'), {
+      id: data._id,
+      username: data.nickname
+    }, getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const takeRequest = async (data, companyId) => {
+  try {
+
+    let result = await axios.post(getUrl(companyId, 'take-request'), data, getHeadera());
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const fetchDialogs = async () => {
-    try {
-        const uri = getUrl(config.backApiProcessId, config.companyId, 'get-dialogs');
-        let result = await axios.post(uri, {}, {
-            headers: getHeadera(),
-        });
-        return result;
-    } catch (err) {
-        throw err;
+  try {
+
+    let result = await axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.list`, { headers: getRocketChatHeaders() });
+    return result.data.groups;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchDialog = async (roomId, unreads, count) => {
+  try {
+
+    let result = await axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.history`, {
+      params: {
+        roomId: roomId,
+        unreads: unreads,
+        count: count
+      },
+      headers: getRocketChatHeaders()
+    });
+    return result.data.messages;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const memoizedFetchDialog = memoizee(fetchDialog, { promise: true });
+
+export const deleteMemoizedFetchDialog = async (roomId, unreads, count) => {
+  try {
+
+    memoizedFetchDialog.delete(roomId, unreads, count);
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchGroupList = async () => {
+  try {
+
+    return axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.list`, getRocketChatHeaders());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchGroupInfo = async (roomId) => {
+  try {
+
+    return axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.info`, {
+      params: { roomId: roomId },
+      headers: getRocketChatHeaders()
+    });
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const memoizedFetchGroupInfo = memoizee(fetchGroupInfo, { promise: true });
+
+export const deleteMemoizedFetchGroupInfo = async (roomId) => {
+  try {
+
+    memoizedFetchGroupInfo.delete(roomId);
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchGroupMembers = async (roomId) => {
+  try {
+
+    return axios.get(`https://${getRocketCahtUrl()}/api/v1/groups.members`, {
+      params: { roomId: roomId },
+      headers: getRocketChatHeaders()
+    });
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const memoizedFetchGroupMembers = memoizee(fetchGroupMembers, { promise: true });
+
+export const deleteMemoizedFetchGroupMembers = async (roomId) => {
+  try {
+
+    memoizedFetchGroupMembers.delete(roomId);
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchUserInfo = async (companyId, userId) => {
+  try {
+
+    return await axios.get(getUrl(companyId, 'get-user-info?userId=' + userId), getHeadera());
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const memoizedFetchUserInfo = memoizee(fetchUserInfo, { promise: true });
+
+export const deleteMemoizedFetchUserInfo = async (userId) => {
+  try {
+
+    memoizedFetchUserInfo.delete(userId);
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const fetchRole = async (companyId) => {
+  try {
+
+    let result = await axios.get(getUrl(companyId, 'fetch-role'), getHeadera());
+    return result.data;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const sendMessage = async (room, text) => {
+  try {
+
+    return axios({
+      method: 'POST',
+      url: `https://${getRocketCahtUrl()}/api/v1/chat.postMessage`,
+      data: {
+        roomId: room._id,
+        text: text
+      },
+      headers: getRocketChatHeaders(true)
+    });
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const formatDate = (date, lang) => {
+  const monthNames = {
+    en: [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ],
+    ru: [
+      "Январь", "Февраль", "Март",
+      "Апрель", "Май", "Июнь", "Июль",
+      "Август", "Сентябрь", "Октябрь",
+      "Ноябрь", "Декабрь"
+    ]
+  }
+
+  let day = date.getDate();
+  let month = lang ? monthNames[lang][date.getMonth()] : date.getMonth();
+  let year = date.getFullYear();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+
+  return ('0' + (day + 1)).slice(-2) + '.' + ('0' + (month + 1)).slice(-2) + '.' + year + ', ' + ("0" + hours).slice(-2) + ':' + minutes;
+}
+
+export const fetchWebsocket = () => {
+  var Xuser = getRocketChatHeaders();
+  // init the connection here
+  const options = {
+    endpoint: `wss://${getRocketCahtUrl()}/websocket`,
+    SocketConstructor: WebSocket
+  };
+  let ddp = new DDP(options);
+  ddp.on('connected', () => {
+    ddp.method('login', [{ resume: Xuser['X-Auth-Token'] }]);
+    ddp.sub('stream-notify-user', [Xuser['X-User-Id'] + '/rooms-changed', false]);
+  });
+  return ddp;
+}
+
+export const websocketInitRoomsChanged = (ddp) => {
+  return eventChannel(emitter => {
+    ddp.on('changed', (data) => {
+      return emitter({ type: 'SOCKET_ROOMS_CHANGED_EVENT', data });
+    });
+
+    // unsubscribe function
+    return () => {
+      // do whatever to interrupt the socket communication here
     }
+  })
+}
+
+export const setStatus = (trigger, ddp) => {
+  let status = trigger ? 'online' : 'away';
+  return ddp.method('UserPresence:' + status, []);
+}
+
+export const sendMessageSocket = async (room, text, ddp) => {
+  try {
+
+    return ddp.method('sendMessage', [{
+      rid: room._id,
+      msg: text
+    }]);
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const callWebhook = (event_type, url, params) => {
+
+  return axios({
+    method: 'POST',
+    url: url,
+    data: {
+      event_type: event_type,
+      ...params
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
 }
