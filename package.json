@@ -3,25 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.10.7",
+    "antd": "^3.13.2",
     "axios": "^0.18.0",
+    "ddp.js": "^2.2.1",
     "history": "^4.7.2",
+    "html-react-parser": "^0.4.7",
+    "i18next": "^14.0.1",
+    "i18next-browser-languagedetector": "^2.2.4",
+    "memoizee": "^0.4.14",
     "react": "^16.6.3",
     "react-color": "^2.14.1",
     "react-dom": "^16.6.3",
+    "react-i18next": "^9.0.10",
+    "react-infinite-scroller": "^1.2.2",
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "2.1.1",
+    "react-scroll": "^1.7.10",
     "redux": "^4.0.1",
     "redux-saga": "^0.16.2",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "reqwest": "^2.0.5",
+    "underscore": "^1.9.1"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"

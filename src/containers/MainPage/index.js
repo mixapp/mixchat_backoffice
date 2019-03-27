@@ -1,12 +1,8 @@
 import React from 'react';
+import MainPageView from '../../components/MainPage'
 
-const MainPage = () => {
-    return (
-      <div>
-        <h2>Home</h2>
-        <div>Login</div>
-      </div>
-    );
-  }
+const MainPage = (props) => {
+  return <MainPageView {...props} />;
+};
 
 export default MainPage;

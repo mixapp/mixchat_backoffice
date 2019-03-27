@@ -1,0 +1,10 @@
+version: '2'
+services:
+  nginx:
+    container_name: project
+    build:
+      context: nginx/
+      environment:
+        API_URL='mixchat.mixapp.io/api'
+    ports:
+      - "8000:80"
