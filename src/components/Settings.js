@@ -30,7 +30,7 @@ class RegistrationForm extends React.Component {
   fallbackCopyTextToClipboard(text) {
     let { t } = this.props;
     var textArea = document.createElement("textarea");
-    textArea.value = text.cdn + text.init;
+    textArea.value = `${text.cdn}\r\n${text.init}`;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
@@ -69,7 +69,7 @@ class RegistrationForm extends React.Component {
 
         <label className='settings-header-bold'>{t('Copy this code into body of your HTML')}</label>
         <div className='settings-alert'>
-          <Alert message={[<p>{this.widgetCode.cdn}</p>, <p>{this.widgetCode.init}</p>]} type="info" />
+          <Alert message={[<span>{this.widgetCode.cdn}</span>, <br />, <span>{this.widgetCode.init}</span>]} type="info" />
           <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.widgetCode)}><Icon type='copy' /> Click to copy</span>
           {/* this.fallbackCopyTextToClipboard.bind(this) */}
         </div>
