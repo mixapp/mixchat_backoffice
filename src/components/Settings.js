@@ -30,7 +30,7 @@ class RegistrationForm extends React.Component {
   fallbackCopyTextToClipboard(text) {
     let { t } = this.props;
     var textArea = document.createElement("textarea");
-    textArea.value = text;
+    textArea.value = text.cdn + text.init;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
@@ -53,9 +53,10 @@ class RegistrationForm extends React.Component {
     let companyId = localStorage.getItem('currentCompany');
     let { widgetSettings } = this.props.app;
     this.meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-    this.widgetCode = "" +
-      "<script src='https://mixchat.mixapp.io/app/static/js/widget.js'></script>" +
-      "<script>window.onload=()=>{ Omni.Widget({ companyId: '" + companyId + "' }); }</script>";
+    this.widgetCode = {
+      cdn: "<script src='https://mixchat.mixapp.io/app/static/js/widget.js'></script>",
+      init: "<script>window.onload=()=>{ Omni.Widget({ companyId: '" + companyId + "' }); }</script>"
+    }
 
     return (
       <div>
@@ -68,7 +69,7 @@ class RegistrationForm extends React.Component {
 
         <label className='settings-header-bold'>{t('Copy this code into body of your HTML')}</label>
         <div className='settings-alert'>
-          <Alert message={this.widgetCode} type="info" />
+          <Alert message={[<p>{this.widgetCode.cdn}</p>, <p>{this.widgetCode.init}</p>]} type="info" />
           <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.widgetCode)}><Icon type='copy' /> Click to copy</span>
           {/* this.fallbackCopyTextToClipboard.bind(this) */}
         </div>
