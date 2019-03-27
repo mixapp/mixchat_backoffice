@@ -331,7 +331,7 @@ function* logoutSaga() {
 
       yield put({ type: FETCH_ROLE_SUCCESS, role: false });
       localStorage.clear();
-      window.location.href = Api.getCurrentURL();
+      window.location.href = Api.getCurrentURL() + '/app';
 
     } catch (err) {
       throw err;
