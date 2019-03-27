@@ -68,6 +68,8 @@ class MenuPanel extends React.Component {
           <li>
             <div>
               <Switch size="small" checked={manager && manager.status === 'online' ? true : false} onChange={this.props.setStatus} />
+              <br />
+              <span style={{fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)'}}>{manager && manager.status}</span>
             </div>
           </li>}
         <li className={pathname === '/logout' ? 'active' : undefined}>
