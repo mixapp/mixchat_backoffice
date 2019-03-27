@@ -165,7 +165,7 @@ class DialogsList extends React.Component {
   }
 
   render() {
-    let { dialogLoader, messages } = this.props.app;
+    let { dialogLoader } = this.props.app;
     const {
       getFieldError, isFieldTouched, getFieldDecorator
     } = this.props.form;
@@ -183,9 +183,7 @@ class DialogsList extends React.Component {
                 useWindow={false}
                 threshold={1}
               >
-                <CommentList
-                  messages={messages}
-                />
+                <CommentList {... this.props} />
               </InfiniteScroll>
             </div>
           </Spin>

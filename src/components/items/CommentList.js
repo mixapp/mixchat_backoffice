@@ -12,9 +12,9 @@ export default class CommentList extends React.Component {
   render() {
     let rocketChatURL = Api.getRocketCahtUrl();
     return <List
-    locale={{ emptyText: '' }}
+      locale={{ emptyText: ' ' }}
       size="small"
-      dataSource={this.props.messages}
+      dataSource={this.props.app.messages}
       renderItem={item => {
         if (item.u.name)
           item.u.name.length > 15 ? item.u.shortName = item.u.name.substring(0, 15) + '...' : item.u.shortName = item.u.name;
