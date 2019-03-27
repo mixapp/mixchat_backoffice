@@ -35,11 +35,11 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 Build an image from a Dockerfile with our project. For example, run this command `$ docker build . -t mixchat --build-arg API_URL=www.example.com/api` to build an image with tag "mixchat and arg API_URL with www.example.com/api as a params.
 
+
 ### `docker run [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]`
 
 The docker run command must specify an IMAGE to derive the container from. For example, run this command `$ docker run -p 3000:80 mixchat` to run image with tag "mixchat" on local port 3000. And you can test project on local machine.
 
-In the project directory, you can run:
 
 ## Learn More about Docker
 
