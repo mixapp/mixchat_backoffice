@@ -311,3 +311,12 @@ textarea:focus {
   font-size: 10px;
   font-weight: 600;
 }
+
+.dialog-spinner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
