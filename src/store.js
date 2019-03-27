@@ -7,7 +7,9 @@ import thunk from 'redux-thunk'
 import reducers from './reducers';
 import rootSaga from './sagas';
 
-const history = createHistory();
+const history = createHistory({
+  basename: process.env.PUBLIC_URL ? process.env.PUBLIC_URL : '/app'
+});
 const sagaMiddleware = createSagaMiddleware();
 
 const user = localStorage.getItem('user');

@@ -21,11 +21,11 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy backoffice files
-COPY --from=backoffice /backoffice/build /usr/share/nginx/html
+COPY --from=backoffice /backoffice/build /usr/share/nginx/html/app
 
 # Copy widget files
-COPY --from=widget /mixchat_widget/build/ /usr/share/nginx/html/static/js
-COPY --from=widget /mixchat_widget/build/widget.js.map /usr/share/nginx/html/static/js
+COPY --from=widget /mixchat_widget/build/ /usr/share/nginx/html/app/static/js
+COPY --from=widget /mixchat_widget/build/widget.js.map /usr/share/nginx/html/app/static/js
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
