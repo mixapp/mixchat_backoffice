@@ -4,7 +4,7 @@ RUN mkdir backoffice
 WORKDIR /backoffice
 COPY . ./
 ARG API_URL
-RUN echo "{\"API_URL\": \"${API_URL}\"}" >> src/config.json
+RUN echo "{\"API_URL\": \"${API_URL}\"}" > src/config.json
 RUN yarn
 RUN yarn build
 
