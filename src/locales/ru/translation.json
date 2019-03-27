@@ -23,7 +23,7 @@
     "Password": "Пароль",
     "This field is required": "Обязательное поле",
     "User already exist": "Пользователь уже существует",
-    "Copy this code into body of your HTML": "Скопируйте этот код в body вашего HTML документа",
+    "Copy this code into body of your HTML": "Скопируйте этот код в тэг body",
     "successful": "успешно",
     "unsuccessful": "неудачно",
     "Code copied": "Копирование завершено",
@@ -91,5 +91,5 @@
     "Apply": "Применить",
     "min 8 symb": "от 8 букв",
     "This email is already been taken": "Этот Email уже занят",
-    "Copy this code into HTML header": "Скопируйте код нижу в заголовки вашей HTML страницы"
+    "Copy this code into HTML header": "Скопируйте код в тэг HEAD"
 }

@@ -114,7 +114,6 @@ class RegistrationForm extends React.Component {
                     }, {
                       validator: this.handleNameValidator.bind(this)
                     }],
-                    initialValue: '3dspaun@mail.ru'
                   })(
                     <Input onChange={e => this.handleInputChange(e.target.value)} />
                   )}
@@ -128,7 +127,6 @@ class RegistrationForm extends React.Component {
                     }, {
                       validator: this.validateToNextPassword,
                     }],
-                    initialValue: 'qwerty123456'
                   })(
                     <Input type="password" />
                   )}
@@ -142,7 +140,6 @@ class RegistrationForm extends React.Component {
                     }, {
                       validator: this.compareToFirstPassword.bind(t),
                     }],
-                    initialValue: 'qwerty123456'
                   })(
                     <Input type="password" onBlur={this.handleConfirmBlur} />
                   )}
@@ -162,7 +159,6 @@ class RegistrationForm extends React.Component {
                       message: t('Please input your nickname!') + ' ' + t('min 8 symb'),
                       whitespace: true
                     }],
-                    initialValue: 'SashaMailRu'
                   })(
                     <Input />
                   )}

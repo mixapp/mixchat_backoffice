@@ -53,7 +53,8 @@ class RegistrationForm extends React.Component {
     let companyId = localStorage.getItem('currentCompany');
     let { widgetSettings } = this.props.app;
     this.meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-    this.widgetCode = "<script src='https://cdn.jsdelivr.net/gh/mixapp/mixchat_widget@8d1cb879d6565ea7cfb4182fbf2a32aaa6265cbd/build/widget.js?v=1'></script>" +
+    this.widgetCode = "" +
+      "<script src='https://mixchat.mixapp.io/app/static/js/widget.js'></script>" +
       "<script>window.onload=()=>{ Omni.Widget({ companyId: '" + companyId + "' }); }</script>";
 
     return (
