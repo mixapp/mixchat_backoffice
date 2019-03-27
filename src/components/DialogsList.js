@@ -78,7 +78,10 @@ class DialogsListMenu extends React.Component {
               <Avatar size='small'>{item.name.substring(0, 1).toUpperCase()}</Avatar>
               <div className='dialogs-item-caption'>
                 <div>{t('Client') + ' ' + clientNumber}</div>
-                {item.lastMessage && <div>{messengerIcon}<div className='dialogs-item-caption-text'>{item.lastMessage.msg}</div></div>}
+                {item.lastMessage ?
+                  <div>{messengerIcon}<div className='dialogs-item-caption-text'>{item.lastMessage.msg}</div></div>:
+                  <div><MessageIcon /><div className='dialogs-item-caption-text'></div></div>
+                }
               </div>
             </div>
           </Menu.Item>;
