@@ -58,7 +58,7 @@ class RegistrationForm extends React.Component {
 
     return (
       <div>
-        <h2><b>{t('mainMenu.settings')}</b></h2>
+        <h2>{t('mainMenu.settings')}</h2>
         <label className='settings-header-bold'>{t('Copy this code into HTML header')}</label>
         <div className='settings-alert'>
           <Alert message={this.meta} type="info" />
