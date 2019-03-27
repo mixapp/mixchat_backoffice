@@ -74,7 +74,6 @@ class DialogsList extends React.Component {
 
   handleInfiniteOnLoad = async () => {
     if (this.state.currentPage * this.state.pageItemsCount >= this.state.messagesCount) {
-      message.warning('Infinite List loaded all');
       this.setState({
         hasMore: false
       });

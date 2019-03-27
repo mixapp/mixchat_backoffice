@@ -12,6 +12,7 @@ export default class CommentList extends React.Component {
   render() {
     let rocketChatURL = Api.getRocketCahtUrl();
     return <List
+    locale={{ emptyText: '' }}
       size="small"
       dataSource={this.props.messages}
       renderItem={item => {
