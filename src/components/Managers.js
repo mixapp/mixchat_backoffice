@@ -51,7 +51,7 @@ export default class ManagersList extends React.Component {
   render() {
     let { t } = this.props;
     let { managers } = this.props.app;
-    
+
     let columns = [
       { title: '№', dataIndex: 'number', key: 'number' },
       { title: t('Email'), dataIndex: 'email', key: 'email' },
@@ -71,7 +71,7 @@ export default class ManagersList extends React.Component {
     ];
     return (
       <div>
-        <h2>{t('mainMenu.operators')}</h2>
+        <h2 className='content-header'>{t('mainMenu.operators')}</h2>
         <Button type="primary" onClick={this.showModal} style={{ marginBottom: "20px" }}>
           {t('buttons.addOperator')}
         </Button>

@@ -12,6 +12,13 @@ textarea:focus {
   box-shadow: none !important;
 }
 
+.content-header {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 10px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
 .dialogs {
   padding: 0px !important;
   height: 100%;

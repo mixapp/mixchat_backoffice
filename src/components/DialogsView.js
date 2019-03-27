@@ -42,7 +42,7 @@ export default class DialogsListView extends React.Component {
     return (
       <div className='dialog-layout'>
         <div>
-          <h2>{t('Client') + ' ' + currentRoom.customFields.clientNumber}</h2>
+          <h2 className='content-header'>{t('Client') + ' ' + currentRoom.customFields.clientNumber}</h2>
           <small>{t('Last activity')}: {lastTime}</small>
           <Dialogs {...this.props} />
         </div>
