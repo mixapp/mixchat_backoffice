@@ -48,17 +48,7 @@ export default class DialogsListView extends React.Component {
               <span>{t('Last activity')}: {lastTime}</span>
             </div>
           </div>
-          <Dialogs //TODO
-            {...this.props}
-            loader={this.props.app.loader}
-            messagesCount={this.props.app.messagesCount}
-            currentRoom={this.props.app.currentRoom}
-            fetchDialog={this.props.fetchDialog}
-            messages={this.props.app.messages}
-            message={this.props.app.message}
-            dialogs={this.props.app.dialogs}
-            sendMessage={this.props.sendMessage}
-          />
+          <Dialogs {...this.props} />
         </div>
         <div>
           <div className='dialog-layout-detail'>

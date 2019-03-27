@@ -88,7 +88,7 @@ class DialogsList extends React.Component {
   }
 
   async componentDidUpdate() {
-    let { messages, message } = this.props;
+    let { messages, message } = this.props.app;
     if (messages) {
       let lm = messages[messages.length - 1];
       if (this.lm) {
@@ -107,7 +107,7 @@ class DialogsList extends React.Component {
   }
 
   async componentWillReceiveProps() {
-    let { currentRoom, messagesCount } = this.props;
+    let { currentRoom, messagesCount } = this.props.app;
     if (currentRoom) {
       if (this.state.currentRoom && currentRoom._id !== this.state.currentRoom._id) {
         this.setState({
@@ -134,7 +134,7 @@ class DialogsList extends React.Component {
   }
 
   componentDidMount() {
-    let { messagesCount, currentRoom } = this.props;
+    let { messagesCount, currentRoom } = this.props.app;
     this.setState({
       messagesCount: messagesCount,
       currentRoom: currentRoom
@@ -166,7 +166,7 @@ class DialogsList extends React.Component {
   }
 
   render() {
-    let { dialogLoader } = this.props.app;
+    let { dialogLoader, messages } = this.props.app;
     const {
       getFieldError, isFieldTouched, getFieldDecorator
     } = this.props.form;
@@ -185,7 +185,7 @@ class DialogsList extends React.Component {
                 threshold={1}
               >
                 <CommentList
-                  messages={this.props.messages}
+                  messages={messages}
                 />
               </InfiniteScroll>
             </div>
