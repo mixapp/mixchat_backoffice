@@ -1,14 +1,14 @@
 @import '~antd/dist/antd.css';
 /* Remove outline on the forms and links */
 
-textarea {
+.chat-textarea {
   margin: 0;
   border: none !important;
   resize: none;
   overflow: hidden;
 }
 
-textarea:focus {
+.chat-textarea:focus {
   box-shadow: none !important;
 }
 

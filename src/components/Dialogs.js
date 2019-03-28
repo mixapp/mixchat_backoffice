@@ -200,7 +200,7 @@ class DialogsList extends React.Component {
             >
               <div style={{ display: 'flex' }}>
                 {getFieldDecorator('userComment')(
-                  <TextArea placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
+                  <TextArea className='chat-textarea' placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
                 )}
                 <div
                   onClick={this.handleSubmit}

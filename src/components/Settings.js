@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, Input, Button, Radio, Collapse, Alert, message, Icon } from 'antd';
 import { CirclePicker } from 'react-color';
 
-const FormItem = Form.Item;
+const { TextArea } = Input;
+const { Item: FormItem } = Form;
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 
@@ -69,9 +70,8 @@ class RegistrationForm extends React.Component {
 
         <label className='settings-header-bold'>{t('Copy this code into body of your HTML')}</label>
         <div className='settings-alert'>
-          <Alert message={[<span>{this.widgetCode.cdn}</span>, <br />, <span>{this.widgetCode.init}</span>]} type="info" />
+          <Alert message={[<span key={1}>{this.widgetCode.cdn}</span>, <br key={2} />, <span key={3}>{this.widgetCode.init}</span>]} type="info" />
           <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.widgetCode)}><Icon type='copy' /> Click to copy</span>
-          {/* this.fallbackCopyTextToClipboard.bind(this) */}
         </div>
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
@@ -137,7 +137,7 @@ class RegistrationForm extends React.Component {
             {getFieldDecorator('greeting', {
               initialValue: widgetSettings ? widgetSettings.greeting : '',
               rules: [],
-            })(<Input />)}
+            })(<TextArea style={{border: 'auto'}} placeholder="Autosize height with minimum and maximum number of lines" autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
 
           <Collapse bordered={false} accordion defaultActiveKey={['1']} onChange={this.callback}>
