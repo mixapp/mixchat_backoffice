@@ -25,7 +25,7 @@ class LoginForm extends React.Component {
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col>
+        <Col xs={{ span: 23 }} sm={{ span: 10 }}>
           <h2 className='form-title'>{t('Authorization')}</h2>
           <div className='tech-forms'>
             <Form onSubmit={this.handleSubmit}>
@@ -44,8 +44,8 @@ class LoginForm extends React.Component {
                 )}
               </Form.Item>
               <Form.Item>
-                <a href="/registration">{t('Register now')}</a>
-                <a className="login-form-forgot" href="/forgot">{t('Forgot password')}</a>
+                <a href="/app/registration">{t('Register now')}</a>
+                <a className="login-form-forgot" href="/app/forgot">{t('Forgot password')}</a>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   {t('Log in')}
                 </Button>

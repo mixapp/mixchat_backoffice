@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Scroll from 'react-scroll';
-import { Row, Col, Input, Form, message, Spin } from 'antd';
+import { Row, Col, Input, Form, Spin } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 import CommentList from './items/CommentList';
 import SendButton from '../components/svg/send_button';

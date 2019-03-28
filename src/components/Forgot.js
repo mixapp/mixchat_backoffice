@@ -67,7 +67,7 @@ class ForgotForm extends React.Component {
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col span={10}>
+        <Col xs={{ span: 23 }} sm={{ span: 10 }}>
           {!recovery_token && <div>
             {!recoveryFormSuccess && <div style={{ display: 'flex', flexDirection: 'column' }}>
               <h2 className='form-title'>{t('Recovery password')}</h2>

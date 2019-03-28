@@ -60,7 +60,7 @@ textarea:focus {
   overflow: auto;
 }
 
-.dialogs-item-sider>li{
+.dialogs-item-sider>li {
   height: 45px !important;
 }
 
@@ -270,7 +270,7 @@ textarea:focus {
   background-color: #f8f8f8;
   padding: 25px 40px 10px 40px;
   border-radius: 15px;
-  width: 400px;
+  width: 100%
 }
 
 .login-link {
