@@ -133,6 +133,13 @@ class RegistrationForm extends React.Component {
             })(<Input />)}
           </FormItem>
 
+          <FormItem label={t('greeting')}>
+            {getFieldDecorator('greeting', {
+              initialValue: widgetSettings ? widgetSettings.greeting : '',
+              rules: [],
+            })(<Input />)}
+          </FormItem>
+
           <Collapse bordered={false} accordion defaultActiveKey={['1']} onChange={this.callback}>
             <Panel header="Telegram" key="1">
               <FormItem label={t('Bot name')}>

@@ -108,6 +108,7 @@ export const saveSettings = async (settings, companyId) => {
     return axios.post(getUrl(companyId, 'settings'), {
       "companyName": settings.companyName,
       "widget": {
+        "greeting": settings.greeting,
         "isActive": settings.isActive,
         "color": settings.color,
         "openChat": settings.openChat,
