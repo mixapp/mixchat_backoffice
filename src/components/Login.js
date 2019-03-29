@@ -22,10 +22,19 @@ class LoginForm extends React.Component {
   render() {
     let { t } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      xs: { span: 23 },
+      sm: { span: 15 },
+      md: { span: 9 },
+      ls: { span: 8 },
+      xl: { span: 7 },
+      xxl: { span: 6 }
+    };
+
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col xs={{ span: 23 }} sm={{ span: 10 }}>
+        <Col {...formItemLayout}>
           <h2 className='form-title'>{t('Authorization')}</h2>
           <div className='tech-forms'>
             <Form onSubmit={this.handleSubmit}>

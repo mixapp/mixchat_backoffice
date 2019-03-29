@@ -95,10 +95,18 @@ class RegistrationForm extends React.Component {
     const { registrationFormSuccess } = this.props.app;
     const { getFieldDecorator } = this.props.form;
     const { loading } = this.state;
+    const formItemLayout = {
+      xs: { span: 23 },
+      sm: { span: 15 },
+      md: { span: 9 },
+      ls: { span: 8 },
+      xl: { span: 7 },
+      xxl: { span: 6 }
+    };
 
     return (
       <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
-        <Col xs={{ span: 23 }} sm={{ span: 10 }}>
+        <Col {...formItemLayout}>
           {!registrationFormSuccess && <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h2 className='form-title'>{t('Registration')}</h2>
             <div className='tech-forms'>
