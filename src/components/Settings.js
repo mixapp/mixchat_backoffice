@@ -65,13 +65,13 @@ class RegistrationForm extends React.Component {
         <label className='settings-header-bold'>{t('Copy this code into HTML header')}</label>
         <div className='settings-alert'>
           <Alert message={this.meta} type="info" />
-          <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.meta)}><Icon type='copy' /> Click to copy</span>
+          <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.meta)}><Icon type='copy' /> {t('Click to copy')}</span>
         </div>
 
         <label className='settings-header-bold'>{t('Copy this code into body of your HTML')}</label>
         <div className='settings-alert'>
           <Alert message={[<span key={1}>{this.widgetCode.cdn}</span>, <br key={2} />, <span key={3}>{this.widgetCode.init}</span>]} type="info" />
-          <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.widgetCode)}><Icon type='copy' /> Click to copy</span>
+          <span className='settings-copy-button' onClick={this.fallbackCopyTextToClipboard.bind(this, this.widgetCode)}><Icon type='copy' /> {t('Click to copy')}</span>
         </div>
         <br />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
@@ -137,7 +137,7 @@ class RegistrationForm extends React.Component {
             {getFieldDecorator('greeting', {
               initialValue: widgetSettings ? widgetSettings.greeting : '',
               rules: [],
-            })(<TextArea style={{border: 'auto'}} placeholder="Autosize height with minimum and maximum number of lines" autosize={{ minRows: 2, maxRows: 6 }} />)}
+            })(<TextArea style={{ border: 'auto' }} placeholder={t('Enter your greeting text')} autosize={{ minRows: 2, maxRows: 6 }} />)}
           </FormItem>
 
           <Collapse bordered={false} accordion defaultActiveKey={['1']} onChange={this.callback}>

@@ -165,6 +165,7 @@ class DialogsList extends React.Component {
   }
 
   render() {
+    let { t } = this.props;
     let { dialogLoader } = this.props.app;
     const {
       getFieldError, isFieldTouched, getFieldDecorator
@@ -200,7 +201,7 @@ class DialogsList extends React.Component {
             >
               <div style={{ display: 'flex' }}>
                 {getFieldDecorator('userComment')(
-                  <TextArea className='chat-textarea' placeholder="You commnet ..." onKeyUp={this.sendMessage.bind(this)} />
+                  <TextArea className='chat-textarea' placeholder={`${t('Enter your message')} ...`} onKeyUp={this.sendMessage.bind(this)} />
                 )}
                 <div
                   onClick={this.handleSubmit}

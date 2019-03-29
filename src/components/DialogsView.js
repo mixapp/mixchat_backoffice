@@ -57,7 +57,7 @@ export default class DialogsListView extends React.Component {
                   <div><Avatar size={48} icon="user" /></div>
                   <div className='current-dialog-info-user'>
                     <span>{t('Client') + ' ' + currentRoom.customFields.clientNumber}</span>
-                    <span>{t('Type')}: {userInfo.data.user.customFields.messenger || 'Web'}</span>
+                    <span>{t('Source')}: {userInfo.data.user.customFields.messenger || 'Web'}</span>
                   </div>
                 </div>
                 <div style={{ fontSize: '16px', fontWeight: '600' }}>{t('Members')}:</div>
