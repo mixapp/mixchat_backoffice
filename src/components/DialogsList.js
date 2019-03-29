@@ -6,6 +6,7 @@ import VKIcon from './svg/vk_icon';
 import TelegramIcon from '../components/svg/telegram_icon';
 import ViberIcon from '../components/svg/viber_icon';
 import FBMIcon from '../components/svg/fbm_icon';
+import SMSIcon from '../components/svg/sms_icon';
 
 const Search = Input.Search;
 
@@ -34,6 +35,7 @@ class DialogsListMenu extends React.Component {
   }
 
   getMessengerIcon(messenger) {
+    console.log(messenger);
     switch (messenger) {
       case 'viber':
         return <ViberIcon />;
@@ -43,6 +45,8 @@ class DialogsListMenu extends React.Component {
         return <VKIcon />;
       case 'telegram':
         return <TelegramIcon />;
+      case 'sms':
+        return <SMSIcon />;
       case 'web':
       default:
         return <MessageIcon />;
@@ -79,7 +83,7 @@ class DialogsListMenu extends React.Component {
               <div className='dialogs-item-caption'>
                 <div>{t('Client') + ' ' + clientNumber}</div>
                 {item.lastMessage ?
-                  <div>{messengerIcon}<div className='dialogs-item-caption-text'>{item.lastMessage.msg}</div></div>:
+                  <div>{messengerIcon}<div className='dialogs-item-caption-text'>{item.lastMessage.msg}</div></div> :
                   <div><MessageIcon /><div className='dialogs-item-caption-text'></div></div>
                 }
               </div>
