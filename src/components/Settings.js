@@ -31,7 +31,10 @@ class RegistrationForm extends React.Component {
   fallbackCopyTextToClipboard(text) {
     let { t } = this.props;
     var textArea = document.createElement("textarea");
-    textArea.value = `${text.cdn}\r\n${text.init}`;
+    if (text.cdn)
+      textArea.value = `${text.cdn}\r\n${text.init}`;
+    else
+      textArea.value = text;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();

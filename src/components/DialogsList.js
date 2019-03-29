@@ -35,7 +35,6 @@ class DialogsListMenu extends React.Component {
   }
 
   getMessengerIcon(messenger) {
-    console.log(messenger);
     switch (messenger) {
       case 'viber':
         return <ViberIcon />;
