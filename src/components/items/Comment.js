@@ -18,7 +18,9 @@ export default class CommentList extends React.Component {
         key={item._id}
         author={<b>{item.u.shortName}</b>}
         avatar={(
-          <Avatar style={{ backgroundColor: item.u._id === this.client.userId ? '#77a2ff' : '#ff87a3' }}>{name ? name.charAt(0).toUpperCase() : null}</Avatar>
+          <Avatar style={{ backgroundColor: item.u._id === this.client.userId ? '#77a2ff' : '#ff87a3' }}>
+            {name ? name.charAt(0).toUpperCase() : null}
+          </Avatar>
         )}
         content={(
           <div>

@@ -13,6 +13,8 @@ FROM node:10.10.0 as widget
 # Clone the conf files into the docker container
 RUN git clone https://github.com/mixapp/mixchat_widget.git
 WORKDIR /mixchat_widget
+ARG API_URL
+RUN echo "{\"API_URL\": \"${API_URL}\"}" > src/config.json
 RUN yarn
 RUN yarn build
 
