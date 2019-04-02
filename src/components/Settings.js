@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, Radio, Collapse, Alert, message, Icon } from 'antd';
 import { CirclePicker } from 'react-color';
+import * as Api from '../api';
 
 const { TextArea } = Input;
 const { Item: FormItem } = Form;
@@ -58,7 +59,7 @@ class RegistrationForm extends React.Component {
     let { widgetSettings } = this.props.app;
     this.meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
     this.widgetCode = {
-      cdn: "<script src='https://mixchat.mixapp.io/app/static/js/widget.js'></script>",
+      cdn: `<script src='https://mixchat.mixapp.io/${Api.getAppPath()}/static/js/widget.js'></script>`,
       init: "<script>window.onload=()=>{ Omni.Widget({ companyId: '" + companyId + "' }); }</script>"
     }
 

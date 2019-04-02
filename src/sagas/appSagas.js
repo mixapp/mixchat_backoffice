@@ -340,7 +340,7 @@ function* logoutSaga() {
       for (let i = 0; i < itemsArray.length; i++) {
         localStorage.removeItem(itemsArray[i]);
       }
-      window.location.href = Api.getCurrentURL() + '/app';
+      window.location.href = `${Api.getCurrentURL()}/${Api.getAppPath()}`;
 
     } catch (err) {
       throw err;

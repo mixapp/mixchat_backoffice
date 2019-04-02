@@ -7,6 +7,7 @@ import {
   Col,
   Button,
 } from 'antd';
+import * as Api from '../api';
 
 class LoginForm extends React.Component {
 
@@ -53,8 +54,8 @@ class LoginForm extends React.Component {
                 )}
               </Form.Item>
               <Form.Item>
-                <a href="/app/registration">{t('Register now')}</a>
-                <a className="login-form-forgot" href="/app/forgot">{t('Forgot password')}</a>
+                <a href={`/${Api.getAppPath()}/registration`}>{t('Register now')}</a>
+                <a className="login-form-forgot" href={`/${Api.getAppPath()}/forgot`}>{t('Forgot password')}</a>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   {t('Log in')}
                 </Button>

@@ -3,8 +3,9 @@ FROM node:10.10.0 as backoffice
 RUN mkdir backoffice
 WORKDIR /backoffice
 COPY . ./
-ARG API_URL
-RUN echo "{\"API_URL\": \"${API_URL}\"}" > src/config.json
+ARG API_PATH=app
+ARG API_URL=mixchat.mixapp.io/api
+RUN echo "{\"API_URL\": \"${API_URL}\",\"API_PATH\": \"${API_PATH}\"}" > src/config.json
 RUN yarn
 RUN yarn build
 
@@ -13,8 +14,9 @@ FROM node:10.10.0 as widget
 # Clone the conf files into the docker container
 RUN git clone https://github.com/mixapp/mixchat_widget.git
 WORKDIR /mixchat_widget
-ARG API_URL
-RUN echo "{\"API_URL\": \"${API_URL}\"}" > src/config.json
+ARG API_PATH=app
+ARG API_URL=mixchat.mixapp.io/api
+RUN echo "{\"API_URL\": \"${API_URL}\",\"API_PATH\": \"${API_PATH}\"}" > src/config.json
 RUN yarn
 RUN yarn build
 

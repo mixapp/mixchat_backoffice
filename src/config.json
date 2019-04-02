@@ -1,3 +1,4 @@
 {
-    "API_URL": "mixchat.mixapp.io/api"
+    "API_URL": "mixchat.mixapp.io/api",
+    "API_PATH": "app"
 }
