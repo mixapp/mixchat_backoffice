@@ -8,9 +8,7 @@ ARG API_URL=mixchat.mixapp.io/api
 ARG REGEXP="s/\%\/APP_PATH\%/\/${APP_PATH}/g"
 RUN echo "{\"API_URL\": \"${API_URL}\",\"APP_PATH\": \"${APP_PATH}\"}" > src/config.json \
     && sed -i ${REGEXP} package.json \
-    && cat package.json \
     && sed -i ${REGEXP} nginx.conf \
-    && cat nginx.conf \
     && yarn \
     && yarn build
 
@@ -27,7 +25,11 @@ RUN echo "{\"API_URL\": \"${API_URL}\"}" > src/config.json \
 # Stage 3 - the production environment
 FROM nginx:alpine
 ARG APP_PATH=app
+ARG API_URL=mixchat.mixapp.io/api
+ARG REGEXP="s/\%\/APP_PATH\%/\/${APP_PATH}/g"
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN sed -i ${REGEXP} /etc/nginx/conf.d/default.conf
+RUN cat /etc/nginx/conf.d/default.conf
 
 # Copy backoffice files
 ARG COPY_TO_1=/usr/share/nginx/html/${APP_PATH}
