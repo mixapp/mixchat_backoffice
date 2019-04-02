@@ -8,7 +8,9 @@ ARG API_URL=mixchat.mixapp.io/api
 ARG REGEXP="s/\%\/APP_PATH\%/\/${APP_PATH}/g"
 RUN echo "{\"API_URL\": \"${API_URL}\",\"APP_PATH\": \"${APP_PATH}\"}" > src/config.json \
     && sed -i ${REGEXP} package.json \
+    && cat package.json \
     && sed -i ${REGEXP} nginx.conf \
+    && cat nginx.conf \
     && yarn \
     && yarn build
 
