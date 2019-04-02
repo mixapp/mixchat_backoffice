@@ -328,9 +328,18 @@ function* loaderOff() {
 function* logoutSaga() {
   yield takeLatest(LOGOUT, function* () {
     try {
-
+      const itemsArray = [
+        'rocketChatHost',
+        'user',
+        'XUSER',
+        'currentCompany',
+        'companies',
+        'redirect'
+      ];
       yield put({ type: FETCH_ROLE_SUCCESS, role: false });
-      localStorage.clear();
+      for (let i = 0; i < itemsArray.length; i++) {
+        localStorage.removeItem(itemsArray[i]);
+      }
       window.location.href = Api.getCurrentURL() + '/app';
 
     } catch (err) {
