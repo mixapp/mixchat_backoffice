@@ -15,8 +15,8 @@ export const getCurrentURL = () => {
 }
 
 export const getAuthUrl = () => {
-  let currentURL = getCurrentURL();
-  return `https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=${currentURL}/${config.APP_PATH}/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup`;
+  let url_part = `${getCurrentURL()}/${config.APP_PATH}`;
+  return `https://api.mixapp.io/oidc/mixapp/authorize?response_type=id_token+token&client_id=5a82de9435b3820437d23cfd&redirect_uri=${url_part}/authorize&scope=openid+email+profile&state=uUpgnZBBCBMnI_GLGIzCP3AZXzavFzEVC5hM6UKB_ew&nonce=UXwkyVyGj-Lw_-zEUMbySDW2A4C5G1tYA1_HKrH0-r4&display=popup`;
 }
 
 export const getApiURL = () => {

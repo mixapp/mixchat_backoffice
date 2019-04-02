@@ -28,8 +28,8 @@
     "underscore": "^1.9.1"
   },
   "scripts": {
-    "start": "set PUBLIC_URL=/app && react-scripts start",
-    "build": "set PUBLIC_URL=/app && react-scripts build"
+    "start": "set PUBLIC_URL=%/APP_PATH% && react-scripts start",
+    "build": "set PUBLIC_URL=%/APP_PATH% && react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -40,5 +40,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "homepage": "https://mixchat.mixapp.io/app"
+  "homepage": "https://mixchat.mixapp.io%/APP_PATH%"
 }
