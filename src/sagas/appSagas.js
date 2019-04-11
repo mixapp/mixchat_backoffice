@@ -295,6 +295,11 @@ function* loginSaga() {
       const uri = localStorage.getItem('redirect') || '/';
       localStorage.removeItem('redirect');
       if (companies.data.length < 2) {
+        if (!companies.data[0]) {
+          Api.cleanLocalStorage();
+          window.location.href = `${Api.getCurrentURL()}/${Api.getAppPath()}/`;
+          return;
+        }
         yield put({ type: SET_CURRENT_COMPANY_REQUEST, data: companies.data[0]._id });
         let widget = yield Api.fetchWidget(companies.data[0]._id);
         localStorage.setItem('rocketChatHost', widget.data.result.rocketChatHost);
@@ -328,20 +333,8 @@ function* loaderOff() {
 function* logoutSaga() {
   yield takeLatest(LOGOUT, function* () {
     try {
-      const itemsArray = [
-        'rocketChatHost',
-        'user',
-        'XUSER',
-        'currentCompany',
-        'companies',
-        'redirect'
-      ];
       yield put({ type: FETCH_ROLE_SUCCESS, role: false });
-      for (let i = 0; i < itemsArray.length; i++) {
-        localStorage.removeItem(itemsArray[i]);
-      }
-      window.location.href = `${Api.getCurrentURL()}/${Api.getAppPath()}/`;
-
+      Api.anyErrors();
     } catch (err) {
       throw err;
     }
@@ -427,8 +420,12 @@ function* fetchManagerInfoSaga() {
 function* fetchXUSERSaga() {
   yield takeLatest(FETCH_XUSER_REQUEST, function* () {
     try {
-
-      let XUSER = JSON.parse(localStorage.getItem('XUSER'));
+      let XUSER = null;
+      try {
+        XUSER = JSON.parse(localStorage.getItem('XUSER'));
+      } catch (err) {
+        Api.anyErrors();
+      }
       if (XUSER)
         yield put({ type: FETCH_XUSER_SUCCESS, xuser: XUSER });
 

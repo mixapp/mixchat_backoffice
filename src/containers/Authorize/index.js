@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setAuthorize } from '../../actions/app';
+import * as Api from '../../api';
 
 const transform = (data) => {
     const result = {};
@@ -22,7 +23,7 @@ class Authorize extends React.Component {
         if (result.token) {
             this.props.setAuthorize(result);
         } else {
-            //alert();
+            window.location.href = `${Api.getCurrentURL()}/${Api.getAppPath()}/`;
         }
 
     }

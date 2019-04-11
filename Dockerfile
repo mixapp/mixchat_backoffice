@@ -29,7 +29,6 @@ ARG API_URL=mixchat.mixapp.io/api
 ARG REGEXP="s/\%\/APP_PATH\%/\/${APP_PATH}/g"
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 RUN sed -i ${REGEXP} /etc/nginx/conf.d/default.conf
-RUN cat /etc/nginx/conf.d/default.conf
 
 # Copy backoffice files
 ARG COPY_TO_1=/usr/share/nginx/html/${APP_PATH}

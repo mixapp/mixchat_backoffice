@@ -4,6 +4,23 @@ import { eventChannel } from 'redux-saga';
 import memoizee from 'memoizee';
 import config from './config.json';
 
+axios.interceptors.response.use(null, (error) => {
+  //TODO
+  anyErrors();
+  /*
+  return updateToken().then((token) => {
+    //error.config.headers.xxxx <= set the token
+    return axios.request(config);
+  });
+  */
+  return Promise.reject(error);
+});
+
+export const anyErrors = () => {
+  cleanLocalStorage();
+  window.location.href = `${getCurrentURL()}/${getAppPath()}/`;
+}
+
 export const getCurrentURL = () => {
   let { protocol, hostname, port } = window.location;
   let port_ = '';
@@ -12,6 +29,20 @@ export const getCurrentURL = () => {
   }
   return protocol + '//' + hostname + port_;
 
+}
+
+export const cleanLocalStorage = () => {
+  const itemsArray = [
+    'rocketChatHost',
+    'user',
+    'XUSER',
+    'currentCompany',
+    'companies',
+    'redirect'
+  ];
+  for (let i = 0; i < itemsArray.length; i++) {
+    localStorage.removeItem(itemsArray[i]);
+  }
 }
 
 export const getAuthUrl = () => {
