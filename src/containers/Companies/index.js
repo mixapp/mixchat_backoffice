@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { Icon, Row, Col, Form } from 'antd';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { history } from '../../store';
@@ -30,6 +30,14 @@ const Companies = (props) => {
   }
 
   let companiesList = [];
+  const formItemLayout = {
+    xs: { span: 23 },
+    sm: { span: 15 },
+    md: { span: 9 },
+    ls: { span: 8 },
+    xl: { span: 7 },
+    xxl: { span: 6 }
+  };
 
   for (let i = 0; i < companies.data.length; i++) {
     companiesList.push(
@@ -39,14 +47,20 @@ const Companies = (props) => {
       </div>
     )
   }
-  return <div className='companies-container'>
-    <div>
-      <div className='company-list-item-header'>
-        <h1>{t('Select company')}</h1>
-      </div>
-      {companiesList}
-    </div>
-  </div>;
+  return (
+    <Row type="flex" justify="space-around" align="middle" style={{ height: '100vh' }}>
+      <Col {...formItemLayout}>
+        <h2 className='form-title'>{t('Select company')}</h2>
+        <div className='tech-forms'>
+          <Form>
+            <Form.Item>
+              {companiesList}
+            </Form.Item>
+          </Form>
+        </div>
+      </Col>
+    </Row>
+  )
 };
 
 const mapStateToProps = (state, ownProps) => {
