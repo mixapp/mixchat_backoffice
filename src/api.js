@@ -425,7 +425,7 @@ export const formatDate = (date, lang) => {
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
-  return ('0' + (day + 1)).slice(-2) + '.' + ('0' + (month + 1)).slice(-2) + '.' + year + ', ' + ("0" + hours).slice(-2) + ':' + minutes;
+  return ('0' + (day + 1)).slice(-2) + '.' + ('0' + (month + 1)).slice(-2) + '.' + year + ', ' + ("0" + hours).slice(-2) + ':' + ('0' + (minutes + 1)).slice(-2);
 }
 
 export const fetchWebsocket = () => {
