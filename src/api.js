@@ -221,7 +221,7 @@ export const recovery = async (data) => {
 export const recoveryToken = async (data) => {
   try {
 
-    return axios.post(`https://${getApiURL()}/recovery/` + data.token, data, getHeadera());
+    return axios.post(`https://${getApiURL()}/recovery/${data.token}`, data, getHeadera());
 
   } catch (err) {
     throw err;
@@ -355,7 +355,7 @@ export const deleteMemoizedFetchGroupMembers = async (roomId) => {
 export const fetchUserInfo = async (companyId, userId) => {
   try {
 
-    return await axios.get(getUrl(companyId, 'get-user-info?userId=' + userId), getHeadera());
+    return await axios.get(getUrl(companyId, `get-user-info?userId=${userId}`), getHeadera());
 
   } catch (err) {
     throw err;
@@ -458,7 +458,7 @@ export const websocketInitRoomsChanged = (ddp) => {
 
 export const setStatus = (trigger, ddp) => {
   let status = trigger ? 'online' : 'away';
-  return ddp.method('UserPresence:' + status, []);
+  return ddp.method(`UserPresence:${status}`, []);
 }
 
 export const sendMessageSocket = async (room, text, ddp) => {
