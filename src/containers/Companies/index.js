@@ -42,7 +42,7 @@ const Companies = (props) => {
   for (let i = 0; i < companies.data.length; i++) {
     companiesList.push(
       <div key={companies.data[i]._id} className='company-list-item' onClick={clickHandler.bind(companies.data[i])}>
-        <div>{companies.data[i].companyName}</div>
+        <div>{companies.data[i].companyName} ({companies.data[i].role})</div>
         <Icon type="right" />
       </div>
     )
